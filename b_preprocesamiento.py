@@ -37,12 +37,12 @@
       "metadata": {
         "id": "sNztg3cvjSDP"
       },
-      "execution_count": 1,
+      "execution_count": null,
       "outputs": []
     },
     {
       "cell_type": "code",
-      "execution_count": 2,
+      "execution_count": null,
       "metadata": {
         "id": "sp9XXeKSrFPU"
       },
@@ -58,15 +58,15 @@
       "cell_type": "code",
       "source": [
         "#se generan las url para conectar las bases de datos desde git hub\n",
-        "employee = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/employee_survey_data.csv'\n",
-        "general = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/general_data.csv'\n",
-        "manager = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/manager_survey.csv'\n",
-        "retirement = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/retirement_info.csv'\n"
+        "employee = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/RH_Grupo1/databases/employee_survey_data.csv'\n",
+        "general = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/RH_Grupo1/databases/general_data.csv'\n",
+        "manager = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/RH_Grupo1/databases/manager_survey.csv'\n",
+        "retirement = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/RH_Grupo1/databases/retirement_info.csv'"
       ],
       "metadata": {
         "id": "OQrmPsjOlph2"
       },
-      "execution_count": 5,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -81,7 +81,7 @@
       "metadata": {
         "id": "yKMQExbaloc4"
       },
-      "execution_count": 6,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -98,9 +98,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "fkjRtOzF2sh-",
-        "outputId": "ed411ae1-32b4-4a65-ed91-24ea6970dda0"
+        "outputId": "d7ca5272-7cfb-4d79-fb2c-b953c53713d3"
       },
-      "execution_count": 7,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "stream",
@@ -193,7 +193,7 @@
       "metadata": {
         "id": "olQzhJ-45aQ0"
       },
-      "execution_count": 8,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -208,7 +208,7 @@
       "metadata": {
         "id": "t0bf70fU7rFx"
       },
-      "execution_count": 9,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -223,7 +223,7 @@
       "metadata": {
         "id": "70hipAwh-GyT"
       },
-      "execution_count": 10,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -237,9 +237,9 @@
           "height": 206
         },
         "id": "_OBhT117Gdhp",
-        "outputId": "21a731a0-6a37-4017-816d-16868c56d9da"
+        "outputId": "d0c74942-8443-479f-8341-d71fe7471b96"
       },
-      "execution_count": 11,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -261,7 +261,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-55610da4-6493-4ba5-941a-51952fc99f21\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-c4106b78-0b23-4918-8f04-38b54c175510\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -334,7 +334,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-55610da4-6493-4ba5-941a-51952fc99f21')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-c4106b78-0b23-4918-8f04-38b54c175510')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -386,12 +386,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-55610da4-6493-4ba5-941a-51952fc99f21 button.colab-df-convert');\n",
+              "        document.querySelector('#df-c4106b78-0b23-4918-8f04-38b54c175510 button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-55610da4-6493-4ba5-941a-51952fc99f21');\n",
+              "        const element = document.querySelector('#df-c4106b78-0b23-4918-8f04-38b54c175510');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -411,8 +411,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-600f7fbd-d042-4dd6-b6fe-8570df5eff18\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-600f7fbd-d042-4dd6-b6fe-8570df5eff18')\"\n",
+              "<div id=\"df-97ccade8-6eec-46ef-b8ad-848ea17b3092\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-97ccade8-6eec-46ef-b8ad-848ea17b3092')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -531,13 +531,12 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-600f7fbd-d042-4dd6-b6fe-8570df5eff18 button');\n",
+              "        document.querySelector('#df-97ccade8-6eec-46ef-b8ad-848ea17b3092 button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
               "  </script>\n",
               "</div>\n",
-              "\n",
               "    </div>\n",
               "  </div>\n"
             ],
@@ -548,7 +547,7 @@
             }
           },
           "metadata": {},
-          "execution_count": 11
+          "execution_count": 78
         }
       ]
     },
@@ -556,13 +555,13 @@
       "cell_type": "code",
       "source": [
         "#crear base de datos en SQL\n",
-        "conn= sql.connect(\"databases\\db_empleados\") ### crea una base de datos con el nombre dentro de comillas, si existe crea una conexión.\n",
+        "conn= sql.connect(\"data\\\\db_empleados\") ### crea una base de datos con el nombre dentro de comillas, si existe crea una conexión.\n",
         "cur=conn.cursor() ### ejecutar funciones  en BD\n"
       ],
       "metadata": {
         "id": "wKI8QqO3m5hY"
       },
-      "execution_count": 13,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -579,9 +578,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "dKqHj3GFquXy",
-        "outputId": "3c8462c7-2306-40d1-b70f-7164d4263c44"
+        "outputId": "4bf008d3-d8b9-4084-b615-d5bb031d8061"
       },
-      "execution_count": 14,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -591,7 +590,7 @@
             ]
           },
           "metadata": {},
-          "execution_count": 14
+          "execution_count": 80
         }
       ]
     },
@@ -606,9 +605,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "qz-GJFc68pRX",
-        "outputId": "3d16c6eb-6a6d-4b06-ae78-26030a277f69"
+        "outputId": "5b593d76-cb1d-4160-a9ae-31e1ddf94f9d"
       },
-      "execution_count": 15,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -618,7 +617,7 @@
             ]
           },
           "metadata": {},
-          "execution_count": 15
+          "execution_count": 81
         }
       ]
     },
@@ -632,12 +631,12 @@
       "metadata": {
         "colab": {
           "base_uri": "https://localhost:8080/",
-          "height": 424
+          "height": 423
         },
         "id": "NV0-A8Bm9fLK",
-        "outputId": "a06d8c5d-eada-43b4-97e8-2d09a28aecf4"
+        "outputId": "c772d256-0394-4e72-db24-6789a5914161"
       },
-      "execution_count": 16,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -660,7 +659,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-f91733d5-19c9-4899-993b-ce27458e7504\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-e93680f8-d9e3-437a-9a79-45fe8097c8a9\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -746,7 +745,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-f91733d5-19c9-4899-993b-ce27458e7504')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-e93680f8-d9e3-437a-9a79-45fe8097c8a9')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -798,12 +797,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-f91733d5-19c9-4899-993b-ce27458e7504 button.colab-df-convert');\n",
+              "        document.querySelector('#df-e93680f8-d9e3-437a-9a79-45fe8097c8a9 button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-f91733d5-19c9-4899-993b-ce27458e7504');\n",
+              "        const element = document.querySelector('#df-e93680f8-d9e3-437a-9a79-45fe8097c8a9');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -823,8 +822,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-e6c953ed-6644-478a-a10f-0adc1b169855\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-e6c953ed-6644-478a-a10f-0adc1b169855')\"\n",
+              "<div id=\"df-245753b8-0fcd-44bb-bb65-bee0c7006c1c\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-245753b8-0fcd-44bb-bb65-bee0c7006c1c')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -943,13 +942,12 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-e6c953ed-6644-478a-a10f-0adc1b169855 button');\n",
+              "        document.querySelector('#df-245753b8-0fcd-44bb-bb65-bee0c7006c1c button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
               "  </script>\n",
               "</div>\n",
-              "\n",
               "    </div>\n",
               "  </div>\n"
             ],
@@ -959,7 +957,7 @@
             }
           },
           "metadata": {},
-          "execution_count": 16
+          "execution_count": 82
         }
       ]
     }
