@@ -60,7 +60,7 @@ df_retirement = df_retirement.rename(columns=lambda x: x.lower())
 df_employee.head(5)
 
 #crear base de datos en SQL
-conn= sql.connect("databases\\db_empleados") ### crea una base de datos con el nombre dentro de comillas, si existe crea una conexión.
+conn= sql.connect("databases/db_empleados.sql") ### crea una base de datos con el nombre dentro de comillas, si existe crea una conexión.
 cur=conn.cursor() ### ejecutar funciones  en BD
 
 ### Llevar tablas a base de datos
