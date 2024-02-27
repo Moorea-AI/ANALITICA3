@@ -9,7 +9,7 @@
 ################################################################
 
 
-### Funciones
+### Este es el archivo de funciones donde se recopilan todas las que se usarán y serán llamadas desde otros archivos
 
 import pandas as pd
 import numpy as np
