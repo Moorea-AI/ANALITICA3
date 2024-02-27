@@ -1,3 +1,13 @@
+################################################################
+#               PRIMER TRABAJO PARA LA MATERIA:                #
+#                 APLICACIONES DE LA ANALITICA                 #
+#                  MÓDULO DE RECURSOS HUMANOS                  #
+#                              POR:                            #
+#                       ALEJANDRA AGUIRRE                      #
+#                    AURA LUZ MORENO - MOOREA                  #
+#                    UNIVERSIDAD DE ANTIOQUIA                  #
+################################################################
+
 def ejecutar_sql (nombre_archivo, cur):
   sql_file=open(nombre_archivo)
   sql_as_string=sql_file.read()

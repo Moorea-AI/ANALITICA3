@@ -1,3 +1,14 @@
+################################################################
+#               PRIMER TRABAJO PARA LA MATERIA:                #
+#                 APLICACIONES DE LA ANALITICA                 #
+#                  MÓDULO DE RECURSOS HUMANOS                  #
+#                              POR:                            #
+#                       ALEJANDRA AGUIRRE                      #
+#                    AURA LUZ MORENO - MOOREA                  #
+#                    UNIVERSIDAD DE ANTIOQUIA                  #
+################################################################
+
+
 ### Funciones
 
 import pandas as pd
@@ -42,8 +53,8 @@ def show_confusion_matrix(y_true, y_pred):
     matrix = confusion_matrix(y_true, y_pred)
     return matrix
 
-#Se hará un imputador? tomare los del profe:
-#REVISAR DE AQUI PARA ABAJO MÁS ADELANTE
+
+#IMPUTADORES:
 
 def imputar_f (df,list_cat):  
         
