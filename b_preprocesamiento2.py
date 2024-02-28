@@ -72,10 +72,34 @@ df['JobSatisfaction'] = df['JobSatisfaction'].fillna(3)
 
 
 
+##############################################
+# 'WorkLifeBalance', hacemos lo mismo, tiene 304 filas repetidas
+df['WorkLifeBalance'].value_counts() #3 es el valor que más se repite
+df['WorkLifeBalance'].mean() #2.7614
+df['WorkLifeBalance'].median() #3
+df['WorkLifeBalance'] = df['WorkLifeBalance'].fillna(3)
 
 
-       'WorkLifeBalance', 'DateSurvey', 'Age', 'BusinessTravel', 'Department',
-       'DistanceFromHome', 'Education', 'EducationField', 'EmployeeCount',
+# 'DateSurvey', No tiene nulos
+df[df['DateSurvey'].isnull()]
+
+# 'Age', No tiene nulos
+df[df['Age'].isnull()]
+
+
+# 'BusinessTravel',  No tiene nulos
+df[df['BusinessTravel'].isnull()]
+
+ 
+# 'Department', No tiene nulos
+df[df['Department'].isnull()]
+
+#'DistanceFromHome' No tiene nulos
+df[df['DistanceFromHome'].isnull()]
+
+# 'Education', 
+
+# 'EducationField', 'EmployeeCount',
        'Gender', 'JobLevel', 'JobRole', 'MaritalStatus', 'MonthlyIncome',
        'NumCompaniesWorked', 'Over18', 'PercentSalaryHike', 'StandardHours',
        'StockOptionLevel', 'TotalWorkingYears', 'TrainingTimesLastYear',
