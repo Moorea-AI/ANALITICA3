@@ -35,17 +35,19 @@ sns.histplot(df['Age'], bins=30, kde=False, color=plt.cm.viridis(0.3), alpha=0.7
 plt.title('Distribución de edad')
 plt.xlabel('Edad')
 plt.ylabel('Frecuencia')
+note_text = "Se puede ver la distribución entre 25 y 35 años"
+plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
+
 plt.show()
 
 
 # El clima laboral y el indice de satisfacción con el trabajo
-sns.histplot(df['JobSatisfaction'], bins=30, kde=False, color=plt.cm.viridis(0.3), alpha=0.7)
+sns.histplot(df['JobSatisfaction'], bins=30, kde=False, color=plt.cm.viridis(0.3), alpha=1)
 plt.title('Distribución de satisfacción laboral')
 plt.xlabel('Satisfacción laboral')
 plt.ylabel('Frecuencia')
-note_text = "Se puede ver la distribuciób de la satisfacción laboral"
+note_text = "1. Low, 2. Medium, 3. High, 4. Very High"
 plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
-
 plt.show()
 
 
@@ -55,11 +57,24 @@ sns.boxplot(x='Attrition', y='JobSatisfaction', data=df)
 plt.title('Relación entre satisfacción laboral y retención del empleado')
 plt.xlabel('Attrition / Abandono / Desgaste')
 plt.ylabel('Satisfacción laboral')
-
 note_text = "A mayor satisfacción laboral, menos tasa de abandono"
 plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
-
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### explorar variable respuesta ###
 fig=df.perf_2023.hist(bins=50,ec='black') ## no hay atípicos
