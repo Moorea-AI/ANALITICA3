@@ -21,8 +21,6 @@ import os  #Paquete OS: https://docs.python.org/es/3.10/library/os.html
 #Ya que es un problema de clasificación, quiero usar la matriz de confusion para 
 # visualizar mejor la relación de las variables que influyen si un empleado se queda o no.
 from sklearn.metrics import confusion_matrix 
-
-
 #Se toman del archivo del profe por si nos sirven de algo más adelante:
 from sklearn.impute import SimpleImputer 
 from sklearn.feature_selection import SelectFromModel
@@ -31,7 +29,8 @@ import joblib
 from sklearn.preprocessing import StandardScaler ## escalar variables 
 
 
-###########Esta función permite ejecutar un archivo  con extensión .sql que contenga varias consultas
+#Esta función permite ejecutar un archivo  con extensión .sql que contenga varias consultas
+#En el archivo de SQL pondremos todas las consultas necesarias para construir la base de datos del modelo
 def ejecutar_sql(nombre_archivo, cur):
     try:
         # Mirar si el archivo existe
@@ -50,6 +49,24 @@ def ejecutar_sql(nombre_archivo, cur):
         print("Error al ejecutar el archivo SQL:", str(e))
 
 
+# esta podemos usarla para limpiar las bases de datos, del semestre pasado
+def identify_and_remove_outliers(conn, columns, threshold=2.1):
+    # Leer datos desde la base de datos SQL
+    df = pd.read_sql("SELECT * FROM all_employees", conn)
+
+    for column in columns:
+        Q1 = np.quantile(df[column], 0.25)
+        Q3 = np.quantile(df[column], 0.75)
+        IQR = Q3 - Q1
+        upper = Q3 + threshold * IQR
+        lower = Q1 - threshold * IQR
+
+        # Usar SQL para eliminar outliers
+        query = f"DELETE FROM all_employees WHERE {column} > {upper} OR {column} < {lower}"
+        conn.execute(query)
+        conn.commit()
+        
+        
 #Se podria hacer una función para determinar la matriz de confusion
 #Este lo tomo del trabajo del semestre pasado para ver si funciona.
 
