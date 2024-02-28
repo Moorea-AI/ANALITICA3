@@ -18,10 +18,10 @@ from pandas.plotting import scatter_matrix  ## para matriz de correlaciones
 from sklearn import tree ###para ajustar arboles de decisión
 from sklearn.tree import export_text ## para exportar reglas del árbol
 
-conn= sql.connect("data\\db_empleados")
+conn= sql.connect("databases\\db_empleados")
 cur=conn.cursor() ### para ejecutar querys sql en base de datos create y drop table
 
-df=pd.read_sql("select * from base_completa", conn)
+df=pd.read_sql("select * from base_empleados", conn)
 
 
 ### explorar variable respuesta ###
