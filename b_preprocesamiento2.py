@@ -53,6 +53,8 @@ df = df_employee.merge(df_general, on='EmployeeID', how='inner')\
 print(df.isnull().sum())
 print(df.columns)
 
+
+
 #Algunas columnas no aportan mucho al modelo, por ejemplo 
 # EmployeeCount: Employee count managed 
 # Over18: Whether the employee is above 18 years of age or not ya que tenemos una columna de edad que sirve para lo mismo
@@ -110,6 +112,19 @@ df['retirementDate'].info() #Tiene datos tipo objeto
 df['retirementDate'] = pd.to_datetime(df['retirementDate'], dayfirst=True)
 print(df.dtypes)
 
+# QUé es Attrition? no esta en la BD. Al traducir es un "desgaste" que tiene contenido Si o No
+contenido_columna = df['Attrition']
+print(contenido_columna)
+# Rellenaremos los valores nulos con NO
+df['Attrition'].fillna('No', inplace=True)
+# Mapeamos "Yes" a 1 y "No" a 0
+attrition_mapping = {'Yes': 1, 'No': 0}
+df['Attrition'] = df['Attrition'].map(attrition_mapping)
+df['Attrition'].unique()
+
+    
+
+
 
 #Revisamos nuevamente la base de datos para verificar que no haya quedado ningun nulo sin motivo aparente
 print(df.isnull().sum())
@@ -132,3 +147,34 @@ pd.read_sql("""SELECT Age, COUNT(*) as Retirements
                                     WHERE retirementDate IS NOT NULL 
                                     GROUP BY Age
                                     ORDER BY Retirements DESC""", conn)
+
+
+#Se nos ocurrren más preguntas pero las contestaremos en la exploración
+
+
+#En el archivo de funciones teniamos una función para detección de los atipicos:
+a_funciones.identify_and_remove_outliers(conn, ['MonthlyIncome', 'TrainingTimesLastYear', 'YearsAtCompany', 'TotalWorkingYears'])
+
+
+# Algunas funciones tienen el tipo de datos susceptible para cambio:
+columns_to_convert = [
+    'Education', 'EnvironmentSatisfaction', 'JobInvolvement',
+    'JobSatisfaction', 'TotalWorkingYears','NumCompaniesWorked','PerformanceRating', 'WorkLifeBalance', 'JobLevel'
+]
+
+print(df.dtypes)
+
+# Y cambiamos a tipo string
+for column in columns_to_convert:
+    df[column] = df[column].astype(str)
+    
+
+#Vamos a crear un archivo .sql donde pondremos los P.A. para manipular los datos
+df.info()
+df.describe(include='all')
+
+df.to_sql("all_employees", conn, if_exists="replace")
+
+df = pd.read_sql("SELECT * FROM all_employees", conn)
+cur=conn.cursor()
+a_funciones.ejecutar_sql('preprocesamientos.sql',cur)
