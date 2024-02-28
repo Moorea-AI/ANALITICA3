@@ -8,9 +8,9 @@
 -- para esto seleccionamos el ID del empleado, fechas, tipo de retiro y porque se retiró
 
 
-drop table if exists retirement_2016;
+drop table if exists retirados_2016;
 
-create table retirement_2016 as
+create table retirados_2016 as
 select
 EmployeeID,
 retirementDate,

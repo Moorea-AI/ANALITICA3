@@ -11,18 +11,55 @@
 #### Cargar paquetes siempre al inicio
 import pandas as pd ### para manejo de datos
 import sqlite3 as sql #### para bases de datos sql
-import a_funciones as funciones ### archivo de funciones propias
+import a_funciones as a_funciones ### archivo de funciones propias
 import matplotlib as mpl ## gráficos
 import matplotlib.pyplot as plt ### gráficos
 from pandas.plotting import scatter_matrix  ## para matriz de correlaciones
 from sklearn import tree ###para ajustar arboles de decisión
 from sklearn.tree import export_text ## para exportar reglas del árbol
+import seaborn as sns
 
-conn= sql.connect("databases\\db_empleados")
-cur=conn.cursor() ### para ejecutar querys sql en base de datos create y drop table
+# Conexión a la base de datos
+conn = sql.connect("db_empleados")
+cur = conn.cursor()  # para ejecutar consultas SQL en la base de datos
 
-df=pd.read_sql("select * from base_empleados", conn)
 
+# Cargar datos desde SQL
+df = pd.read_sql("select * from all_employees", conn)
+
+# Como lo hablamos en el preprocesamiento, queremos explorar cuál es el grupo de edad
+#que tiene más deserción. Para esto, primero queremos ver dentro de la muestra la distribución 
+# de la edad
+# Visualización de la distribución de la edad
+sns.histplot(df['Age'], bins=30, kde=False, color=plt.cm.viridis(0.3), alpha=0.7)
+plt.title('Distribución de edad')
+plt.xlabel('Edad')
+plt.ylabel('Frecuencia')
+plt.show()
+
+
+# El clima laboral y el indice de satisfacción con el trabajo
+sns.histplot(df['JobSatisfaction'], bins=30, kde=False, color=plt.cm.viridis(0.3), alpha=0.7)
+plt.title('Distribución de satisfacción laboral')
+plt.xlabel('Satisfacción laboral')
+plt.ylabel('Frecuencia')
+note_text = "Se puede ver la distribuciób de la satisfacción laboral"
+plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
+
+plt.show()
+
+
+
+# Desgaste versus la satisfaccion laboral
+sns.boxplot(x='Attrition', y='JobSatisfaction', data=df)
+plt.title('Relación entre satisfacción laboral y retención del empleado')
+plt.xlabel('Attrition / Abandono / Desgaste')
+plt.ylabel('Satisfacción laboral')
+
+note_text = "A mayor satisfacción laboral, menos tasa de abandono"
+plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
+
+plt.show()
 
 ### explorar variable respuesta ###
 fig=df.perf_2023.hist(bins=50,ec='black') ## no hay atípicos

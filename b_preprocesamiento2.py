@@ -78,8 +78,6 @@ df['JobSatisfaction'].mean() #2.7272 que se aproxima a 3
 df['JobSatisfaction'].median() # Mediana de 3
 df['JobSatisfaction'] = df['JobSatisfaction'].fillna(3)
 
-
-
 ##############################################
 # 'WorkLifeBalance', hacemos lo mismo, tiene 304 filas nulas
 df['WorkLifeBalance'].value_counts() #3 es el valor que más se repite
@@ -122,7 +120,11 @@ attrition_mapping = {'Yes': 1, 'No': 0}
 df['Attrition'] = df['Attrition'].map(attrition_mapping)
 df['Attrition'].unique()
 
-    
+
+#Volvemos JobSatisfaction tipo Int
+df['JobSatisfaction'].dtype
+df['JobSatisfaction'] = df['JobSatisfaction'].astype(float).astype(int)
+df['JobSatisfaction'].unique()    
 
 
 
