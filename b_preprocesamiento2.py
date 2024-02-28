@@ -8,56 +8,80 @@
 #                    UNIVERSIDAD DE ANTIOQUIA                  #
 ################################################################
 
-def ejecutar_sql (nombre_archivo, cur):
-  sql_file=open(nombre_archivo)
-  sql_as_string=sql_file.read()
-  sql_file.close
-  cur.executescript(sql_as_string)
-  
-  #### Cargar paquetes
-import pandas as pd ### para manejo de datos
-import sqlite3 as sql #### para bases de datos sql
-import sys ## saber ruta de la que carga paquetes
+#### Cargar paquetes
+import pandas as pd # para manejo de datos
+import sqlite3 as sql ### para bases de datos sql
+import a_funciones as a_funciones ## funciones creadas en el archivo de funciones
 
-#se generan las url para conectar las bases de datos desde git hub
-employee = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/employee_survey_data.csv'
-general = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/general_data.csv'
-manager = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/manager_survey.csv'
-retirement = 'https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/retirement_info.csv'
+#Hacemos llamado a las bases de datos desde GitHub
+df_employee = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/employee_survey_data.csv')
+df_general = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/general_data.csv')
+df_manager = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/manager_survey.csv')
+df_retirement = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/retirement_info.csv')
 
-# se leen los archivos csv
-df_employee=pd.read_csv(employee)
-df_general=pd.read_csv(general)
-df_manager=pd.read_csv(manager)
-df_retirement=pd.read_csv(retirement)
+# Verificamos la correcta visualización
+df_employee.sort_values(by=['EmployeeID']).head(10)
+df_general.sort_values(by=['EmployeeID']).head(10)
+df_manager.sort_values(by=['EmployeeID']).head(10)
+df_retirement.sort_values(by=['EmployeeID']).head(10)
 
-
-# resumen de información de las tablas
-df_employee.info()
+# Verificamos el tipo de información que tiene cada uno
+df_employee.info(verbose=True)
 df_general.info()
 df_manager.info()
 df_retirement.info()
 
+#Existen datos faltantes? Revisamos los atípicos:
+print(df_employee.isnull().sum())
+print(df_general.isnull().sum())
+print(df_manager.isnull().sum()) #No tiene nulos
+print(df_retirement.isnull().sum())
 
-#### Convertir campos a formato fecha
-df_employee["DateSurvey"]=pd.to_datetime(df_employee['DateSurvey'], format="%Y/%m/%d")
-df_general["InfoDate"]=pd.to_datetime(df_general['InfoDate'], format="%Y/%m/%d")
-df_manager["SurveyDate"]=pd.to_datetime(df_manager['SurveyDate'], format="%Y/%m/%d")
-df_retirement["retirementDate"]=pd.to_datetime(df_retirement['retirementDate'], format="%Y/%m/%d")
-
-## eliminar columnas
+## Eliminamos columnas que no se necesitan
 df_employee =df_employee.drop(["Unnamed: 0"], axis=1)
 df_general =df_general.drop(["Unnamed: 0"], axis=1)
 df_manager =df_manager.drop(["Unnamed: 0"], axis=1)
 df_retirement =df_retirement.drop(["Unnamed: 0","Unnamed: 0.1"], axis=1)
 
-### por facilidad se convierten los nombres de las columnas a minuscula
-df_employee = df_employee.rename(columns=lambda x: x.lower())
-df_general = df_general.rename(columns=lambda x: x.lower())
-df_manager = df_manager.rename(columns=lambda x: x.lower())
-df_retirement = df_retirement.rename(columns=lambda x: x.lower())
 
-df_employee.head(5)
+# Se construye una sola BD
+df = df_employee.merge(df_general, on='EmployeeID', how='inner')\
+                        .merge(df_manager, on='EmployeeID', how='inner')\
+                        .merge(df_retirement, on='EmployeeID', how='left')              
+
+
+print(df.isnull().sum())
+print(df.columns)
+
+#Revisamos los nulos columna por columna:
+
+##############################################
+#EnvironmentSatisfaction' tiene 200 nulos. Revisaremos la mediana y la media para determinar el valor más adecuado
+df['EnvironmentSatisfaction'].value_counts()  #3 es el valor que más tiene
+df['EnvironmentSatisfaction'].mean()  #2.7236
+df['EnvironmentSatisfaction'].median() #3
+#Como la mediana y la media se aproximan a 3, se rellenarán los nulos con 3
+df['EnvironmentSatisfaction'] = df['EnvironmentSatisfaction'].fillna(3)
+
+##############################################
+# 'JobSatisfaction', hacemos lo mismo que el anterior, con 160
+df['JobSatisfaction'].value_counts() #4 y 3 es el valor que mas se repite
+df['JobSatisfaction'].mean() #2.7272 que se aproxima a 3
+df['JobSatisfaction'].median() # Mediana de 3
+df['JobSatisfaction'] = df['JobSatisfaction'].fillna(3)
+
+
+
+
+
+       'WorkLifeBalance', 'DateSurvey', 'Age', 'BusinessTravel', 'Department',
+       'DistanceFromHome', 'Education', 'EducationField', 'EmployeeCount',
+       'Gender', 'JobLevel', 'JobRole', 'MaritalStatus', 'MonthlyIncome',
+       'NumCompaniesWorked', 'Over18', 'PercentSalaryHike', 'StandardHours',
+       'StockOptionLevel', 'TotalWorkingYears', 'TrainingTimesLastYear',
+       'YearsAtCompany', 'YearsSinceLastPromotion', 'YearsWithCurrManager',
+       'InfoDate', 'JobInvolvement', 'PerformanceRating', 'SurveyDate',
+       'Attrition', 'retirementDate', 'retirementType', 'resignationReason'
 
 #crear base de datos en SQL
 conn= sql.connect("databases/db_empleados.sql") ### crea una base de datos con el nombre dentro de comillas, si existe crea una conexión.
