@@ -37,7 +37,6 @@ plt.xlabel('Edad')
 plt.ylabel('Frecuencia')
 note_text = "Se puede ver la distribución entre 25 y 35 años"
 plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
-
 plt.show()
 
 
@@ -52,7 +51,7 @@ plt.show()
 
 
 
-# Desgaste versus la satisfaccion laboral
+# Abandono versus la satisfaccion laboral
 sns.boxplot(x='Attrition', y='JobSatisfaction', data=df)
 plt.title('Relación entre satisfacción laboral y retención del empleado')
 plt.xlabel('Attrition / Abandono / Desgaste')

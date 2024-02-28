@@ -102,26 +102,30 @@ df['TotalWorkingYears'].median() #10
 #Para este caso, a pesr de que la media y la mediana estan en 11.27 y 10, lo cambiaremos por el total de años que lleva en la empresa 'Years at company'
 df['TotalWorkingYears'].fillna(df['YearsAtCompany'], inplace=True)
 
-
-#retirementDate tiene valores nulos, que es lógico ya que hay muchos empleados activos los cuales NO tienen fecha de retiro al momento.
+##############################################
+# 'retirementDate' tiene valores nulos, que es lógico ya que hay muchos empleados activos los cuales NO tienen fecha de retiro al momento.
 # Estos valores nulos se quedan asi por ahora, sin embargo, hay que revisar el formato de fecha de este campo
-
 df['retirementDate'].info() #Tiene datos tipo objeto
 df['retirementDate'] = pd.to_datetime(df['retirementDate'], dayfirst=True)
 print(df.dtypes)
 
-# QUé es Attrition? no esta en la BD. Al traducir es un "desgaste" que tiene contenido Si o No
+
+##############################################
+# 'Attrition' no esta en la BD. Al traducir es un "desgaste" que tiene contenido Si o No
+# "Attrition" es un término que se utiliza en recursos humanos y gestión empresarial para referirse a la 
+#  tasa de rotación o la tasa de desgaste de empleados en una organización. Representa la proporción de 
+#  empleados que dejan la empresa en un período de tiempo determinado, ya sea debido a renuncias, 
+#  jubilaciones, despidos u otras razones.
 contenido_columna = df['Attrition']
 print(contenido_columna)
 # Rellenaremos los valores nulos con NO
 df['Attrition'].fillna('No', inplace=True)
-# Mapeamos "Yes" a 1 y "No" a 0
 attrition_mapping = {'Yes': 1, 'No': 0}
 df['Attrition'] = df['Attrition'].map(attrition_mapping)
 df['Attrition'].unique()
 
-
-#Volvemos JobSatisfaction tipo Int
+##############################################
+# 'JobSatisfaction' tipo Int
 df['JobSatisfaction'].dtype
 df['JobSatisfaction'] = df['JobSatisfaction'].astype(float).astype(int)
 df['JobSatisfaction'].unique()    
