@@ -54,6 +54,7 @@ print(df.isnull().sum())
 print(df.columns)
 
 
+df['Attrition'].unique()
 
 #Algunas columnas no aportan mucho al modelo, por ejemplo 
 # EmployeeCount: Employee count managed 
@@ -184,3 +185,35 @@ df.to_sql("all_employees", conn, if_exists="replace")
 df = pd.read_sql("SELECT * FROM all_employees", conn)
 cur=conn.cursor()
 a_funciones.ejecutar_sql('preprocesamientos.sql',cur)
+
+# LA BASE DE DATOS QUEDA CON ESTAS COLUMNAS
+# EnvironmentSatisfaction: Low, Medium, High, Very High
+# JobSatisfaction:  Low, Medium, High, Very High
+# WorkLifeBalance: Bad, Good, Better, Best
+# Age: Integer
+# BusinessTravel: 'Travel_Rarely', 'Travel_Frequently', 'Non-Travel', 
+# Department: Sales, Research & Development, Human Resources
+# DistanceFromHome: distancia en kilometros
+# Education: 1. Below college, 2. College, 3. Bachelor, 4. Master, 5. Doctor
+# EducationField: Life Sciences, Other, Medical, Marketing, Technical Degree, Human Resources
+# Gender: Male or Female
+# JobLevel: Job level at company on a scale of 1 to 5
+# JobRole: Healthcare Representative, Research Scientist, Sales Executive, Human Resources, Research Director, Laboratory Technician, Manufacturing Director,Sales Representative, Manager
+# MaritalStatus: Married, Single, Divorced
+# 'MonthlyIncome', 
+# 'NumCompaniesWorked',
+# 'PercentSalaryHike', 
+# 'StockOptionLevel', 
+# 'TotalWorkingYears',
+# 'TrainingTimesLastYear', 
+# 'YearsAtCompany', 
+# 'YearsSinceLastPromotion',
+# 'YearsWithCurrManager', 
+# 'InfoDate', 
+# 'JobInvolvement',
+# 'PerformanceRating', 
+# 'SurveyDate', 
+# 'Attrition', 
+# 'retirementDate',
+# 'retirementType', 
+# 'resignationReason'],

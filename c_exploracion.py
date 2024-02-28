@@ -27,6 +27,43 @@ cur = conn.cursor()  # para ejecutar consultas SQL en la base de datos
 # Cargar datos desde SQL
 df = pd.read_sql("select * from all_employees", conn)
 
+df.columns
+
+df['retirementDate'].unique()
+
+# EnvironmentSatisfaction: 1. Low, 2. Medium, 3. High, 4. Very High
+# JobSatisfaction:  1. Low, 2. Medium, 3. High, 4. Very High
+# WorkLifeBalance: Bad, Good, Better, Best
+# Age: Integer
+# BusinessTravel: 'Travel_Rarely', 'Travel_Frequently', 'Non-Travel', 
+# Department: Sales, Research & Development, Human Resources
+# DistanceFromHome: distancia en kilometros
+# Education: 1. Below college, 2. College, 3. Bachelor, 4. Master, 5. Doctor
+# EducationField: Life Sciences, Other, Medical, Marketing, Technical Degree, Human Resources
+# Gender: Male or Female
+# JobLevel: Job level at company on a scale of 1 to 5
+# JobRole: Healthcare Representative, Research Scientist, Sales Executive, Human Resources, Research Director, Laboratory Technician, Manufacturing Director,Sales Representative, Manager
+# MaritalStatus: Married, Single, Divorced
+# MonthlyIncome': Monthly income in rupees per month (Rupees? es de la India?)
+# NumCompaniesWorked : Total number of companies the employee has worked for
+# PercentSalaryHike: Percent salary hike for last year
+# StockOptionLevel: Stock option level of the employee  
+# TotalWorkingYears:  Total number of years the employee has worked so far
+# TrainingTimesLastYear: Number of times training was conducted for this employee last year
+# YearsAtCompany: Total number of years spent at the company by the employee
+# YearsSinceLastPromotion: Number of years since last promotion
+# YearsWithCurrManager: Number of years under current manager
+# InfoDate: Date when gneral information about employees was extracted
+# JobInvolvement: 1. Low, 2. Medium, 3. High, 4. Very High
+# PerformanceRating: 1. Low, 2: Good, 3. Excellent, 4. Outstanding
+# SurveyDate: Date in which surveys (manager and satisfaction) were carried out
+# Attrition: Yes. No. Es un término que se utiliza en recursos humanos y gestión empresarial para referirse a la tasa de rotación o la tasa de desgaste de empleados en una organización. Representa la proporción de empleados que dejan la empresa en un período de tiempo determinado, ya sea debido a renuncias, jubilaciones, despidos u otras razones.
+# retirementDate
+# 'retirementType', 
+# 'resignationReason'],
+
+      
+
 # Como lo hablamos en el preprocesamiento, queremos explorar cuál es el grupo de edad
 #que tiene más deserción. Para esto, primero queremos ver dentro de la muestra la distribución 
 # de la edad
