@@ -10,3 +10,6 @@ Por:
 
 Estudiantes de Ingeniería Industrial
 Universidad de Antioquia
+
+<span style="color: red;">Este texto es rojo.</span>
+
