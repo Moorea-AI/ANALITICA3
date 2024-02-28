@@ -29,7 +29,7 @@ df = pd.read_sql("select * from all_employees", conn)
 
 df.columns
 
-df['retirementDate'].unique()
+df['resignationReason'].unique()
 
 # EnvironmentSatisfaction: 1. Low, 2. Medium, 3. High, 4. Very High
 # JobSatisfaction:  1. Low, 2. Medium, 3. High, 4. Very High
@@ -58,9 +58,9 @@ df['retirementDate'].unique()
 # PerformanceRating: 1. Low, 2: Good, 3. Excellent, 4. Outstanding
 # SurveyDate: Date in which surveys (manager and satisfaction) were carried out
 # Attrition: Yes. No. Es un término que se utiliza en recursos humanos y gestión empresarial para referirse a la tasa de rotación o la tasa de desgaste de empleados en una organización. Representa la proporción de empleados que dejan la empresa en un período de tiempo determinado, ya sea debido a renuncias, jubilaciones, despidos u otras razones.
-# retirementDate
-# 'retirementType', 
-# 'resignationReason'],
+# retirementDate: Date employee quit the company
+# retirementType:  None, 'Resignation', 'Fired'. Fired when decision was made for the company and resignation when it was made for the employee
+# resignationReason: None, 'Others', 'Stress', 'Salary'
 
       
 
@@ -111,6 +111,10 @@ plt.show()
 
 
 
+###############################
+######ARCHIVO PROFE
+###############################
+###############################
 
 ### explorar variable respuesta ###
 fig=df.perf_2023.hist(bins=50,ec='black') ## no hay atípicos

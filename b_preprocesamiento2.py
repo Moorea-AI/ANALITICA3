@@ -54,8 +54,6 @@ print(df.isnull().sum())
 print(df.columns)
 
 
-df['Attrition'].unique()
-
 #Algunas columnas no aportan mucho al modelo, por ejemplo 
 # EmployeeCount: Employee count managed 
 # Over18: Whether the employee is above 18 years of age or not ya que tenemos una columna de edad que sirve para lo mismo
@@ -187,8 +185,8 @@ cur=conn.cursor()
 a_funciones.ejecutar_sql('preprocesamientos.sql',cur)
 
 # LA BASE DE DATOS QUEDA CON ESTAS COLUMNAS
-# EnvironmentSatisfaction: Low, Medium, High, Very High
-# JobSatisfaction:  Low, Medium, High, Very High
+# EnvironmentSatisfaction: 1. Low, 2. Medium, 3. High, 4. Very High
+# JobSatisfaction:  1. Low, 2. Medium, 3. High, 4. Very High
 # WorkLifeBalance: Bad, Good, Better, Best
 # Age: Integer
 # BusinessTravel: 'Travel_Rarely', 'Travel_Frequently', 'Non-Travel', 
@@ -200,20 +198,20 @@ a_funciones.ejecutar_sql('preprocesamientos.sql',cur)
 # JobLevel: Job level at company on a scale of 1 to 5
 # JobRole: Healthcare Representative, Research Scientist, Sales Executive, Human Resources, Research Director, Laboratory Technician, Manufacturing Director,Sales Representative, Manager
 # MaritalStatus: Married, Single, Divorced
-# 'MonthlyIncome', 
-# 'NumCompaniesWorked',
-# 'PercentSalaryHike', 
-# 'StockOptionLevel', 
-# 'TotalWorkingYears',
-# 'TrainingTimesLastYear', 
-# 'YearsAtCompany', 
-# 'YearsSinceLastPromotion',
-# 'YearsWithCurrManager', 
-# 'InfoDate', 
-# 'JobInvolvement',
-# 'PerformanceRating', 
-# 'SurveyDate', 
-# 'Attrition', 
-# 'retirementDate',
-# 'retirementType', 
-# 'resignationReason'],
+# MonthlyIncome': Monthly income in rupees per month (Rupees? es de la India?)
+# NumCompaniesWorked : Total number of companies the employee has worked for
+# PercentSalaryHike: Percent salary hike for last year
+# StockOptionLevel: Stock option level of the employee  
+# TotalWorkingYears:  Total number of years the employee has worked so far
+# TrainingTimesLastYear: Number of times training was conducted for this employee last year
+# YearsAtCompany: Total number of years spent at the company by the employee
+# YearsSinceLastPromotion: Number of years since last promotion
+# YearsWithCurrManager: Number of years under current manager
+# InfoDate: Date when gneral information about employees was extracted
+# JobInvolvement: 1. Low, 2. Medium, 3. High, 4. Very High
+# PerformanceRating: 1. Low, 2: Good, 3. Excellent, 4. Outstanding
+# SurveyDate: Date in which surveys (manager and satisfaction) were carried out
+# Attrition: Yes. No. Es un término que se utiliza en recursos humanos y gestión empresarial para referirse a la tasa de rotación o la tasa de desgaste de empleados en una organización. Representa la proporción de empleados que dejan la empresa en un período de tiempo determinado, ya sea debido a renuncias, jubilaciones, despidos u otras razones.
+# retirementDate: Date employee quit the company
+# retirementType:  None, 'Resignation', 'Fired'. Fired when decision was made for the company and resignation when it was made for the employee
+# resignationReason: None, 'Others', 'Stress', 'Salary'
