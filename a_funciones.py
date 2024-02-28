@@ -9,14 +9,18 @@
 ################################################################
 
 
-### Este es el archivo de funciones donde se recopilan todas las que se usarán y serán llamadas desde otros archivos
+### Este es el archivo de funciones donde se recopilan todas las que se usarán y serán llamadas 
+# desde otros archivos. Usaremos una matriz de confusión y una de correlación para ver la cohesión de 
+#las variables
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt #Para poder ver gráficamente las variables
-import seaborn as sns
+import seaborn as sns #Para poder ver gráficamente las variables.
 import os  #Paquete OS: https://docs.python.org/es/3.10/library/os.html
-from sklearn.metrics import confusion_matrix #Ya que es un problema de clasificación, quiero usar la matriz de confusion para predecir si un empleado se queda o no.
+#Ya que es un problema de clasificación, quiero usar la matriz de confusion para 
+# visualizar mejor la relación de las variables que influyen si un empleado se queda o no.
+from sklearn.metrics import confusion_matrix 
 
 
 #Se toman del archivo del profe por si nos sirven de algo más adelante:
@@ -106,14 +110,8 @@ def medir_modelos(modelos,scoring,X,y,cv):
 
 
 def preparar_datos (df):
-   
-    
-
-    #######Cargar y procesar nuevos datos ######
-   
-    
-    #### Cargar modelo y listas 
-    
+   #######Cargar y procesar nuevos datos ######
+   #### Cargar modelo y listas 
    
     list_cat=joblib.load("list_cat.pkl")
     list_dummies=joblib.load("list_dummies.pkl")
@@ -128,8 +126,5 @@ def preparar_datos (df):
     X2=scaler.transform(df_dummies)
     X=pd.DataFrame(X2,columns=df_dummies.columns)
     X=X[var_names]
-    
-    
-    
-    
+     
     return X
