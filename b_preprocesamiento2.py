@@ -53,6 +53,12 @@ df = df_employee.merge(df_general, on='EmployeeID', how='inner')\
 print(df.isnull().sum())
 print(df.columns)
 
+#Algunas columnas no aportan mucho al modelo, por ejemplo 
+# EmployeeCount: Employee count managed 
+# Over18: Whether the employee is above 18 years of age or not ya que tenemos una columna de edad que sirve para lo mismo
+# StandardHours: Standard hours of work for the employee no es relevante yaq ue el numero de horas trabajadas ya se infiere
+df.drop(columns=["EmployeeCount", "Over18", "StandardHours"],inplace=True)
+
 #Revisamos los nulos columna por columna:
 
 ##############################################
@@ -73,57 +79,56 @@ df['JobSatisfaction'] = df['JobSatisfaction'].fillna(3)
 
 
 ##############################################
-# 'WorkLifeBalance', hacemos lo mismo, tiene 304 filas repetidas
+# 'WorkLifeBalance', hacemos lo mismo, tiene 304 filas nulas
 df['WorkLifeBalance'].value_counts() #3 es el valor que más se repite
 df['WorkLifeBalance'].mean() #2.7614
 df['WorkLifeBalance'].median() #3
 df['WorkLifeBalance'] = df['WorkLifeBalance'].fillna(3)
 
 
-# 'DateSurvey', No tiene nulos
-df[df['DateSurvey'].isnull()]
+##############################################
+# 'NumCompaniesWorked', hacemos lo mismo, tiene 152 filas nulas
+df['NumCompaniesWorked'].value_counts() #1 es el valor que más se repite
+df['NumCompaniesWorked'].mean() #2.69
+df['NumCompaniesWorked'].median() #2
+#En este caso los cambiamos a CERO, ya que hay personas que pueden estar en su primer empleo y todavia no cumplen 1 año.
+df['NumCompaniesWorked'] = df['NumCompaniesWorked'].fillna(0)
 
-# 'Age', No tiene nulos
-df[df['Age'].isnull()]
-
-
-# 'BusinessTravel',  No tiene nulos
-df[df['BusinessTravel'].isnull()]
-
- 
-# 'Department', No tiene nulos
-df[df['Department'].isnull()]
-
-#'DistanceFromHome' No tiene nulos
-df[df['DistanceFromHome'].isnull()]
-
-# 'Education', 
-
-# 'EducationField', 'EmployeeCount',
-       'Gender', 'JobLevel', 'JobRole', 'MaritalStatus', 'MonthlyIncome',
-       'NumCompaniesWorked', 'Over18', 'PercentSalaryHike', 'StandardHours',
-       'StockOptionLevel', 'TotalWorkingYears', 'TrainingTimesLastYear',
-       'YearsAtCompany', 'YearsSinceLastPromotion', 'YearsWithCurrManager',
-       'InfoDate', 'JobInvolvement', 'PerformanceRating', 'SurveyDate',
-       'Attrition', 'retirementDate', 'retirementType', 'resignationReason'
-
-#crear base de datos en SQL
-conn= sql.connect("databases/db_empleados.sql") ### crea una base de datos con el nombre dentro de comillas, si existe crea una conexión.
-cur=conn.cursor() ### ejecutar funciones  en BD
-
-### Llevar tablas a base de datos
-df_employee.to_sql("employee",conn,if_exists="replace")
-df_general.to_sql("general",conn,if_exists="replace")
-df_manager.to_sql("manager",conn,if_exists="replace")
-df_retirement.to_sql("retirement",conn,if_exists="replace")
+##############################################
+# 'TotalWorkingYears', hacemos lo mismo, tiene 72 filas nulas
+df['TotalWorkingYears'].value_counts() #10 es el valor que más se repite
+df['TotalWorkingYears'].mean() #11.27
+df['TotalWorkingYears'].median() #10
+#Para este caso, a pesr de que la media y la mediana estan en 11.27 y 10, lo cambiaremos por el total de años que lleva en la empresa 'Years at company'
+df['TotalWorkingYears'].fillna(df['YearsAtCompany'], inplace=True)
 
 
-cur.execute("Select name from sqlite_master where type='table'") ### consultar bases de datos
-cur.fetchall()
+#retirementDate tiene valores nulos, que es lógico ya que hay muchos empleados activos los cuales NO tienen fecha de retiro al momento.
+# Estos valores nulos se quedan asi por ahora, sin embargo, hay que revisar el formato de fecha de este campo
+
+df['retirementDate'].info() #Tiene datos tipo objeto
+df['retirementDate'] = pd.to_datetime(df['retirementDate'], dayfirst=True)
+print(df.dtypes)
 
 
-pd.read_sql("""select employeeid,count(*)
-                            from employee
-                            group by employeeid""", conn)
+#Revisamos nuevamente la base de datos para verificar que no haya quedado ningun nulo sin motivo aparente
+print(df.isnull().sum())
+print(df.columns)
 
 
+# Y ahora si la creamos en SQL
+conn = sql.connect("db_empleados")  # creacion de la base de datos
+cursor = conn.cursor() # para funcion execute
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+cursor.fetchall() # para ver en tablas las bases de datos
+
+df.to_sql("all_employees", conn, if_exists="replace") #Y agregamos
+
+#Y probaremso algunas consultas para verificar el funcionamiento correcto
+
+# Nos da curiosidad saber si las personas más jóvenes son las que más se retiran:
+pd.read_sql("""SELECT Age, COUNT(*) as Retirements 
+                                    FROM all_employees 
+                                    WHERE retirementDate IS NOT NULL 
+                                    GROUP BY Age
+                                    ORDER BY Retirements DESC""", conn)
