@@ -169,20 +169,7 @@ plt.show()
 ###############################
 ###############################
 
-### explorar variable respuesta ###
-fig=df.perf_2023.hist(bins=50,ec='black') ## no hay atípicos
-fig.grid(False)
-plt.show()
 
-boxprops = dict(linestyle='-', color='black')
-medianprops = dict(linestyle='-',  color='black')
-fig=df.boxplot("perf_2023",patch_artist=True,
-                boxprops=boxprops,
-                medianprops=medianprops,
-                whiskerprops=dict(color='black'),
-                showmeans=True)
-fig.grid(False)
-plt.show()
 
 ####explorar variables numéricas con histograma
 fig=df.hist(bins=50, figsize=(40,30),grid=False,ec='black')
