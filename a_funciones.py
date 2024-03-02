@@ -69,17 +69,13 @@ def identify_and_remove_outliers(conn, columns, threshold=2.1):
         
 #Se podria hacer una función para determinar la matriz de confusion
 #Este lo tomo del trabajo del semestre pasado para ver si funciona.
-
 def show_confusion_matrix(y_true, y_pred):
     matrix = confusion_matrix(y_true, y_pred)
     return matrix
 
 
 #IMPUTADORES:
-
 def imputar_f (df,list_cat):  
-        
-    
     df_c=df[list_cat]
     df_n=df.loc[:,~df.columns.isin(list_cat)]
 
@@ -100,7 +96,6 @@ def imputar_f (df,list_cat):
 
 
 def sel_variables(modelos,X,y,threshold):
-    
     var_names_ac=np.array([])
     for modelo in modelos:
         #modelo=modelos[i]
@@ -109,18 +104,15 @@ def sel_variables(modelos,X,y,threshold):
         var_names= modelo.feature_names_in_[sel.get_support()]
         var_names_ac=np.append(var_names_ac, var_names)
         var_names_ac=np.unique(var_names_ac)
-    
     return var_names_ac
 
 
 def medir_modelos(modelos,scoring,X,y,cv):
-
     metric_modelos=pd.DataFrame()
     for modelo in modelos:
         scores=cross_val_score(modelo,X,y, scoring=scoring, cv=cv )
         pdscores=pd.DataFrame(scores)
         metric_modelos=pd.concat([metric_modelos,pdscores],axis=1)
-    
     metric_modelos.columns=["reg_lineal","decision_tree","random_forest","gradient_boosting"]
     return metric_modelos
 
@@ -143,5 +135,4 @@ def preparar_datos (df):
     X2=scaler.transform(df_dummies)
     X=pd.DataFrame(X2,columns=df_dummies.columns)
     X=X[var_names]
-     
     return X

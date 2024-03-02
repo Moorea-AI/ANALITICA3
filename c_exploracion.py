@@ -19,12 +19,12 @@ from sklearn import tree ###para ajustar arboles de decisión
 from sklearn.tree import export_text ## para exportar reglas del árbol
 import seaborn as sns
 
-# Conexión a la base de datos
+# Conexión a la base de datos db_empleados
 conn = sql.connect("db_empleados")
 cur = conn.cursor()  # para ejecutar consultas SQL en la base de datos
 
 
-# Cargar datos desde SQL
+# Cargar datos desde SQLm seleccionamos todo de la tabla all_employees
 df = pd.read_sql("select * from all_employees", conn)
 
 df.columns
@@ -63,6 +63,17 @@ df['resignationReason'].unique()
 # resignationReason: None, 'Others', 'Stress', 'Salary'
 
       
+      
+      
+# Gráfico de distribución de la edad
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Age'], bins=20, kde=True, color='skyblue')
+plt.title('Distribución de Edad de los Empleados')
+plt.xlabel('Edad')
+plt.ylabel('Frecuencia')
+plt.show()
+
+
 
 # Como lo hablamos en el preprocesamiento, queremos explorar cuál es el grupo de edad
 #que tiene más deserción. Para esto, primero queremos ver dentro de la muestra la distribución 
@@ -76,13 +87,13 @@ note_text = "Se puede ver la distribución entre 25 y 35 años"
 plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
 plt.show()
 
-
-# El clima laboral y el indice de satisfacción con el trabajo
-sns.histplot(df['JobSatisfaction'], bins=30, kde=False, color=plt.cm.viridis(0.3), alpha=1)
-plt.title('Distribución de satisfacción laboral')
-plt.xlabel('Satisfacción laboral')
+#Distribución de la satisfacción laboral
+plt.figure(figsize=(8, 6))
+sns.countplot(x='JobSatisfaction', data=df, color=plt.cm.viridis(0.3))
+plt.title('Distribución de Satisfacción Laboral')
+plt.xlabel('Satisfacción Laboral')
 plt.ylabel('Frecuencia')
-note_text = "1. Low, 2. Medium, 3. High, 4. Very High"
+note_text = "1. Bajo, 2. Medio, 3. Alto, 4. Muy alto"
 plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
 plt.show()
 
@@ -98,13 +109,55 @@ plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gra
 plt.show()
 
 
+# Relación entre la satisfacción laboral y el departamento
+# Existen departamentos con mayor deserción?
+# Cómo varia la deserción según el departamento?
+plt.figure(figsize=(12, 8))
+sns.boxplot(x='Department', y='JobSatisfaction', hue='Attrition', data=df)
+plt.title('Relación entre Satisfacción Laboral, Departamento y Abandono')
+plt.xlabel('Departamento')
+plt.ylabel('Satisfacción Laboral')
+plt.show()
+
+# Relación entre la satisfacción laboral y la educación
+#Las personas con menor nivel educativo y menos contentas en su trabajo abandonan más que las que si?
+plt.figure(figsize=(12, 8))
+sns.boxplot(x='Education', y='JobSatisfaction', hue='Attrition', data=df)
+plt.title('Relación entre Satisfacción Laboral, Educación y Abandono')
+plt.xlabel('Nivel de Educación')
+plt.ylabel('Satisfacción Laboral')
+plt.show()
 
 
+# Relación entre la satisfacción laboral y el nivel de cargo
+# Qué relación hay entre los niveles directivos y la satisfacción laboral?
+# Y que pasa son los niveles más bajos?
+plt.figure(figsize=(12, 8))
+sns.boxplot(x='JobLevel', y='JobSatisfaction', hue='Attrition', data=df)
+plt.title('Relación entre Satisfacción Laboral, Nivel de Cargo y Abandono')
+plt.xlabel('Nivel de Cargo')
+plt.ylabel('Satisfacción Laboral')
+plt.show()
 
 
+# Relación entre la satisfacción laboral y el estado civil
+# Quienes renuncia más? casados? solteros? divorciados?
+plt.figure(figsize=(12, 8))
+sns.boxplot(x='MaritalStatus', y='JobSatisfaction', hue='Attrition', data=df)
+plt.title('Relación entre Satisfacción Laboral, Estado Civil y Abandono')
+plt.xlabel('Estado Civil')
+plt.ylabel('Satisfacción Laboral')
+plt.show()
 
 
-
+# Relación entre la satisfacción laboral y la distancia al trabajo
+# Quiénes renuncian más? los que viven más lejos? los que viven más cerca?
+plt.figure(figsize=(12, 8))
+sns.boxplot(x='Attrition', y='DistanceFromHome', data=df)
+plt.title('Relación entre Distancia al Trabajo y Abandono Laboral')
+plt.xlabel('Abandono Laboral')
+plt.ylabel('Distancia al Trabajo')
+plt.show()
 
 
 
