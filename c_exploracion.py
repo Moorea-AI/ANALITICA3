@@ -18,6 +18,8 @@ from pandas.plotting import scatter_matrix  ## para matriz de correlaciones
 from sklearn import tree ###para ajustar arboles de decisión
 from sklearn.tree import export_text ## para exportar reglas del árbol
 import seaborn as sns
+from sklearn.preprocessing import MinMaxScaler
+
 
 # Conexión a la base de datos db_empleados
 conn = sql.connect("db_empleados")
@@ -30,6 +32,12 @@ df = pd.read_sql("select * from all_employees", conn)
 df.columns
 
 df['resignationReason'].unique()
+
+################################################################
+#                                                              #
+#          ANALISIS DE LAS VARIABLES DE LA BD EN FIRME         #              #
+#                                                              #    
+################################################################
 
 # EnvironmentSatisfaction: 1. Low, 2. Medium, 3. High, 4. Very High
 # JobSatisfaction:  1. Low, 2. Medium, 3. High, 4. Very High
@@ -63,22 +71,45 @@ df['resignationReason'].unique()
 # resignationReason: None, 'Others', 'Stress', 'Salary'
 
       
+################################################################
+#                                                              #
+#        1. ANÁLISIS DE RESIGNATION REASON.                    #
+#       ¿Porqué renuncian y con qué frecuencia?                # 
+#                                                              #
+#       Se observa que "otros" es la variable más frecuente    #
+#       Por ende se descarta el salario y el estrés como       #
+#       la razón fundamental                                   #                   
+#                                                              #
+################################################################
       
-      
-# Gráfico de distribución de la edad
-plt.figure(figsize=(10, 6))
-sns.histplot(df['Age'], bins=20, kde=True, color='skyblue')
-plt.title('Distribución de Edad de los Empleados')
-plt.xlabel('Edad')
+#Asignamos la columna a una variable
+reason_counts = df['resignationReason'].value_counts()
+
+plt.figure(figsize=(12, 6))
+sns.barplot(x=reason_counts.index, y=reason_counts.values, palette="viridis")
+plt.title('Frecuencia de Razones de Renuncia')
+plt.xlabel('Razón de Renuncia')
 plt.ylabel('Frecuencia')
+plt.xticks(rotation=45, ha='right')
 plt.show()
+#Podemos ver que "otras" son las razones más allá del salario o el estrés
 
 
-
-# Como lo hablamos en el preprocesamiento, queremos explorar cuál es el grupo de edad
-#que tiene más deserción. Para esto, primero queremos ver dentro de la muestra la distribución 
-# de la edad
-# Visualización de la distribución de la edad
+################################################################
+#                                                              #
+#        2. ANÁLISIS DE LA EDAD (AGE).                         #
+#       ¿Cómo está distribuida la edad en la empresa?          # 
+#                                                              #
+#       Como lo hablamos en el preprocesamiento, queremos      #
+#       explorar ¿cuál es la edad que tiene más deserción      #
+#       serán los jóvenes o los más mayores?                   $
+#                                                              #                                                              #
+#       Podemos observar que la mayoría del personal actual    #
+#       se encuentra entre 28 y 48 años                        #                   
+#                                                              #
+################################################################
+    
+# Visualización de la distribución de la edad, con un rango entre 28 y 48 años
 sns.histplot(df['Age'], bins=30, kde=False, color=plt.cm.viridis(0.3), alpha=0.7)
 plt.title('Distribución de edad')
 plt.xlabel('Edad')
@@ -87,6 +118,39 @@ note_text = "Se puede ver la distribución entre 25 y 35 años"
 plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
 plt.show()
 
+
+######################################################################
+#                                                                    #
+#   3. ANÁLISIS DE LA EDAD (AGE) VS TASA DE ABANDONO (Attrition)     #
+#   ¿Son los más jóvenes los que abandonan? los más viejos?          # 
+#                                                                    #
+#   En este caso es 0 para los que aún permanecen en la empresa y    #
+#   1 para los que renunciaron.                                      #
+#   Se puede ver que si hay una tendencia a que las personas más     #
+#   jóvenes se retiren de la empresa ya que su rango de dad para     #                                                               #
+#   la tasa de renuncia está más abajo en el boxplot.                #
+#                                                                    #
+######################################################################
+ 
+plt.figure(figsize=(12, 8))
+sns.boxplot(x='Attrition', y='Age', data=df, palette="Set2")
+plt.title('Relación entre Edad y Attrition')
+plt.xlabel('Attrition o rotación')
+plt.ylabel('Edad')
+plt.show()
+
+
+######################################################################
+#                                                                    #
+#   4. Pero... Cómo está la satisfacción laboral?
+# 
+#   ANÁLISIS DE JOB SATISFACTION (satisfacción laboral)  
+#   Tiene relación con Attrition? Veamos como está distribuida.
+#                                                                    #
+                                                                                 #
+######################################################################
+ 
+ 
 #Distribución de la satisfacción laboral
 plt.figure(figsize=(8, 6))
 sns.countplot(x='JobSatisfaction', data=df, color=plt.cm.viridis(0.3))
@@ -99,7 +163,13 @@ plt.show()
 
 
 
+
 # Abandono versus la satisfaccion laboral
+# Pero como se relaciona la tasa de abandono con las renuncias?
+scaler = MinMaxScaler()
+df['JobSatisfaction'] = df['JobSatisfaction'].astype(float)
+df[['JobSatisfaction', 'Attrition']] = scaler.fit_transform(df[['JobSatisfaction', 'Attrition']])
+
 sns.boxplot(x='Attrition', y='JobSatisfaction', data=df)
 plt.title('Relación entre satisfacción laboral y retención del empleado')
 plt.xlabel('Attrition / Abandono / Desgaste')
@@ -107,6 +177,8 @@ plt.ylabel('Satisfacción laboral')
 note_text = "A mayor satisfacción laboral, menos tasa de abandono"
 plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
 plt.show()
+# En este caso es cero para "no" y  uno para "si", podemos ver lo esperado, entre más satisfacción laboral más retención.
+
 
 
 # Relación entre la satisfacción laboral y el departamento
@@ -170,8 +242,7 @@ plt.show()
 ###############################
 
 
-
-####explorar variables numéricas con histograma
+#### Exploración de todas las variables numéricas con histograma.
 fig=df.hist(bins=50, figsize=(40,30),grid=False,ec='black')
 plt.show()
 
@@ -180,13 +251,16 @@ plt.show()
 
 ###Analizar correlación de numéricas con un rango amplio,las de rangopequeño se pueden analizar como categóricas
 df.info()
-continuas = ['perf_2023',
-             'dias_lst_mov',
-             'antiguedad_dias',
-             'edad_dias',
-             'PayRate2',
-             'EmpSatisfaction',
-             'EngagementSurvey'
+continuas = ['Age',
+             'DistanceFromHome',
+             'MonthlyIncome',
+             'PercentSalaryHike',
+             'StockOptionLevel',
+             'TotalWorkingYears',
+             'TrainingTimesLastYear',
+             'YearsAtCompany',
+             'YearsSinceLastPromotion',
+             'YearsWithCurrManager'
              ]
 scatter_matrix(df[continuas], figsize=(12, 8))
 plt.show()

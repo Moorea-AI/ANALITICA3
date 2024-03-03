@@ -51,6 +51,8 @@ df = df_employee.merge(df_general, on='EmployeeID', how='inner')\
 
 
 print(df.isnull().sum())
+
+
 print(df.columns)
 
 
@@ -58,7 +60,14 @@ print(df.columns)
 # EmployeeCount: Employee count managed 
 # Over18: Whether the employee is above 18 years of age or not ya que tenemos una columna de edad que sirve para lo mismo
 # StandardHours: Standard hours of work for the employee no es relevante yaq ue el numero de horas trabajadas ya se infiere
+
 df.drop(columns=["EmployeeCount", "Over18", "StandardHours"],inplace=True)
+
+
+
+
+
+
 
 #Revisamos los nulos columna por columna:
 
