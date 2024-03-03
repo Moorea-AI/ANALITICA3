@@ -439,11 +439,42 @@ print("Importancia de las variables según el árbol de decisión:\n", feature_i
 
 
 
-AHORA QUE CONOCEMOS LAS VARIABLES MÁS IMPORTANTES, EXPLOREMOS ESPECÍFICMENTE ESAS CON LA VARIABLE OBJETIVO
+# AHORA QUE CONOCEMOS LAS VARIABLES MÁS IMPORTANTES, EXPLOREMOS ESPECÍFICMENTE ESAS CON LA VARIABLE OBJETIVO
 
-TotalWorkingYears
-NumCompaniesWorked
-EnvironmentSatisfaction
+# TotalWorkingYears
+sns.histplot(df['TotalWorkingYears'], kde=False)
+plt.title('Distribución de TotalWorkingYears (Total de años trabajados)')
+plt.xlabel('TotalWorkingYears')
+plt.ylabel('Frecuencia')
+plt.show()
+
+
+#Age
+sns.histplot(df['NumCompaniesWorked'], kde=False)
+plt.title('Distribución de NumCompaniesWorked')
+plt.xlabel('NumCompaniesWorked')
+plt.ylabel('Frecuencia')
+plt.show()
+
+
+#YearsWithCurrManager
+sns.histplot(df['EnvironmentSatisfaction'], kde=False)
+plt.title('Distribución de EnvironmentSatisfaction')
+plt.xlabel('EnvironmentSatisfaction')
+plt.ylabel('Frecuencia')
+plt.show()
+
+
+#YearsWithCurrManager
+sns.histplot(df['Age'], kde=False)
+plt.title('Distribución de Age')
+plt.xlabel('Age')
+plt.ylabel('Frecuencia')
+plt.show()
+
+
+
+
 
 
 # Combina preprocesamiento con el modelo (puedes usar el preprocesamiento definido anteriormente)
