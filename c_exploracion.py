@@ -439,6 +439,12 @@ print("Importancia de las variables según el árbol de decisión:\n", feature_i
 
 
 
+AHORA QUE CONOCEMOS LAS VARIABLES MÁS IMPORTANTES, EXPLOREMOS ESPECÍFICMENTE ESAS CON LA VARIABLE OBJETIVO
+
+TotalWorkingYears
+NumCompaniesWorked
+EnvironmentSatisfaction
+
 
 # Combina preprocesamiento con el modelo (puedes usar el preprocesamiento definido anteriormente)
 model_decision_tree = Pipeline(steps=[('preprocessor', preprocessor),
