@@ -442,119 +442,33 @@ print("Importancia de las variables según el árbol de decisión:\n", feature_i
 # AHORA QUE CONOCEMOS LAS VARIABLES MÁS IMPORTANTES, EXPLOREMOS ESPECÍFICMENTE ESAS CON LA VARIABLE OBJETIVO
 
 # TotalWorkingYears
-sns.histplot(df['TotalWorkingYears'], kde=False)
-plt.title('Distribución de TotalWorkingYears (Total de años trabajados)')
-plt.xlabel('TotalWorkingYears')
-plt.ylabel('Frecuencia')
+sns.boxplot(x='Attrition', y='TotalWorkingYears', data=df)
+plt.title('Relación entre la variable objetivo Attrition y TotalWorkingYears')
+plt.xlabel('Abandono')
+plt.ylabel('Total de años trabajados')
+plt.show()
+
+
+#NumCompaniesWorked
+sns.boxplot(x='Attrition', y='NumCompaniesWorked', data=df)
+plt.title('Relación entre la variable objetivo y NumCompaniesWorked')
+plt.xlabel('NumCompaniesWorked')
+plt.ylabel('Numero de empresas donde trabajó')
 plt.show()
 
 
 #Age
-sns.histplot(df['NumCompaniesWorked'], kde=False)
-plt.title('Distribución de NumCompaniesWorked')
-plt.xlabel('NumCompaniesWorked')
-plt.ylabel('Frecuencia')
-plt.show()
-
-
-#YearsWithCurrManager
-sns.histplot(df['EnvironmentSatisfaction'], kde=False)
-plt.title('Distribución de EnvironmentSatisfaction')
-plt.xlabel('EnvironmentSatisfaction')
-plt.ylabel('Frecuencia')
-plt.show()
-
-
-#YearsWithCurrManager
-sns.histplot(df['Age'], kde=False)
-plt.title('Distribución de Age')
+sns.boxplot(x='Attrition', y='Age', data=df)
+plt.title('Relación entre la variable objetivo y Age')
 plt.xlabel('Age')
-plt.ylabel('Frecuencia')
+plt.ylabel('Edad')
+plt.show()
+
+#MonthlyIncome
+sns.boxplot(x='Attrition', y='MonthlyIncome', data=df)
+plt.title('Relación entre la variable objetivo y MonthlyIncome')
+plt.xlabel('MonthlyIncome')
+plt.ylabel('Salario mensual')
 plt.show()
 
 
-
-
-
-
-# Combina preprocesamiento con el modelo (puedes usar el preprocesamiento definido anteriormente)
-model_decision_tree = Pipeline(steps=[('preprocessor', preprocessor),
-                                      ('classifier', DecisionTreeClassifier(random_state=42))])
-
-# Entrena el modelo de árbol de decisión
-model_decision_tree.fit(X_train, y_train)
-
-# Evalúa el rendimiento en el conjunto de prueba
-y_pred_tree = model_decision_tree.predict(X_test)
-print(classification_report(y_test, y_pred_tree))
-print(confusion_matrix(y_test, y_pred_tree))
-
-# Exporta el árbol de decisión a formato DOT (puedes visualizarlo con Graphviz)
-tree.export_graphviz(model_decision_tree.named_steps['classifier'],
-                     feature_names=numeric_features + model_decision_tree.named_steps['preprocessor'].transformers_[1][1].named_steps['onehot'].get_feature_names_out(categorical_features).tolist(),
-                     class_names=['No', 'Yes'],
-                     filled=True, rounded=True,
-                     out_file='tree.dot')
-
-# Puedes convertir el archivo DOT a una imagen usando Graphviz
-# o utilizar alguna librería de visualización de árboles en Python.
-# Por ejemplo, con Graphviz:
-
-# graphviz.render('dot', 'png', 'tree.dot')  # Requiere Graphviz instalado en el sistema
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##### analizar relación con categóricas ####
-
-df.boxplot("perf_2023","GenderID",figsize=(5,5),grid=False)
-df.boxplot("perf_2023","EmpSatisfaction",figsize=(5,5),grid=False)
-
-#### también se pueden usar modelos para exploracion ######
-####Ajustar un modelo para ver importancia de variables categóricas
-
-####Crear variables para entrenar modelo
-y=df.perf_2023
-X=df.loc[:, ~df.columns.isin(['perf_2023','cnt_total','cnt_mov10','cnt_mov30','cnt_mov90','cnt_mov91','EmpID2'])]
-X.info()
-X_dummy=pd.get_dummies(X,columns=['DepID','level2','MaritalDesc','FromDiversityJobFairID','position','State','CitizenDesc','HispanicLatino','RaceDesc','RecruitmentSource'])
-X_dummy.info()
-
-#entrenar modelo
-rtree=tree.DecisionTreeRegressor(max_depth=3)
-rtree=rtree.fit(X=X_dummy,y=y)
-
-####Analizar resultados del modelo
-r = export_text(rtree,feature_names=X_dummy.columns.tolist(),show_weights=True)
-print(r)
-plt.figure(figsize=(40,40))
-tree.plot_tree(rtree,fontsize=9,impurity=False,filled=True)
-plt.show()
-
-#####HAcer lista de variables importantes
-d={"columna":X_dummy.columns,"importancia": rtree.feature_importances_}
-df_import=pd.DataFrame(d)
-pd.set_option('display.max_rows', 100)
-df_import.sort_values(by=['importancia'],ascending=0)
-
-##### ver graficamente las categorias más importantes
-
-df.plot(kind="scatter",y="perf_2023",x="dias_lst_mov")
-
-df.boxplot("perf_2023","MaritalDesc",figsize=(5,5),grid=False)
-df.boxplot("perf_2023","DepID",figsize=(5,5))
