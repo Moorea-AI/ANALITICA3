@@ -22,6 +22,7 @@ from sklearn import tree ###para ajustar arboles de decisión
 from sklearn.tree import export_text ## para exportar reglas del árbol
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
+import numpy as np 
 
 
 # Conexión a la base de datos db_empleados
@@ -86,7 +87,8 @@ df['resignationReason'].unique()
 ################################################################
       
 #Asignamos la columna a una variable
-reason_counts = df['resignationReason'].value_counts()
+df['resignationReason'].replace('nan', np.nan, inplace=True)
+reason_counts = df['resignationReason'].dropna().value_counts()
 
 plt.figure(figsize=(12, 6))
 sns.barplot(x=reason_counts.index, y=reason_counts.values, palette="viridis")
@@ -201,16 +203,45 @@ plt.show()
 # En este caso es cero para "no" y  uno para "si", podemos ver lo esperado, entre más satisfacción laboral más retención.
 
 
+######################################################################
+#                                                                    #
+#   6. Cuáles son los departamentos con más renuncias?               #             
+#                                                                    #  
+#   ANÁLISIS DE DEPARTMENT VS ATTRITION                              # 
+#   Tiene relación con Attrition? Veamos como está distribuida.      #
+#                                                                    #
+#   En el caso de Sales y Research vemos comportamientos muy         #
+#   similares. Esto no ocurre con RRHH quienes tanto los que         #
+#   se retiraron como los que se quedaron tienen una alta            #
+#   satisfacción laboral. Es decir que estos empleados tienen        #
+#   otras razones para renunciar que se deberian explorar en         #
+#   otro trabajo y presentrlo en las recomendaciones finales         #
+#                                                                    #
+######################################################################
 
-# Relación entre la satisfacción laboral y el departamento
-# Existen departamentos con mayor deserción?
-# Cómo varia la deserción según el departamento?
+
 plt.figure(figsize=(12, 8))
 sns.boxplot(x='Department', y='JobSatisfaction', hue='Attrition', data=df)
 plt.title('Relación entre Satisfacción Laboral, Departamento y Abandono')
 plt.xlabel('Departamento')
 plt.ylabel('Satisfacción Laboral')
 plt.show()
+
+######################################################################
+#                                                                    #
+#   7. Qué pasa con el nivel educativo?
+#                                                                    #  
+#   ANÁLISIS DE Education VS ATTRITION                               # 
+#   Tiene relación con Attrition? Veamos como está distribuida.      #
+#                                                                    #
+#   Qué pasa con los que tienen doctorado? son los que menos         #
+#   están, aunque también no son los que tengan mayor número         #
+#   de empleados.Pero si tienen la mayor tasa de abandono            #
+#   Los cargos con estudios más bajos tienen menos tasa de           #
+#   abandono. Esto se puede explicar con los campos de acción.       #  
+#                                                                    #
+######################################################################
+
 
 # Relación entre la satisfacción laboral y la educación
 #Las personas con menor nivel educativo y menos contentas en su trabajo abandonan más que las que si?
@@ -219,8 +250,23 @@ sns.boxplot(x='Education', y='JobSatisfaction', hue='Attrition', data=df)
 plt.title('Relación entre Satisfacción Laboral, Educación y Abandono')
 plt.xlabel('Nivel de Educación')
 plt.ylabel('Satisfacción Laboral')
+note_text = "Education: 1. Below college, 2. College, 3. Bachelor, 4. Master, 5. Doctor"
+plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
+
 plt.show()
 
+######################################################################
+#                                                                    #
+#   8. Qué pasa con el nivel laboral?
+#                                                                    #  
+#   ANÁLISIS DE JobLevel VS ATTRITION                                # 
+#   Tiene relación con Attrition? Veamos como está distribuida.      #
+#                                                                    #
+#   Este es un factor común para todos. El nivel del cargo           #
+#   medio y el más alto son los que presentan menos inconfomidades   #
+#   que los dos primeros.                                            #                                                                    #
+#                                                                    #
+######################################################################
 
 # Relación entre la satisfacción laboral y el nivel de cargo
 # Qué relación hay entre los niveles directivos y la satisfacción laboral?
@@ -230,8 +276,24 @@ sns.boxplot(x='JobLevel', y='JobSatisfaction', hue='Attrition', data=df)
 plt.title('Relación entre Satisfacción Laboral, Nivel de Cargo y Abandono')
 plt.xlabel('Nivel de Cargo')
 plt.ylabel('Satisfacción Laboral')
+note_text = "Se mide en una escala de 1 a 5"
+plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gray', transform=plt.gca().transAxes)
+
 plt.show()
 
+
+######################################################################
+#                                                                    #
+#   9. Y el estado civil? se van más los solteros, casados?          #
+#                                                                    #  
+#   ANÁLISIS DE MaritalStatus VS ATTRITION                           # 
+#   Tiene relación con Attrition? Veamos como está distribuida.      #
+#                                                                    #
+#   Tenemos a los solteros con mayor deserción, seguido de los       #
+#   casados. Los dirvorciados son los que menos se retiran de la     #
+#   compañia.                                                        #                                                                    #
+#                                                                    #
+######################################################################
 
 # Relación entre la satisfacción laboral y el estado civil
 # Quienes renuncia más? casados? solteros? divorciados?
@@ -242,6 +304,27 @@ plt.xlabel('Estado Civil')
 plt.ylabel('Satisfacción Laboral')
 plt.show()
 
+#La complementaremos con esta:
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='MaritalStatus', hue='Attrition', data=df, palette='viridis')
+plt.title('Relación entre Estado Civil y Abandono')
+plt.xlabel('Estado Civil')
+plt.ylabel('Cantidad')
+plt.show()
+
+
+######################################################################
+#                                                                    #
+#   10. Y los que se demoran más en llegar al trabajo?               #                                                                    #  
+#                                                                    #
+#   ANÁLISIS DE DistanceFromHome VS ATTRITION                        # 
+#   Tiene relación con Attrition? Veamos como está distribuida.      #
+#                                                                    #
+#   Podemos observar que están muy balanceadas por lo que la         #
+#   distancia no es un factor que defina la variable                 #
+#                                                                    #
+######################################################################
 
 # Relación entre la satisfacción laboral y la distancia al trabajo
 # Quiénes renuncian más? los que viven más lejos? los que viven más cerca?
@@ -251,11 +334,6 @@ plt.title('Relación entre Distancia al Trabajo y Abandono Laboral')
 plt.xlabel('Abandono Laboral')
 plt.ylabel('Distancia al Trabajo')
 plt.show()
-
-
-
-
-
 
 ###############################
 ######ARCHIVO PROFE

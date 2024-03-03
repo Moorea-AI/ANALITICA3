@@ -201,7 +201,7 @@ a_funciones.identify_and_remove_outliers(conn, ['MonthlyIncome', 'TrainingTimesL
 # resignationReason
 
 columns_to_convert_str = [
-    'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'retirementType', 'resignationReason'
+    'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'retirementType'
 ]
 # Y cambiamos a tipo string
 for column in columns_to_convert_str:
