@@ -23,6 +23,13 @@ from sklearn.tree import export_text ## para exportar reglas del árbol
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np 
+from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn import tree
+import graphviz
+from sklearn.pipeline import Pipeline
+
+
+
 
 
 # Conexión a la base de datos db_empleados
@@ -364,37 +371,114 @@ plt.show()
 ###Analizar correlación de numéricas con un rango amplio,las de rangopequeño se pueden analizar como categóricas
 df.info()
 
-continuas = ['Age',
-             'DistanceFromHome',
-             'MonthlyIncome',
-             'PercentSalaryHike',
-             'StockOptionLevel',
-             'TotalWorkingYears',
-             'TrainingTimesLastYear',
-             'YearsAtCompany',
-             'YearsSinceLastPromotion',
-             'YearsWithCurrManager'
-             ]
-scatter_matrix(df[continuas], figsize=(12, 8))
-plt.show()
 
 df_numeric = df.select_dtypes(include=['float64', 'int64'])
 corr_matrix = df_numeric.corr()
 attrition_correlation = corr_matrix["Attrition"].sort_values(ascending=False)
 attrition_correlation
 
-plt.figure(figsize=(12, 10))
-sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=.5)
-plt.title("Matriz de Correlación de Variables Numéricas")
+# CORRELACIONES POSITIVAS
+# NumCompaniesWorked         0.041503
+# PercentSalaryHike          0.032533
+# PerformanceRating          0.023403
+
+# Esto quiere decir que los empleados que han tenido otros 
+# trabajos, los que han tenido mayores aumentos de salario y
+# mejor desempeño, son los que tienden a abandonar más rápido,
+# aunque no es una correlación muy alta.
+
+# CORRELACIONES CASI CERO
+# EmployeeID                -0.004729
+# StockOptionLevel          -0.006839
+# DistanceFromHome          -0.009730
+
+# Estas no tienen un impacto muy determinante en el estudio.
+
+# CORRELACIONES NEGATIVAS
+# JobLevel                  -0.010290
+# Education                 -0.015111
+# JobInvolvement            -0.015588
+# MonthlyIncome             -0.031176
+# YearsSinceLastPromotion   -0.033019
+# TrainingTimesLastYear     -0.049431
+# WorkLifeBalance           -0.062975
+# EnvironmentSatisfaction   -0.101625
+# JobSatisfaction           -0.103068
+# YearsAtCompany            -0.134392
+# YearsWithCurrManager      -0.156199
+# Age                       -0.159205
+# TotalWorkingYears         -0.171050
+    
+# Los que están más satisfechos con el clima laboral, con su trabajo
+# y que llevan más años con la compañia y con su jefe actual son más propensos
+# a quedarse en la empresa a medida que pasan los años y se incrementa su edad
 
 
 
-cont=df[continuas]
-corr_matrix = cont.corr()
-corr_matrix["retirados_2016"].sort_values(ascending=False)
+# Se eliminan variables nulas y se seleccionan las variables numericas
+df_arbol = df.select_dtypes(include=['float64', 'int64']).dropna()
 
-df.plot(kind="scatter",y="perf_2023",x="avg_perf")
-plt.show()
+# Separamos las variables predictoras de la variable objetivo
+X = df_arbol.drop("Attrition", axis=1)  
+y = df_arbol["Attrition"]
+
+
+# Entrenamos un arbol dedecision para hacer predicciones sobre nuevas instancias de datos
+model = DecisionTreeClassifier(max_depth=3) #Limitamos el arbol a 3 para evitar el sobreajuste
+model.fit(X, y)
+
+
+importances = model.feature_importances_ #importancia de las columnas
+feature_names = X.columns  #nombre de todas las columnas
+
+#Organizamos la importancia de todas las variables
+feature_importance_df = pd.DataFrame({"Feature": feature_names, "Importance": importances})
+
+
+print("Importancia de las variables según el árbol de decisión:\n", feature_importance_df.sort_values(by="Importance", ascending=False))
+
+
+
+
+# Combina preprocesamiento con el modelo (puedes usar el preprocesamiento definido anteriormente)
+model_decision_tree = Pipeline(steps=[('preprocessor', preprocessor),
+                                      ('classifier', DecisionTreeClassifier(random_state=42))])
+
+# Entrena el modelo de árbol de decisión
+model_decision_tree.fit(X_train, y_train)
+
+# Evalúa el rendimiento en el conjunto de prueba
+y_pred_tree = model_decision_tree.predict(X_test)
+print(classification_report(y_test, y_pred_tree))
+print(confusion_matrix(y_test, y_pred_tree))
+
+# Exporta el árbol de decisión a formato DOT (puedes visualizarlo con Graphviz)
+tree.export_graphviz(model_decision_tree.named_steps['classifier'],
+                     feature_names=numeric_features + model_decision_tree.named_steps['preprocessor'].transformers_[1][1].named_steps['onehot'].get_feature_names_out(categorical_features).tolist(),
+                     class_names=['No', 'Yes'],
+                     filled=True, rounded=True,
+                     out_file='tree.dot')
+
+# Puedes convertir el archivo DOT a una imagen usando Graphviz
+# o utilizar alguna librería de visualización de árboles en Python.
+# Por ejemplo, con Graphviz:
+
+# graphviz.render('dot', 'png', 'tree.dot')  # Requiere Graphviz instalado en el sistema
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
