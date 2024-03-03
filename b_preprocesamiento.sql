@@ -1,3 +1,16 @@
+-- ################################################################
+-- #               PRIMER TRABAJO PARA LA MATERIA:                #
+-- #                 APLICACIONES DE LA ANALITICA                 #
+-- #                  MÓDULO DE RECURSOS HUMANOS                  #
+-- #                              POR:                            #
+-- #                                                              #
+-- #                    AURA LUZ MORENO - MOOREA                  #
+-- #                       ALEJANDRA AGUIRRE                      #
+-- #                                                              #
+-- #                    UNIVERSIDAD DE ANTIOQUIA                  #
+-- ################################################################
+
+
 -- Se solicita al equipo de analítica proponer estrategias que permitan tomar acciones para 
 -- reducir el porcentaje de retiros utilizando la información disponible que se tiene de los empleados. 
 -- Asuma que la fecha actual es 1 de enero de 2017, y el plan y estrategia que proponga, son para reducir
@@ -6,6 +19,11 @@
 
 -- Como estamos parados en 2017, 1 de Enero. Requerimos saber cuántos empleados se retiraron en 2016, 
 -- para esto seleccionamos el ID del empleado, fechas, tipo de retiro y porque se retiró
+
+
+-- TABLAS EN LA BASE DE DATOS:
+-- retirados_2016
+-- all_employees
 
 
 drop table if exists retirados_2016;

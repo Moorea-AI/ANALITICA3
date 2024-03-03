@@ -3,8 +3,10 @@
 #                 APLICACIONES DE LA ANALITICA                 #
 #                  MÓDULO DE RECURSOS HUMANOS                  #
 #                              POR:                            #
-#                       ALEJANDRA AGUIRRE                      #
+#                                                              #
 #                    AURA LUZ MORENO - MOOREA                  #
+#                       ALEJANDRA AGUIRRE                      #
+#                                                              #
 #                    UNIVERSIDAD DE ANTIOQUIA                  #
 ################################################################
 
@@ -37,22 +39,25 @@ print(df_general.isnull().sum())
 print(df_manager.isnull().sum()) #No tiene nulos
 print(df_retirement.isnull().sum())
 
-## Eliminamos columnas que no se necesitan
+## Eliminamos columnas que no se necesitan ya que son índices que no tienen relación entre si
 df_employee =df_employee.drop(["Unnamed: 0"], axis=1)
 df_general =df_general.drop(["Unnamed: 0"], axis=1)
 df_manager =df_manager.drop(["Unnamed: 0"], axis=1)
 df_retirement =df_retirement.drop(["Unnamed: 0","Unnamed: 0.1"], axis=1)
 
 
-# Se construye una sola BD
+# Se construye una sola BD la cual pivotamos por el ID del empleado para que queden solo
+# las filas que tienen los datos completos.
 df = df_employee.merge(df_general, on='EmployeeID', how='inner')\
                         .merge(df_manager, on='EmployeeID', how='inner')\
                         .merge(df_retirement, on='EmployeeID', how='left')              
 
 
+# Revisamos las filas que tienen los datos nulos
 print(df.isnull().sum())
 
-
+# Consultamos el diccionario de datos para determinar cuáles columnas son relevantes para elmodelo y cuales no
+# Para proceder a eliminarlas
 print(df.columns)
 
 
@@ -65,32 +70,30 @@ df.drop(columns=["EmployeeCount", "Over18", "StandardHours"],inplace=True)
 
 
 
-
-
-
-
 #Revisamos los nulos columna por columna:
 
 ##############################################
 #EnvironmentSatisfaction' tiene 200 nulos. Revisaremos la mediana y la media para determinar el valor más adecuado
 df['EnvironmentSatisfaction'].value_counts()  #3 es el valor que más tiene
-df['EnvironmentSatisfaction'].mean()  #2.7236
+df['EnvironmentSatisfaction'].mean()  #2.7251
 df['EnvironmentSatisfaction'].median() #3
 #Como la mediana y la media se aproximan a 3, se rellenarán los nulos con 3
 df['EnvironmentSatisfaction'] = df['EnvironmentSatisfaction'].fillna(3)
 
 ##############################################
 # 'JobSatisfaction', hacemos lo mismo que el anterior, con 160
-df['JobSatisfaction'].value_counts() #4 y 3 es el valor que mas se repite
-df['JobSatisfaction'].mean() #2.7272 que se aproxima a 3
+df['JobSatisfaction'].value_counts() #4 y 3 son los valores que más se repiten
+df['JobSatisfaction'].mean() #2.72 que se aproxima a 3
 df['JobSatisfaction'].median() # Mediana de 3
+# El valor que menos afecta la medición es 3, por lo que se rellenan con este.
 df['JobSatisfaction'] = df['JobSatisfaction'].fillna(3)
 
 ##############################################
 # 'WorkLifeBalance', hacemos lo mismo, tiene 304 filas nulas
 df['WorkLifeBalance'].value_counts() #3 es el valor que más se repite
-df['WorkLifeBalance'].mean() #2.7614
+df['WorkLifeBalance'].mean() #2.76
 df['WorkLifeBalance'].median() #3
+# El valor que menos afecta la medición es 3, por lo que se rellenan con este.
 df['WorkLifeBalance'] = df['WorkLifeBalance'].fillna(3)
 
 
@@ -115,25 +118,42 @@ df['TotalWorkingYears'].fillna(df['YearsAtCompany'], inplace=True)
 # Estos valores nulos se quedan asi por ahora, sin embargo, hay que revisar el formato de fecha de este campo
 df['retirementDate'].info() #Tiene datos tipo objeto
 df['retirementDate'] = pd.to_datetime(df['retirementDate'], dayfirst=True)
+# Queda con tipo fecha
 print(df.dtypes)
 
 
 ##############################################
-# 'Attrition' no esta en la BD. Al traducir es un "desgaste" que tiene contenido Si o No
+# 'Attrition' no esta en el diccionario de datos de la BD. Al traducir es un "desgaste", como una tasa de deserción,
+#  la cual tiene una traducción dificil, aunque podríamos tomarlo como booleano, algo asi como renunció? SI__ NO __
 # "Attrition" es un término que se utiliza en recursos humanos y gestión empresarial para referirse a la 
 #  tasa de rotación o la tasa de desgaste de empleados en una organización. Representa la proporción de 
 #  empleados que dejan la empresa en un período de tiempo determinado, ya sea debido a renuncias, 
 #  jubilaciones, despidos u otras razones.
+#
+#   ****************** IMPORTANTE *******************
+#
+#                   VARIABLE ATTRITION  
+# 
+#   Esta es la candidata perfecta para ser la variable objetivo, 
+#   ya que determina si un empleado se retiró o no
+#
+#   *************************************************
+#
 contenido_columna = df['Attrition']
 print(contenido_columna)
-# Rellenaremos los valores nulos con NO
+# Rellenaremos los valores nulos con NO, ya que corresponde a empleados que aún están dentro de la compañia
 df['Attrition'].fillna('No', inplace=True)
 attrition_mapping = {'Yes': 1, 'No': 0}
 df['Attrition'] = df['Attrition'].map(attrition_mapping)
 df['Attrition'].unique()
+df['Attrition'].value_counts() # Con esto asumimos que tenemos 29.592 empleados activos y 5.688 retirados
+# Aunque me deja una duda: En el planteamiento del problema dice que es una empresa con 4.000 empleados y aqui 
+#  aparecen 29.592. 
+
+
 
 ##############################################
-# 'JobSatisfaction' tipo Int
+# 'JobSatisfaction' de tipo float a  tipo Int 
 df['JobSatisfaction'].dtype
 df['JobSatisfaction'] = df['JobSatisfaction'].astype(float).astype(int)
 df['JobSatisfaction'].unique()    
@@ -152,6 +172,7 @@ cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
 cursor.fetchall() # para ver en tablas las bases de datos
 
 df.to_sql("all_employees", conn, if_exists="replace") #Y agregamos
+# tenemos 35.280 datos entre los que renunciaron y los activos.-
 
 #Y probaremso algunas consultas para verificar el funcionamiento correcto
 
@@ -169,34 +190,60 @@ pd.read_sql("""SELECT Age, COUNT(*) as Retirements
 #En el archivo de funciones teniamos una función para detección de los atipicos:
 a_funciones.identify_and_remove_outliers(conn, ['MonthlyIncome', 'TrainingTimesLastYear', 'YearsAtCompany', 'TotalWorkingYears'])
 
+# CONVERTIR A STRING
+# BusinessTravel de object a string
+# Department de object a string
+# EducationField de object a string
+# Gender de object a string
+# JobRole de object a string
+# MaritalStatus de object a string
+# retirementType
+# resignationReason
 
-# Algunas funciones tienen el tipo de datos susceptible para cambio:
-columns_to_convert = [
-    'Education', 'EnvironmentSatisfaction', 'JobInvolvement',
-    'JobSatisfaction', 'TotalWorkingYears','NumCompaniesWorked','PerformanceRating', 'WorkLifeBalance', 'JobLevel'
+columns_to_convert_str = [
+    'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'retirementType', 'resignationReason'
 ]
-
+# Y cambiamos a tipo string
+for column in columns_to_convert_str:
+    df[column] = df[column].astype(str)
 print(df.dtypes)
 
-# Y cambiamos a tipo string
-for column in columns_to_convert:
-    df[column] = df[column].astype(str)
+# CONVERTIR A FECHA
+# DateSurvey
+# InfoDate 
+columns_to_convert_datetime = [
+    'DateSurvey', 'InfoDate', 'SurveyDate'
+]
+# tipo datetime
+for column in columns_to_convert_datetime:
+    df[column] = pd.to_datetime(df[column], errors='coerce')
+print(df.dtypes)
+
+df['DateSurvey'].unique() 
+df['InfoDate'].unique() 
+df['SurveyDate'].unique() 
     
 
 #Vamos a crear un archivo .sql donde pondremos los P.A. para manipular los datos
+# Y a tomar solamente la información relevante para el trabajo que nos compete, con
+# los retirados hasta 2016 ya que estamos parados en el 01/01/2017
+
 df.info()
 df.describe(include='all')
 
 df.to_sql("all_employees", conn, if_exists="replace")
 
 df = pd.read_sql("SELECT * FROM all_employees", conn)
+
 cur=conn.cursor()
-a_funciones.ejecutar_sql('preprocesamientos.sql',cur)
+
+
+a_funciones.ejecutar_sql('b_preprocesamiento.sql',cur)
 
 # LA BASE DE DATOS QUEDA CON ESTAS COLUMNAS
 # EnvironmentSatisfaction: 1. Low, 2. Medium, 3. High, 4. Very High
 # JobSatisfaction:  1. Low, 2. Medium, 3. High, 4. Very High
-# WorkLifeBalance: Bad, Good, Better, Best
+# WorkLifeBalance: 1. Bad, 2. Good, 3. Better, 4. Best
 # Age: Integer
 # BusinessTravel: 'Travel_Rarely', 'Travel_Frequently', 'Non-Travel', 
 # Department: Sales, Research & Development, Human Resources

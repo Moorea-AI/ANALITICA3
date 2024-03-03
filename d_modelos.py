@@ -3,7 +3,9 @@
 #                 APLICACIONES DE LA ANALITICA                 #
 #                  MÓDULO DE RECURSOS HUMANOS                  #
 #                              POR:                            #
-#                       ALEJANDRA AGUIRRE                      #
+#                                                              #
 #                    AURA LUZ MORENO - MOOREA                  #
+#                       ALEJANDRA AGUIRRE                      #
+#                                                              #
 #                    UNIVERSIDAD DE ANTIOQUIA                  #
 ################################################################

@@ -3,8 +3,10 @@
 #                 APLICACIONES DE LA ANALITICA                 #
 #                  MÓDULO DE RECURSOS HUMANOS                  #
 #                              POR:                            #
-#                       ALEJANDRA AGUIRRE                      #
+#                                                              #
 #                    AURA LUZ MORENO - MOOREA                  #
+#                       ALEJANDRA AGUIRRE                      #
+#                                                              #
 #                    UNIVERSIDAD DE ANTIOQUIA                  #
 ################################################################
 
@@ -17,7 +19,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt #Para poder ver gráficamente las variables
 import seaborn as sns #Para poder ver gráficamente las variables.
+
 import os  #Paquete OS: https://docs.python.org/es/3.10/library/os.html
+
+from pathlib import Path
+
 #Ya que es un problema de clasificación, quiero usar la matriz de confusion para 
 # visualizar mejor la relación de las variables que influyen si un empleado se queda o no.
 from sklearn.metrics import confusion_matrix 
@@ -31,14 +37,35 @@ from sklearn.preprocessing import StandardScaler ## escalar variables
 
 #Esta función permite ejecutar un archivo  con extensión .sql que contenga varias consultas
 #En el archivo de SQL pondremos todas las consultas necesarias para construir la base de datos del modelo
+# def ejecutar_sql(nombre_archivo, cur):
+#     try:
+#         # Mirar si el archivo existe
+#         if not os.path.exists(nombre_archivo):
+#             raise FileNotFoundError(f"El archivo {nombre_archivo} no se encuentra")
+        
+#         # Abir el archivo SQL
+#         with open(nombre_archivo, 'r') as sql_file:
+#             sql_as_string = sql_file.read()
+        
+#         # Ejecutar el SQL
+#         cur.executescript(sql_as_string)
+        
+#     except Exception as e:
+#         # Imprimir el error si lo hay
+#         print("Error al ejecutar el archivo SQL:", str(e))
+
+
+
 def ejecutar_sql(nombre_archivo, cur):
     try:
-        # Mirar si el archivo existe
-        if not os.path.exists(nombre_archivo):
-            raise FileNotFoundError(f"El archivo {nombre_archivo} no se encuentra")
+        archivo_path = Path(nombre_archivo)
         
-        # Abir el archivo SQL
-        with open(nombre_archivo, 'r') as sql_file:
+        # Verificar si el archivo existe
+        if not archivo_path.exists():
+            raise FileNotFoundError(f"El archivo {archivo_path} no se encuentra")
+        
+        # Leer el archivo SQL
+        with archivo_path.open('r') as sql_file:
             sql_as_string = sql_file.read()
         
         # Ejecutar el SQL
@@ -47,6 +74,8 @@ def ejecutar_sql(nombre_archivo, cur):
     except Exception as e:
         # Imprimir el error si lo hay
         print("Error al ejecutar el archivo SQL:", str(e))
+
+
 
 
 # esta podemos usarla para limpiar las bases de datos, del semestre pasado
