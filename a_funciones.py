@@ -136,3 +136,16 @@ def preparar_datos (df):
     X=pd.DataFrame(X2,columns=df_dummies.columns)
     X=X[var_names]
     return X
+
+    #####imputar datos numericos
+def impute_columns(df, columns, strategy): #Función que imputa datos para variables numéricas
+  imputer = SimpleImputer(strategy=strategy)
+  for column in columns:
+    column_imputed = imputer.fit_transform(df[column].values.reshape(-1, 1))
+    df[column] = column_imputed.flatten()
+  return df
+
+def ct(columns):
+  ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [columns])], remainder='passthrough')
+  X = np.array(ct.fit_transform(X))
+  return ct
