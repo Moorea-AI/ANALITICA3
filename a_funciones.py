@@ -75,23 +75,18 @@ def show_confusion_matrix(y_true, y_pred):
 
 
 #IMPUTADORES:
-def imputar_f (df,list_cat):  
-    df_c=df[list_cat]
-    df_n=df.loc[:,~df.columns.isin(list_cat)]
+def imputar_f(df, list_cat):
+    # Seleccionar las columnas categóricas
+    df_c = df[list_cat]
 
-    imputer_n=SimpleImputer(strategy='median')
-    imputer_c=SimpleImputer(strategy='most_frequent')
+    # Imputar valores faltantes para las columnas categóricas con el valor más frecuente
+    imputer_c = SimpleImputer(strategy='most_frequent')
+    X_c = imputer_c.fit_transform(df_c)
+    df_c = pd.DataFrame(X_c, columns=df_c.columns)
 
-    imputer_n.fit(df_n)
-    imputer_c.fit(df_c)
-
-    X_n=imputer_n.transform(df_n)
-    X_c=imputer_c.transform(df_c)
-
-    df_n=pd.DataFrame(X_n,columns=df_n.columns)
-    df_c=pd.DataFrame(X_c,columns=df_c.columns)
-
-    df =pd.concat([df_n,df_c],axis=1)
+    # Concatenar los DataFrames nuevamente
+    df = pd.concat([df_c], axis=1)
+    
     return df
 
 
