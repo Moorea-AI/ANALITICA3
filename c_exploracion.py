@@ -142,12 +142,16 @@ plt.show()
 
 ######################################################################
 #                                                                    #
-#   4. Pero... Cómo está la satisfacción laboral?
-# 
-#   ANÁLISIS DE JOB SATISFACTION (satisfacción laboral)  
-#   Tiene relación con Attrition? Veamos como está distribuida.
+#   4. Pero... Cómo está la satisfacción laboral?                    #             
+#                                                                    #  
+#   ANÁLISIS DE JOB SATISFACTION (satisfacción laboral)              #
+#   Tiene relación con Attrition? Veamos como está distribuida.      #
 #                                                                    #
-                                                                                 #
+#   Podemos observar que la mayor frecuencia está en 3 y 4 que es    #
+#   "High" (alta) y "Very High" (muy alta), es decir que los         #
+#   empleados están renunciando por otra razón que debemos           #
+#   explorar.                                                        #
+#                                                                    #
 ######################################################################
  
  
@@ -162,10 +166,24 @@ plt.text(0.5, -0.2, note_text, ha='center', va='center', fontsize=10, color='gra
 plt.show()
 
 
-
-
+######################################################################
+#                                                                    #
+#   5. Y qué pasa si la comparamos con la variable objetivo?         #             
+#                                                                    #  
+#   ANÁLISIS DE JOB SATISFACTION (satisfacción laboral) VS ATTRITION # 
+#   Tiene relación con Attrition? Veamos como está distribuida.      #
+#                                                                    #
+#   En este caso es cero para los que continuan en la emrpesa y 1    #
+#   para los que renunciaron y ya no están. Obtenemos lo esperado    #
+#   Las personas que ya no están tenían menos satisfacción laboral   #
+#   que las que continúan. Sin embargo vemos un balance entre ambos  #
+#   boxplot que nos podría indicar que esta no es una variable       #
+#   concluyente                                                      #
+#                                                                    #
+######################################################################
+ 
 # Abandono versus la satisfaccion laboral
-# Pero como se relaciona la tasa de abandono con las renuncias?
+# Pero como se relaciona la tasa de abandono con la satisfacción laboral?
 scaler = MinMaxScaler()
 df['JobSatisfaction'] = df['JobSatisfaction'].astype(float)
 df[['JobSatisfaction', 'Attrition']] = scaler.fit_transform(df[['JobSatisfaction', 'Attrition']])
