@@ -28,8 +28,9 @@
 
 drop table if exists retirados_2016;
 
+-- Con la cláusula DISTINCT aseguramos que solamente hayan combinaciones unicas
 create table retirados_2016 as
-select
+select DISTINCT
 EmployeeID,
 retirementDate,
 retirementType,

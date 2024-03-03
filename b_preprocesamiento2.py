@@ -240,6 +240,11 @@ cur=conn.cursor()
 
 a_funciones.ejecutar_sql('b_preprocesamiento.sql',cur)
 
+# Al hacer una lectura notamos que tenemos datos duplicados 4 veces. Estos serán retirados
+pd.read_sql("""SELECT * FROM retirados_2016""", conn)
+
+
+
 # LA BASE DE DATOS QUEDA CON ESTAS COLUMNAS
 # EnvironmentSatisfaction: 1. Low, 2. Medium, 3. High, 4. Very High
 # JobSatisfaction:  1. Low, 2. Medium, 3. High, 4. Very High

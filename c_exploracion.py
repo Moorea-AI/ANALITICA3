@@ -44,11 +44,11 @@ df['resignationReason'].unique()
 
 # EnvironmentSatisfaction: 1. Low, 2. Medium, 3. High, 4. Very High
 # JobSatisfaction:  1. Low, 2. Medium, 3. High, 4. Very High
-# WorkLifeBalance: Bad, Good, Better, Best
+# WorkLifeBalance: 1. Bad, 2. Good, 3. Better, 4. Best
 # Age: Integer
 # BusinessTravel: 'Travel_Rarely', 'Travel_Frequently', 'Non-Travel', 
 # Department: Sales, Research & Development, Human Resources
-# DistanceFromHome: distancia en kilometros
+# DistanceFromHome: distancia en kilómetros
 # Education: 1. Below college, 2. College, 3. Bachelor, 4. Master, 5. Doctor
 # EducationField: Life Sciences, Other, Medical, Marketing, Technical Degree, Human Resources
 # Gender: Male or Female
