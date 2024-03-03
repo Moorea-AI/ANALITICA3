@@ -348,8 +348,22 @@ plt.show()
 
 ####explorar relación con variable respuesta #######
 
+######################################################################
+#                                                                    #
+#   ANALISIS DE CORRELACION DE LAS VARIABLES NUMÉRICAS             #                                                                    #  
+#                                                                    #
+#   ANÁLISIS DE DistanceFromHome VS ATTRITION                        # 
+#   Tiene relación con Attrition? Veamos como está distribuida.      #
+#                                                                    #
+#   Podemos observar que están muy balanceadas por lo que la         #
+#   distancia no es un factor que defina la variable                 #
+#                                                                    #
+######################################################################
+
+
 ###Analizar correlación de numéricas con un rango amplio,las de rangopequeño se pueden analizar como categóricas
 df.info()
+
 continuas = ['Age',
              'DistanceFromHome',
              'MonthlyIncome',
@@ -363,12 +377,27 @@ continuas = ['Age',
              ]
 scatter_matrix(df[continuas], figsize=(12, 8))
 plt.show()
+
+df_numeric = df.select_dtypes(include=['float64', 'int64'])
+corr_matrix = df_numeric.corr()
+attrition_correlation = corr_matrix["Attrition"].sort_values(ascending=False)
+attrition_correlation
+
+plt.figure(figsize=(12, 10))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=.5)
+plt.title("Matriz de Correlación de Variables Numéricas")
+
+
+
 cont=df[continuas]
 corr_matrix = cont.corr()
-corr_matrix["perf_2023"].sort_values(ascending=False)
+corr_matrix["retirados_2016"].sort_values(ascending=False)
 
 df.plot(kind="scatter",y="perf_2023",x="avg_perf")
 plt.show()
+
+
+
 
 ##### analizar relación con categóricas ####
 
