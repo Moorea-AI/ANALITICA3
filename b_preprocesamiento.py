@@ -27,7 +27,7 @@
     },
     {
       "cell_type": "code",
-      "execution_count": 89,
+      "execution_count": 1,
       "metadata": {
         "id": "sp9XXeKSrFPU"
       },
@@ -51,15 +51,15 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "nWkSer0n0q4W",
-        "outputId": "448c2ff3-7ee1-485d-9e30-00aab8162c80"
+        "outputId": "5d632366-76b3-4ad0-b2b2-79515fbe1439"
       },
-      "execution_count": 90,
+      "execution_count": 2,
       "outputs": [
         {
           "output_type": "stream",
           "name": "stdout",
           "text": [
-            "Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount(\"/content/drive\", force_remount=True).\n"
+            "Mounted at /content/drive\n"
           ]
         }
       ]
@@ -72,7 +72,7 @@
       "metadata": {
         "id": "RXv1ureR011F"
       },
-      "execution_count": 91,
+      "execution_count": 3,
       "outputs": []
     },
     {
@@ -84,7 +84,7 @@
       "metadata": {
         "id": "0LuJXOjy1CR6"
       },
-      "execution_count": 92,
+      "execution_count": 4,
       "outputs": []
     },
     {
@@ -99,7 +99,7 @@
       "metadata": {
         "id": "OQrmPsjOlph2"
       },
-      "execution_count": 93,
+      "execution_count": 5,
       "outputs": []
     },
     {
@@ -114,7 +114,7 @@
       "metadata": {
         "id": "yKMQExbaloc4"
       },
-      "execution_count": 94,
+      "execution_count": 6,
       "outputs": []
     },
     {
@@ -129,7 +129,7 @@
       "metadata": {
         "id": "1wgv5hA0y-Yu"
       },
-      "execution_count": 95,
+      "execution_count": 7,
       "outputs": []
     },
     {
@@ -145,9 +145,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "DfOexHb3z508",
-        "outputId": "313df860-a04f-4b6b-cf4a-fd6da231332b"
+        "outputId": "66240e88-cf83-47e5-8950-a24ce798ec5f"
       },
-      "execution_count": 96,
+      "execution_count": 8,
       "outputs": [
         {
           "output_type": "stream",
@@ -175,9 +175,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "fkjRtOzF2sh-",
-        "outputId": "35c5c982-53a9-4cec-c200-bea692558357"
+        "outputId": "347831d0-70b9-406e-f8ed-5d93d4ad77ca"
       },
-      "execution_count": 97,
+      "execution_count": 9,
       "outputs": [
         {
           "output_type": "stream",
@@ -272,9 +272,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "yPeBzF6q0L_J",
-        "outputId": "488f3e1d-f59d-45ea-a11b-e8a8d26f5780"
+        "outputId": "05220b0c-5804-442f-d48a-42f53fb95315"
       },
-      "execution_count": 98,
+      "execution_count": 10,
       "outputs": [
         {
           "output_type": "stream",
@@ -362,7 +362,7 @@
       "metadata": {
         "id": "olQzhJ-45aQ0"
       },
-      "execution_count": 99,
+      "execution_count": 11,
       "outputs": []
     },
     {
@@ -377,7 +377,7 @@
       "metadata": {
         "id": "t0bf70fU7rFx"
       },
-      "execution_count": 100,
+      "execution_count": 12,
       "outputs": []
     },
     {
@@ -391,9 +391,9 @@
           "height": 206
         },
         "id": "_OBhT117Gdhp",
-        "outputId": "3d3c2324-b6c6-4d34-9e33-d44ef7a5f49b"
+        "outputId": "91fe0c9c-26fb-45ac-8216-4ed73b9f37c2"
       },
-      "execution_count": 101,
+      "execution_count": 13,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -415,7 +415,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-706788dc-7dc2-4384-8372-055ea9022b86\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-db6037aa-56bb-4dac-9f87-4bdf9a3a8f73\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -488,7 +488,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-706788dc-7dc2-4384-8372-055ea9022b86')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-db6037aa-56bb-4dac-9f87-4bdf9a3a8f73')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -540,12 +540,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-706788dc-7dc2-4384-8372-055ea9022b86 button.colab-df-convert');\n",
+              "        document.querySelector('#df-db6037aa-56bb-4dac-9f87-4bdf9a3a8f73 button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-706788dc-7dc2-4384-8372-055ea9022b86');\n",
+              "        const element = document.querySelector('#df-db6037aa-56bb-4dac-9f87-4bdf9a3a8f73');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -565,8 +565,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-9bd57b1b-19b1-4929-8b29-2947d8d016a0\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-9bd57b1b-19b1-4929-8b29-2947d8d016a0')\"\n",
+              "<div id=\"df-0168e3c5-da32-4e74-b27d-17d488792007\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-0168e3c5-da32-4e74-b27d-17d488792007')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -685,7 +685,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-9bd57b1b-19b1-4929-8b29-2947d8d016a0 button');\n",
+              "        document.querySelector('#df-0168e3c5-da32-4e74-b27d-17d488792007 button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -701,7 +701,7 @@
             }
           },
           "metadata": {},
-          "execution_count": 101
+          "execution_count": 13
         }
       ]
     },
@@ -716,9 +716,9 @@
           "height": 206
         },
         "id": "yUbK944gU5GE",
-        "outputId": "d020983c-c0e5-4604-e563-2f3b959ae4f1"
+        "outputId": "7381da22-08c3-486d-e50c-17f73a670845"
       },
-      "execution_count": 102,
+      "execution_count": 14,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -733,7 +733,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-deda228f-25dd-444b-bd8b-f6cbfe13c3aa\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-5e77c987-4799-4b2d-96f5-4bcecdc8f5f5\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -800,7 +800,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-deda228f-25dd-444b-bd8b-f6cbfe13c3aa')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-5e77c987-4799-4b2d-96f5-4bcecdc8f5f5')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -852,12 +852,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-deda228f-25dd-444b-bd8b-f6cbfe13c3aa button.colab-df-convert');\n",
+              "        document.querySelector('#df-5e77c987-4799-4b2d-96f5-4bcecdc8f5f5 button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-deda228f-25dd-444b-bd8b-f6cbfe13c3aa');\n",
+              "        const element = document.querySelector('#df-5e77c987-4799-4b2d-96f5-4bcecdc8f5f5');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -877,8 +877,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-0f27ac3a-cf41-43e9-945d-3d1d86b0bc3a\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-0f27ac3a-cf41-43e9-945d-3d1d86b0bc3a')\"\n",
+              "<div id=\"df-0aa4db88-ffc5-4101-9b58-84cd5d40fb95\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-0aa4db88-ffc5-4101-9b58-84cd5d40fb95')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -997,7 +997,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-0f27ac3a-cf41-43e9-945d-3d1d86b0bc3a button');\n",
+              "        document.querySelector('#df-0aa4db88-ffc5-4101-9b58-84cd5d40fb95 button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -1013,7 +1013,7 @@
             }
           },
           "metadata": {},
-          "execution_count": 102
+          "execution_count": 14
         }
       ]
     },
@@ -1027,7 +1027,7 @@
       "metadata": {
         "id": "wKI8QqO3m5hY"
       },
-      "execution_count": 103,
+      "execution_count": 15,
       "outputs": []
     },
     {
@@ -1044,9 +1044,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "dKqHj3GFquXy",
-        "outputId": "433bc5c2-6a94-4541-f05a-beead7892838"
+        "outputId": "cdada6f2-32ad-4384-f56d-c210c28bdf75"
       },
-      "execution_count": 104,
+      "execution_count": 16,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -1056,7 +1056,7 @@
             ]
           },
           "metadata": {},
-          "execution_count": 104
+          "execution_count": 16
         }
       ]
     },
@@ -1071,19 +1071,19 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "qz-GJFc68pRX",
-        "outputId": "7e457c82-8b5a-4ae3-886f-3ada6fb16421"
+        "outputId": "630ad531-cbf1-4fc8-cb34-d2cccb661101"
       },
-      "execution_count": 105,
+      "execution_count": 17,
       "outputs": [
         {
           "output_type": "execute_result",
           "data": {
             "text/plain": [
-              "[('BD',), ('employee',), ('general',), ('manager',), ('retirement',)]"
+              "[('employee',), ('general',), ('manager',), ('retirement',)]"
             ]
           },
           "metadata": {},
-          "execution_count": 105
+          "execution_count": 17
         }
       ]
     },
@@ -1131,7 +1131,7 @@
       "metadata": {
         "id": "FIaAY6-1yI95"
       },
-      "execution_count": 106,
+      "execution_count": 18,
       "outputs": []
     },
     {
@@ -1144,9 +1144,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "cnEhtCnB3LQP",
-        "outputId": "4de4e759-6e53-4f7c-c565-576c059f4181"
+        "outputId": "916a2145-4384-4ca5-d676-cbd2823be05f"
       },
-      "execution_count": 107,
+      "execution_count": 19,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -1156,7 +1156,7 @@
             ]
           },
           "metadata": {},
-          "execution_count": 107
+          "execution_count": 19
         }
       ]
     },
@@ -1173,9 +1173,9 @@
           "height": 424
         },
         "id": "NV0-A8Bm9fLK",
-        "outputId": "c254bf97-d6d8-4891-f3da-18f9f244e39c"
+        "outputId": "0d0649ad-9cfd-4ad7-8482-a1492c2cf26f"
       },
-      "execution_count": 108,
+      "execution_count": 20,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -1198,7 +1198,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-7da5560a-08a8-44d1-af41-1d7c712a0636\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-f2f7c076-e393-4103-8680-58379fdba530\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -1284,7 +1284,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-7da5560a-08a8-44d1-af41-1d7c712a0636')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-f2f7c076-e393-4103-8680-58379fdba530')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -1336,12 +1336,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-7da5560a-08a8-44d1-af41-1d7c712a0636 button.colab-df-convert');\n",
+              "        document.querySelector('#df-f2f7c076-e393-4103-8680-58379fdba530 button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-7da5560a-08a8-44d1-af41-1d7c712a0636');\n",
+              "        const element = document.querySelector('#df-f2f7c076-e393-4103-8680-58379fdba530');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -1361,8 +1361,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-eb6d8b32-7643-46c3-9f78-87286136be24\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-eb6d8b32-7643-46c3-9f78-87286136be24')\"\n",
+              "<div id=\"df-e5120cec-00e5-4f99-b740-b0536b94b78e\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-e5120cec-00e5-4f99-b740-b0536b94b78e')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -1481,7 +1481,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-eb6d8b32-7643-46c3-9f78-87286136be24 button');\n",
+              "        document.querySelector('#df-e5120cec-00e5-4f99-b740-b0536b94b78e button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -1496,7 +1496,7 @@
             }
           },
           "metadata": {},
-          "execution_count": 108
+          "execution_count": 20
         }
       ]
     },
@@ -1513,9 +1513,9 @@
           "height": 112
         },
         "id": "tIohmi6o3DbE",
-        "outputId": "50b8ac93-6f9e-4b9e-8d79-b8539f355678"
+        "outputId": "5409037c-417b-4d28-9672-c1d187730b5a"
       },
-      "execution_count": 109,
+      "execution_count": 21,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -1527,7 +1527,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-3ec22450-66b0-4e0e-854c-9e3ceba4240b\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-1ce23f86-7899-4219-a78b-e0907641da2b\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -1567,7 +1567,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-3ec22450-66b0-4e0e-854c-9e3ceba4240b')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-1ce23f86-7899-4219-a78b-e0907641da2b')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -1619,12 +1619,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-3ec22450-66b0-4e0e-854c-9e3ceba4240b button.colab-df-convert');\n",
+              "        document.querySelector('#df-1ce23f86-7899-4219-a78b-e0907641da2b button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-3ec22450-66b0-4e0e-854c-9e3ceba4240b');\n",
+              "        const element = document.querySelector('#df-1ce23f86-7899-4219-a78b-e0907641da2b');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -1644,8 +1644,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-7386df34-0daa-4b18-b85a-fb04a1370335\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-7386df34-0daa-4b18-b85a-fb04a1370335')\"\n",
+              "<div id=\"df-2a620f91-04ce-49ef-8e46-a5d04396924e\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-2a620f91-04ce-49ef-8e46-a5d04396924e')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -1764,7 +1764,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-7386df34-0daa-4b18-b85a-fb04a1370335 button');\n",
+              "        document.querySelector('#df-2a620f91-04ce-49ef-8e46-a5d04396924e button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -1775,11 +1775,11 @@
             ],
             "application/vnd.google.colaboratory.intrinsic+json": {
               "type": "dataframe",
-              "repr_error": "'str' object has no attribute 'empty'"
+              "summary": "{\n  \"name\": \"                            group by datesurvey\\\"\\\"\\\", conn)\",\n  \"rows\": 2,\n  \"fields\": [\n    {\n      \"column\": \"datesurvey\",\n      \"properties\": {\n        \"dtype\": \"object\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"2016-12-31 00:00:00\",\n          \"2015-12-31 00:00:00\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"count(*)\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 4410,\n        \"max\": 4410,\n        \"num_unique_values\": 1,\n        \"samples\": [\n          4410\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
             }
           },
           "metadata": {},
-          "execution_count": 109
+          "execution_count": 21
         }
       ]
     },
@@ -1796,9 +1796,9 @@
           "height": 112
         },
         "id": "SzI9hmC1UPjz",
-        "outputId": "c4fef4ef-1ae6-440e-e1f6-3b0da9323e5f"
+        "outputId": "3024ef36-ac9d-481f-a34e-b77c168672e0"
       },
-      "execution_count": 110,
+      "execution_count": 22,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -1810,7 +1810,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-62c1bad4-1f7f-440a-a1f1-b33255e9c7f0\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-3e0154ac-8f79-4974-9e1d-d18bbe8a44bd\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -1850,7 +1850,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-62c1bad4-1f7f-440a-a1f1-b33255e9c7f0')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-3e0154ac-8f79-4974-9e1d-d18bbe8a44bd')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -1902,12 +1902,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-62c1bad4-1f7f-440a-a1f1-b33255e9c7f0 button.colab-df-convert');\n",
+              "        document.querySelector('#df-3e0154ac-8f79-4974-9e1d-d18bbe8a44bd button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-62c1bad4-1f7f-440a-a1f1-b33255e9c7f0');\n",
+              "        const element = document.querySelector('#df-3e0154ac-8f79-4974-9e1d-d18bbe8a44bd');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -1927,8 +1927,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-2a3ca811-347e-4dd7-8c3c-34a45bf32416\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-2a3ca811-347e-4dd7-8c3c-34a45bf32416')\"\n",
+              "<div id=\"df-4f1aea94-26ec-4570-92f0-caa526efbecd\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-4f1aea94-26ec-4570-92f0-caa526efbecd')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -2047,7 +2047,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-2a3ca811-347e-4dd7-8c3c-34a45bf32416 button');\n",
+              "        document.querySelector('#df-4f1aea94-26ec-4570-92f0-caa526efbecd button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -2058,11 +2058,11 @@
             ],
             "application/vnd.google.colaboratory.intrinsic+json": {
               "type": "dataframe",
-              "repr_error": "'str' object has no attribute 'empty'"
+              "summary": "{\n  \"name\": \"                            group by surveydate\\\"\\\"\\\", conn)\",\n  \"rows\": 2,\n  \"fields\": [\n    {\n      \"column\": \"surveydate\",\n      \"properties\": {\n        \"dtype\": \"object\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"2016-12-31 00:00:00\",\n          \"2015-12-31 00:00:00\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"count(*)\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 4410,\n        \"max\": 4410,\n        \"num_unique_values\": 1,\n        \"samples\": [\n          4410\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
             }
           },
           "metadata": {},
-          "execution_count": 110
+          "execution_count": 22
         }
       ]
     },
@@ -2080,9 +2080,9 @@
           "height": 143
         },
         "id": "EKtm_PW65A1a",
-        "outputId": "f7c9b642-7895-4fa7-820d-eb24c6bf284c"
+        "outputId": "154f7140-4dee-4131-cd1c-2cdc5d3de7dc"
       },
-      "execution_count": 111,
+      "execution_count": 23,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -2095,7 +2095,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-1098dba1-3ed8-4baa-9def-530d9f077db2\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-834b7fef-f800-4abf-b685-29a06602a4d0\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -2140,7 +2140,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-1098dba1-3ed8-4baa-9def-530d9f077db2')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-834b7fef-f800-4abf-b685-29a06602a4d0')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -2192,12 +2192,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-1098dba1-3ed8-4baa-9def-530d9f077db2 button.colab-df-convert');\n",
+              "        document.querySelector('#df-834b7fef-f800-4abf-b685-29a06602a4d0 button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-1098dba1-3ed8-4baa-9def-530d9f077db2');\n",
+              "        const element = document.querySelector('#df-834b7fef-f800-4abf-b685-29a06602a4d0');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -2217,8 +2217,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-b8cecc9b-e734-470c-aebd-4416123f16db\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-b8cecc9b-e734-470c-aebd-4416123f16db')\"\n",
+              "<div id=\"df-7a646a5d-0a34-4cca-84bb-97cd07523360\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-7a646a5d-0a34-4cca-84bb-97cd07523360')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -2337,7 +2337,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-b8cecc9b-e734-470c-aebd-4416123f16db button');\n",
+              "        document.querySelector('#df-7a646a5d-0a34-4cca-84bb-97cd07523360 button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -2348,11 +2348,11 @@
             ],
             "application/vnd.google.colaboratory.intrinsic+json": {
               "type": "dataframe",
-              "repr_error": "'str' object has no attribute 'empty'"
+              "summary": "{\n  \"name\": \"                                group by fecha\\\"\\\"\\\", conn)\",\n  \"rows\": 3,\n  \"fields\": [\n    {\n      \"column\": \"fecha\",\n      \"properties\": {\n        \"dtype\": \"date\",\n        \"min\": \"2015-01-01 00:00:00\",\n        \"max\": \"2016-01-01 00:00:00\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"2016\",\n          \"2015\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"cnt\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 15621,\n        \"min\": 488,\n        \"max\": 29592,\n        \"num_unique_values\": 3,\n        \"samples\": [\n          29592,\n          488\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
             }
           },
           "metadata": {},
-          "execution_count": 111
+          "execution_count": 23
         }
       ]
     },
@@ -2369,9 +2369,9 @@
           "height": 112
         },
         "id": "w5W0hrMZBp4a",
-        "outputId": "cf4d4e69-c534-4470-ead4-739ace89706c"
+        "outputId": "b610cd10-f73e-4557-f3da-29f67949eec4"
       },
-      "execution_count": 112,
+      "execution_count": 24,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -2383,7 +2383,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-386937a9-535b-4960-97d6-7dcb6ecf2b83\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-4ffe2bd5-6bb6-42de-b72d-0cae9413ff7c\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -2423,7 +2423,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-386937a9-535b-4960-97d6-7dcb6ecf2b83')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-4ffe2bd5-6bb6-42de-b72d-0cae9413ff7c')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -2475,12 +2475,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-386937a9-535b-4960-97d6-7dcb6ecf2b83 button.colab-df-convert');\n",
+              "        document.querySelector('#df-4ffe2bd5-6bb6-42de-b72d-0cae9413ff7c button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-386937a9-535b-4960-97d6-7dcb6ecf2b83');\n",
+              "        const element = document.querySelector('#df-4ffe2bd5-6bb6-42de-b72d-0cae9413ff7c');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -2500,8 +2500,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-78d193da-bdc6-4e1e-9fcc-328c158325b0\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-78d193da-bdc6-4e1e-9fcc-328c158325b0')\"\n",
+              "<div id=\"df-541166f5-307f-42f7-b0b3-1b3310805e33\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-541166f5-307f-42f7-b0b3-1b3310805e33')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -2620,7 +2620,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-78d193da-bdc6-4e1e-9fcc-328c158325b0 button');\n",
+              "        document.querySelector('#df-541166f5-307f-42f7-b0b3-1b3310805e33 button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -2631,11 +2631,11 @@
             ],
             "application/vnd.google.colaboratory.intrinsic+json": {
               "type": "dataframe",
-              "repr_error": "'str' object has no attribute 'empty'"
+              "summary": "{\n  \"name\": \"                            group by FECHA\\\"\\\"\\\", conn)\",\n  \"rows\": 2,\n  \"fields\": [\n    {\n      \"column\": \"FECHA\",\n      \"properties\": {\n        \"dtype\": \"object\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"2016\",\n          \"2015\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"count(*)\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 416,\n        \"min\": 61,\n        \"max\": 650,\n        \"num_unique_values\": 2,\n        \"samples\": [\n          650,\n          61\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
             }
           },
           "metadata": {},
-          "execution_count": 112
+          "execution_count": 24
         }
       ]
     },
@@ -2652,9 +2652,9 @@
           "height": 112
         },
         "id": "hISWhM64C11m",
-        "outputId": "72132a2f-e2dc-4ead-ede4-0d8b5270530f"
+        "outputId": "eba93d95-2412-49e5-bafb-5e476414ac4d"
       },
-      "execution_count": 113,
+      "execution_count": 25,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -2666,7 +2666,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-e21e46c7-d479-47ed-866a-93db73e16c90\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-2b62d234-9ece-4f95-a12f-d6fa5e55c8e4\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -2706,7 +2706,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-e21e46c7-d479-47ed-866a-93db73e16c90')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-2b62d234-9ece-4f95-a12f-d6fa5e55c8e4')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -2758,12 +2758,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-e21e46c7-d479-47ed-866a-93db73e16c90 button.colab-df-convert');\n",
+              "        document.querySelector('#df-2b62d234-9ece-4f95-a12f-d6fa5e55c8e4 button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-e21e46c7-d479-47ed-866a-93db73e16c90');\n",
+              "        const element = document.querySelector('#df-2b62d234-9ece-4f95-a12f-d6fa5e55c8e4');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -2783,8 +2783,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-b7d6a197-6330-4a1b-aa44-fef6e8caa5c2\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-b7d6a197-6330-4a1b-aa44-fef6e8caa5c2')\"\n",
+              "<div id=\"df-80a3cc41-4f92-412b-aca1-05c895cf8ccf\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-80a3cc41-4f92-412b-aca1-05c895cf8ccf')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -2903,7 +2903,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-b7d6a197-6330-4a1b-aa44-fef6e8caa5c2 button');\n",
+              "        document.querySelector('#df-80a3cc41-4f92-412b-aca1-05c895cf8ccf button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -2914,11 +2914,11 @@
             ],
             "application/vnd.google.colaboratory.intrinsic+json": {
               "type": "dataframe",
-              "repr_error": "'str' object has no attribute 'empty'"
+              "summary": "{\n  \"name\": \"                            group by FECHA\\\"\\\"\\\", conn)\",\n  \"rows\": 2,\n  \"fields\": [\n    {\n      \"column\": \"FECHA\",\n      \"properties\": {\n        \"dtype\": \"object\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"2016\",\n          \"2015\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"count(*)\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 4410,\n        \"max\": 4410,\n        \"num_unique_values\": 1,\n        \"samples\": [\n          4410\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
             }
           },
           "metadata": {},
-          "execution_count": 113
+          "execution_count": 25
         }
       ]
     },
@@ -2936,9 +2936,9 @@
           "height": 791
         },
         "id": "unQoeRJs5mp6",
-        "outputId": "7291114b-aff7-4902-a4d3-43b7bcbcf604"
+        "outputId": "382b2a2a-d3cc-4232-e0f4-e9b4f09ae064"
       },
-      "execution_count": 114,
+      "execution_count": 26,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -3026,7 +3026,7 @@
             ],
             "text/html": [
               "\n",
-              "  <div id=\"df-4fb8dd2c-598b-45a5-8ece-d18f54fef48b\" class=\"colab-df-container\">\n",
+              "  <div id=\"df-a0c4f46a-ca63-4a39-947b-831cb5d6b33c\" class=\"colab-df-container\">\n",
               "    <div>\n",
               "<style scoped>\n",
               "    .dataframe tbody tr th:only-of-type {\n",
@@ -3340,7 +3340,7 @@
               "    <div class=\"colab-df-buttons\">\n",
               "\n",
               "  <div class=\"colab-df-container\">\n",
-              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-4fb8dd2c-598b-45a5-8ece-d18f54fef48b')\"\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-a0c4f46a-ca63-4a39-947b-831cb5d6b33c')\"\n",
               "            title=\"Convert this dataframe to an interactive table.\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -3392,12 +3392,12 @@
               "\n",
               "    <script>\n",
               "      const buttonEl =\n",
-              "        document.querySelector('#df-4fb8dd2c-598b-45a5-8ece-d18f54fef48b button.colab-df-convert');\n",
+              "        document.querySelector('#df-a0c4f46a-ca63-4a39-947b-831cb5d6b33c button.colab-df-convert');\n",
               "      buttonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "\n",
               "      async function convertToInteractive(key) {\n",
-              "        const element = document.querySelector('#df-4fb8dd2c-598b-45a5-8ece-d18f54fef48b');\n",
+              "        const element = document.querySelector('#df-a0c4f46a-ca63-4a39-947b-831cb5d6b33c');\n",
               "        const dataTable =\n",
               "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
               "                                                    [key], {});\n",
@@ -3417,8 +3417,8 @@
               "  </div>\n",
               "\n",
               "\n",
-              "<div id=\"df-84493dfa-5a4c-4b00-9c57-e48f9e9cfdfb\">\n",
-              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-84493dfa-5a4c-4b00-9c57-e48f9e9cfdfb')\"\n",
+              "<div id=\"df-ebf3a97a-a2d8-4fbe-af11-ff3e4f7f7177\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-ebf3a97a-a2d8-4fbe-af11-ff3e4f7f7177')\"\n",
               "            title=\"Suggest charts\"\n",
               "            style=\"display:none;\">\n",
               "\n",
@@ -3537,7 +3537,7 @@
               "    }\n",
               "    (() => {\n",
               "      let quickchartButtonEl =\n",
-              "        document.querySelector('#df-84493dfa-5a4c-4b00-9c57-e48f9e9cfdfb button');\n",
+              "        document.querySelector('#df-ebf3a97a-a2d8-4fbe-af11-ff3e4f7f7177 button');\n",
               "      quickchartButtonEl.style.display =\n",
               "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
               "    })();\n",
@@ -3551,7 +3551,7 @@
             }
           },
           "metadata": {},
-          "execution_count": 114
+          "execution_count": 26
         }
       ]
     },
@@ -3559,15 +3559,634 @@
       "cell_type": "code",
       "source": [
         "#Se selecciona las renuncias del año 2016 para realizar el modelo\n",
-        "BD1 = pd.read_sql(\"\"\"SELECT *\n",
+        "pd.read_sql(\"\"\"SELECT *\n",
         "FROM BD\n",
         "WHERE strftime('%Y', retirementdate) = '2016'\"\"\", conn)"
       ],
       "metadata": {
-        "id": "fEsUO2b6Bx3P"
+        "id": "fEsUO2b6Bx3P",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 791
+        },
+        "outputId": "4c12f9a1-fd09-4c8f-fdd3-51158e8768ae"
       },
-      "execution_count": 115,
-      "outputs": []
+      "execution_count": 27,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "      index  employeeid  environmentsatisfaction  jobsatisfaction  \\\n",
+              "0         4           2                      3.0              2.0   \n",
+              "1         5           2                      3.0              2.0   \n",
+              "2         6           2                      3.0              2.0   \n",
+              "3         7           2                      3.0              2.0   \n",
+              "4        24           7                      1.0              3.0   \n",
+              "...     ...         ...                      ...              ...   \n",
+              "5195  33563        3981                      4.0              2.0   \n",
+              "5196  33616        3995                      4.0              1.0   \n",
+              "5197  33617        3995                      4.0              1.0   \n",
+              "5198  33618        3995                      4.0              1.0   \n",
+              "5199  33619        3995                      4.0              1.0   \n",
+              "\n",
+              "      worklifebalance           datesurvey  jobinvolvement  performancerating  \\\n",
+              "0                 4.0  2015-12-31 00:00:00               2                  4   \n",
+              "1                 4.0  2015-12-31 00:00:00               2                  4   \n",
+              "2                 4.0  2015-12-31 00:00:00               2                  4   \n",
+              "3                 4.0  2015-12-31 00:00:00               2                  4   \n",
+              "4                 1.0  2015-12-31 00:00:00               3                  4   \n",
+              "...               ...                  ...             ...                ...   \n",
+              "5195              4.0  2016-12-31 00:00:00               3                  3   \n",
+              "5196              3.0  2016-12-31 00:00:00               3                  3   \n",
+              "5197              3.0  2016-12-31 00:00:00               3                  3   \n",
+              "5198              3.0  2016-12-31 00:00:00               3                  3   \n",
+              "5199              3.0  2016-12-31 00:00:00               3                  3   \n",
+              "\n",
+              "               surveydate attrition  ... maritalstatus monthlyincome  \\\n",
+              "0     2015-12-31 00:00:00       Yes  ...        Single         41890   \n",
+              "1     2015-12-31 00:00:00       Yes  ...        Single         41890   \n",
+              "2     2016-12-31 00:00:00       Yes  ...        Single         41890   \n",
+              "3     2016-12-31 00:00:00       Yes  ...        Single         41890   \n",
+              "4     2015-12-31 00:00:00       Yes  ...        Single         58130   \n",
+              "...                   ...       ...  ...           ...           ...   \n",
+              "5195  2016-12-31 00:00:00       Yes  ...       Married         44220   \n",
+              "5196  2015-12-31 00:00:00       Yes  ...       Married         21680   \n",
+              "5197  2015-12-31 00:00:00       Yes  ...       Married         21680   \n",
+              "5198  2016-12-31 00:00:00       Yes  ...       Married         21680   \n",
+              "5199  2016-12-31 00:00:00       Yes  ...       Married         21680   \n",
+              "\n",
+              "     numcompaniesworked  percentsalaryhike stockoptionlevel totalworkingyears  \\\n",
+              "0                   0.0                 23                1               6.0   \n",
+              "1                   0.0                 23                1               6.0   \n",
+              "2                   0.0                 23                1               6.0   \n",
+              "3                   0.0                 23                1               6.0   \n",
+              "4                   2.0                 20                1               5.0   \n",
+              "...                 ...                ...              ...               ...   \n",
+              "5195                4.0                 11                1              13.0   \n",
+              "5196                0.0                 14                1               2.0   \n",
+              "5197                0.0                 14                1               2.0   \n",
+              "5198                0.0                 14                1               2.0   \n",
+              "5199                0.0                 14                1               2.0   \n",
+              "\n",
+              "      trainingtimeslastyear  yearsatcompany yearssincelastpromotion  \\\n",
+              "0                         3               5                       1   \n",
+              "1                         3               5                       1   \n",
+              "2                         3               5                       1   \n",
+              "3                         3               5                       1   \n",
+              "4                         2               0                       0   \n",
+              "...                     ...             ...                     ...   \n",
+              "5195                      2               9                       3   \n",
+              "5196                      2               1                       0   \n",
+              "5197                      2               1                       0   \n",
+              "5198                      2               1                       0   \n",
+              "5199                      2               1                       0   \n",
+              "\n",
+              "                 infodate  \n",
+              "0     2015-12-31 00:00:00  \n",
+              "1     2016-12-31 00:00:00  \n",
+              "2     2015-12-31 00:00:00  \n",
+              "3     2016-12-31 00:00:00  \n",
+              "4     2015-12-31 00:00:00  \n",
+              "...                   ...  \n",
+              "5195  2016-12-31 00:00:00  \n",
+              "5196  2015-12-31 00:00:00  \n",
+              "5197  2016-12-31 00:00:00  \n",
+              "5198  2015-12-31 00:00:00  \n",
+              "5199  2016-12-31 00:00:00  \n",
+              "\n",
+              "[5200 rows x 32 columns]"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-e95b8418-0d71-4151-9dde-9cb354b73dd8\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>index</th>\n",
+              "      <th>employeeid</th>\n",
+              "      <th>environmentsatisfaction</th>\n",
+              "      <th>jobsatisfaction</th>\n",
+              "      <th>worklifebalance</th>\n",
+              "      <th>datesurvey</th>\n",
+              "      <th>jobinvolvement</th>\n",
+              "      <th>performancerating</th>\n",
+              "      <th>surveydate</th>\n",
+              "      <th>attrition</th>\n",
+              "      <th>...</th>\n",
+              "      <th>maritalstatus</th>\n",
+              "      <th>monthlyincome</th>\n",
+              "      <th>numcompaniesworked</th>\n",
+              "      <th>percentsalaryhike</th>\n",
+              "      <th>stockoptionlevel</th>\n",
+              "      <th>totalworkingyears</th>\n",
+              "      <th>trainingtimeslastyear</th>\n",
+              "      <th>yearsatcompany</th>\n",
+              "      <th>yearssincelastpromotion</th>\n",
+              "      <th>infodate</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>4</td>\n",
+              "      <td>2</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>2</td>\n",
+              "      <td>4</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Single</td>\n",
+              "      <td>41890</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>23</td>\n",
+              "      <td>1</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>3</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>5</td>\n",
+              "      <td>2</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>2</td>\n",
+              "      <td>4</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Single</td>\n",
+              "      <td>41890</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>23</td>\n",
+              "      <td>1</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>3</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>6</td>\n",
+              "      <td>2</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>2</td>\n",
+              "      <td>4</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Single</td>\n",
+              "      <td>41890</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>23</td>\n",
+              "      <td>1</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>3</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>7</td>\n",
+              "      <td>2</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>2</td>\n",
+              "      <td>4</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Single</td>\n",
+              "      <td>41890</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>23</td>\n",
+              "      <td>1</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>3</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>24</td>\n",
+              "      <td>7</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>3</td>\n",
+              "      <td>4</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Single</td>\n",
+              "      <td>58130</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>20</td>\n",
+              "      <td>1</td>\n",
+              "      <td>5.0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5195</th>\n",
+              "      <td>33563</td>\n",
+              "      <td>3981</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>3</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Married</td>\n",
+              "      <td>44220</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>11</td>\n",
+              "      <td>1</td>\n",
+              "      <td>13.0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>9</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5196</th>\n",
+              "      <td>33616</td>\n",
+              "      <td>3995</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>3</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Married</td>\n",
+              "      <td>21680</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>14</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5197</th>\n",
+              "      <td>33617</td>\n",
+              "      <td>3995</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>3</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Married</td>\n",
+              "      <td>21680</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>14</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5198</th>\n",
+              "      <td>33618</td>\n",
+              "      <td>3995</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>3</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Married</td>\n",
+              "      <td>21680</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>14</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2015-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5199</th>\n",
+              "      <td>33619</td>\n",
+              "      <td>3995</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>3</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "      <td>Yes</td>\n",
+              "      <td>...</td>\n",
+              "      <td>Married</td>\n",
+              "      <td>21680</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>14</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2016-12-31 00:00:00</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>5200 rows × 32 columns</p>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-e95b8418-0d71-4151-9dde-9cb354b73dd8')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-e95b8418-0d71-4151-9dde-9cb354b73dd8 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-e95b8418-0d71-4151-9dde-9cb354b73dd8');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-bd64cd78-e216-4d15-ac8d-18cac5f728ec\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-bd64cd78-e216-4d15-ac8d-18cac5f728ec')\"\n",
+              "            title=\"Suggest charts\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-bd64cd78-e216-4d15-ac8d-18cac5f728ec button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe"
+            }
+          },
+          "metadata": {},
+          "execution_count": 27
+        }
+      ]
     },
     {
       "cell_type": "markdown",
@@ -3593,7 +4212,7 @@
       "metadata": {
         "id": "H9a2JkAxjtoE"
       },
-      "execution_count": 116,
+      "execution_count": 28,
       "outputs": []
     },
     {
@@ -3601,54 +4220,55 @@
       "source": [
         "## Se usa la función unique para verificar los datos nulos\n",
         "print(\"environmentsatisfaction: \")\n",
-        "print(BD1.environmentsatisfaction.unique())\n",
+        "print(BD.environmentsatisfaction.unique())\n",
         "print(\" \")\n",
         "print(\"jobsatisfaction: \")\n",
-        "print(BD1.jobsatisfaction.unique())\n",
+        "print(BD.jobsatisfaction.unique())\n",
         "print(\" \")\n",
         "print(\"numcompaniesworked: \")\n",
-        "print(BD1.numcompaniesworked.unique())\n",
+        "print(BD.numcompaniesworked.unique())\n",
         "print(\" \")\n",
         "print(\"totalworkingyears: \")\n",
-        "print(BD1.totalworkingyears.unique())\n",
+        "print(BD.totalworkingyears.unique())\n",
         "print(\" \")\n",
         "print(\"resignationreason: \")\n",
-        "print(BD1.resignationreason.unique())\n",
+        "print(BD.resignationreason.unique())\n",
         "print(\" \")\n",
         "print(\"worklifebalance: \")\n",
-        "print(BD1.worklifebalance.unique())\n"
+        "print(BD.worklifebalance.unique())\n"
       ],
       "metadata": {
         "colab": {
           "base_uri": "https://localhost:8080/"
         },
         "id": "KVWIKq2hkRDc",
-        "outputId": "b818a1a6-0214-476d-f5af-c978ceb48435"
+        "outputId": "fbe308a1-e0cf-4614-ea06-ee268c103598"
       },
-      "execution_count": 117,
+      "execution_count": 29,
       "outputs": [
         {
           "output_type": "stream",
           "name": "stdout",
           "text": [
             "environmentsatisfaction: \n",
-            "[ 3.  1.  4.  2. nan]\n",
+            "[ 3.  2.  4.  1. nan]\n",
             " \n",
             "jobsatisfaction: \n",
-            "[ 2.  3.  4.  1. nan]\n",
+            "[ 4.  2.  1.  3. nan]\n",
             " \n",
             "numcompaniesworked: \n",
-            "[ 0.  2.  1.  3.  5.  4.  8.  9.  7.  6. nan]\n",
+            "[ 1.  0.  3.  4.  2.  7.  9.  5.  6.  8. nan]\n",
             " \n",
             "totalworkingyears: \n",
-            "[ 6.  5. 10. 19.  8.  0. 11. 12.  7.  3.  1.  9. 15.  4. 18. nan 24. 40.\n",
-            "  2. 16. 17. 22. 33. 14. 21. 26. 31. 20. 28. 34. 13. 25. 23.]\n",
+            "[ 1.  6.  5. 13.  9. 28. 10. 21. 16. 37.  7.  3. 15.  8. nan 12. 17. 19.\n",
+            " 22.  2.  4. 23.  0. 11. 24. 25. 20. 14. 26. 18. 30. 36. 31. 33. 32. 34.\n",
+            " 40. 29. 35. 27. 38.]\n",
             " \n",
             "resignationreason: \n",
-            "['Others' 'Stress' 'Salary' None]\n",
+            "[None 'Others' 'Stress' 'Salary']\n",
             " \n",
             "worklifebalance: \n",
-            "[ 4.  1.  2.  3. nan]\n"
+            "[ 2.  4.  1.  3. nan]\n"
           ]
         }
       ]
@@ -3657,60 +4277,59 @@
       "cell_type": "code",
       "source": [
         "## verificamos que tipo de variable es\n",
-        "BD1.info()"
+        "BD.info()"
       ],
       "metadata": {
         "colab": {
           "base_uri": "https://localhost:8080/"
         },
         "id": "aYDbPmHzQu8V",
-        "outputId": "c2508dd4-df42-492d-e817-120be1746ed7"
+        "outputId": "de10fbfb-9d11-45b6-df73-015bdff3b75a"
       },
-      "execution_count": 118,
+      "execution_count": 30,
       "outputs": [
         {
           "output_type": "stream",
           "name": "stdout",
           "text": [
             "<class 'pandas.core.frame.DataFrame'>\n",
-            "RangeIndex: 5200 entries, 0 to 5199\n",
-            "Data columns (total 32 columns):\n",
+            "RangeIndex: 35280 entries, 0 to 35279\n",
+            "Data columns (total 31 columns):\n",
             " #   Column                   Non-Null Count  Dtype  \n",
             "---  ------                   --------------  -----  \n",
-            " 0   index                    5200 non-null   int64  \n",
-            " 1   employeeid               5200 non-null   int64  \n",
-            " 2   environmentsatisfaction  5160 non-null   float64\n",
-            " 3   jobsatisfaction          5192 non-null   float64\n",
-            " 4   worklifebalance          5168 non-null   float64\n",
-            " 5   datesurvey               5200 non-null   object \n",
-            " 6   jobinvolvement           5200 non-null   int64  \n",
-            " 7   performancerating        5200 non-null   int64  \n",
-            " 8   surveydate               5200 non-null   object \n",
-            " 9   attrition                5200 non-null   object \n",
-            " 10  retirementdate           5200 non-null   object \n",
-            " 11  retirementtype           5200 non-null   object \n",
-            " 12  resignationreason        4680 non-null   object \n",
-            " 13  age                      5200 non-null   int64  \n",
-            " 14  businesstravel           5200 non-null   object \n",
-            " 15  department               5200 non-null   object \n",
-            " 16  distancefromhome         5200 non-null   int64  \n",
-            " 17  education                5200 non-null   int64  \n",
-            " 18  educationfield           5200 non-null   object \n",
-            " 19  gender                   5200 non-null   object \n",
-            " 20  joblevel                 5200 non-null   int64  \n",
-            " 21  jobrole                  5200 non-null   object \n",
-            " 22  maritalstatus            5200 non-null   object \n",
-            " 23  monthlyincome            5200 non-null   int64  \n",
-            " 24  numcompaniesworked       5168 non-null   float64\n",
-            " 25  percentsalaryhike        5200 non-null   int64  \n",
-            " 26  stockoptionlevel         5200 non-null   int64  \n",
-            " 27  totalworkingyears        5184 non-null   float64\n",
-            " 28  trainingtimeslastyear    5200 non-null   int64  \n",
-            " 29  yearsatcompany           5200 non-null   int64  \n",
-            " 30  yearssincelastpromotion  5200 non-null   int64  \n",
-            " 31  infodate                 5200 non-null   object \n",
-            "dtypes: float64(5), int64(14), object(13)\n",
-            "memory usage: 1.3+ MB\n"
+            " 0   employeeid               35280 non-null  int64  \n",
+            " 1   environmentsatisfaction  35080 non-null  float64\n",
+            " 2   jobsatisfaction          35120 non-null  float64\n",
+            " 3   worklifebalance          34976 non-null  float64\n",
+            " 4   datesurvey               35280 non-null  object \n",
+            " 5   jobinvolvement           35280 non-null  int64  \n",
+            " 6   performancerating        35280 non-null  int64  \n",
+            " 7   surveydate               35280 non-null  object \n",
+            " 8   attrition                5688 non-null   object \n",
+            " 9   retirementdate           5688 non-null   object \n",
+            " 10  retirementtype           5688 non-null   object \n",
+            " 11  resignationreason        5128 non-null   object \n",
+            " 12  age                      35280 non-null  int64  \n",
+            " 13  businesstravel           35280 non-null  object \n",
+            " 14  department               35280 non-null  object \n",
+            " 15  distancefromhome         35280 non-null  int64  \n",
+            " 16  education                35280 non-null  int64  \n",
+            " 17  educationfield           35280 non-null  object \n",
+            " 18  gender                   35280 non-null  object \n",
+            " 19  joblevel                 35280 non-null  int64  \n",
+            " 20  jobrole                  35280 non-null  object \n",
+            " 21  maritalstatus            35280 non-null  object \n",
+            " 22  monthlyincome            35280 non-null  int64  \n",
+            " 23  numcompaniesworked       35128 non-null  float64\n",
+            " 24  percentsalaryhike        35280 non-null  int64  \n",
+            " 25  stockoptionlevel         35280 non-null  int64  \n",
+            " 26  totalworkingyears        35208 non-null  float64\n",
+            " 27  trainingtimeslastyear    35280 non-null  int64  \n",
+            " 28  yearsatcompany           35280 non-null  int64  \n",
+            " 29  yearssincelastpromotion  35280 non-null  int64  \n",
+            " 30  infodate                 35280 non-null  object \n",
+            "dtypes: float64(5), int64(13), object(13)\n",
+            "memory usage: 8.3+ MB\n"
           ]
         }
       ]
@@ -3719,12 +4338,12 @@
       "cell_type": "code",
       "source": [
         "### Con la función creada tratamos los datos nulos de la base de detos que son de tipo númerico\n",
-        "BD1 = funciones.impute_columns(df = BD1, columns = ['environmentsatisfaction', 'jobsatisfaction', 'worklifebalance', 'numcompaniesworked', 'totalworkingyears'], strategy = 'median')"
+        "BD = funciones.impute_columns(df = BD, columns = ['environmentsatisfaction', 'jobsatisfaction', 'worklifebalance', 'numcompaniesworked', 'totalworkingyears'], strategy = 'median')"
       ],
       "metadata": {
         "id": "UojaKEzGjwqk"
       },
-      "execution_count": 119,
+      "execution_count": 32,
       "outputs": []
     },
     {
@@ -3735,32 +4354,18 @@
       "metadata": {
         "id": "kUqOa4jTTawB"
       },
-      "execution_count": 120,
+      "execution_count": 33,
       "outputs": []
     },
     {
       "cell_type": "code",
       "source": [
-        "BD1['attrition'].fillna('No', inplace=True)\n",
-        "BD1['retirementdate'].fillna('No', inplace=True)\n",
-        "BD1['retirementtype'].fillna('No', inplace=True)\n",
-        "BD1['retirementtype'].fillna('No', inplace=True)"
-      ],
-      "metadata": {
-        "id": "e3Bra8uSRev1"
-      },
-      "execution_count": 121,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "BD1.to_csv('BD1.csv', index=False)"
+        "BD.to_csv('BD1.csv', index=False)"
       ],
       "metadata": {
         "id": "28WTwBGTXiF1"
       },
-      "execution_count": 122,
+      "execution_count": 34,
       "outputs": []
     }
   ]
