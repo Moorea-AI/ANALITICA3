@@ -22,14 +22,14 @@
 
 
 -- TABLAS EN LA BASE DE DATOS:
--- retirados_2016
+-- former_employees_2016
 -- all_employees
 
 
-drop table if exists retirados_2016;
+drop table if exists former_employees_2016;
 
 -- Con la cláusula DISTINCT aseguramos que solamente hayan combinaciones unicas
-create table retirados_2016 as
+create table former_employees_2016 as
 select DISTINCT
 EmployeeID,
 retirementDate,

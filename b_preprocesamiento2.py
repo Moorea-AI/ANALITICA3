@@ -156,7 +156,24 @@ df = df_employee.merge(df_general, on='EmployeeID', how='inner')\
                         .merge(df_retirement, on='EmployeeID', how='left')              
 
 
-# Revisamos las filas que tienen los datos nulos
+######################################################################
+#                                                                    #
+#   TRATAMIENTO DE LOS OUTLIERS                                      #
+#                                                                    #
+#                                                                    #
+######################################################################
+
+# Revisamos las filas que tienen los datos nulos. Las que no tienen datos nulos, las omitimos.
+# Las columnas con nulos son:
+# EnvironmentSatisfaction      200
+# JobSatisfaction              160
+# WorkLifeBalance              304
+# NumCompaniesWorked           152
+# TotalWorkingYears             72
+# Attrition                  29592
+# retirementDate             29592
+# retirementType             29592
+# resignationReason          30152
 print(df.isnull().sum())
 
 # Consultamos el diccionario de datos para determinar cuáles columnas son relevantes para elmodelo y cuales no
@@ -164,11 +181,10 @@ print(df.isnull().sum())
 print(df.columns)
 
 
-#Algunas columnas no aportan mucho al modelo, por ejemplo 
+# Algunas columnas no aportan mucho al modelo, por ejemplo 
 # EmployeeCount: Employee count managed (todos sus valores son 1)
 # Over18: Whether the employee is above 18 years of age or not ya que tenemos una columna de edad que sirve para lo mismo
 # StandardHours: Standard hours of work for the employee no es relevante yaq ue el numero de horas trabajadas ya se infiere
-
 df.drop(columns=["EmployeeCount", "Over18", "StandardHours"],inplace=True)
 
 
@@ -290,7 +306,8 @@ pd.read_sql("""SELECT Age, COUNT(*) as Retirements
 #Se nos ocurrren más preguntas pero las contestaremos en la exploración
 
 
-#En el archivo de funciones teniamos una función para detección de los atipicos:
+#En el archivo de funciones teniamos una función para detección de los atipicos, basados en el rango intercuartilico, de manera
+# tal que si tenemos datos muy sesgados no se tengan en cuenta.
 a_funciones.identify_and_remove_outliers(conn, ['MonthlyIncome', 'TrainingTimesLastYear', 'YearsAtCompany', 'TotalWorkingYears'])
 
 # CONVERTIR A STRING
@@ -344,11 +361,16 @@ cur=conn.cursor()
 a_funciones.ejecutar_sql('b_preprocesamiento.sql',cur)
 
 # Al hacer una lectura notamos que tenemos datos duplicados 4 veces. Estos serán retirados
-pd.read_sql("""SELECT * FROM retirados_2016""", conn)
+pd.read_sql("""SELECT * FROM former_employees_2016""", conn)
+
+pd.read_sql("""SELECT * FROM all_employees""", conn)
+print(df.columns)
+
 
 
 
 # LA BASE DE DATOS QUEDA CON ESTAS COLUMNAS
+# Employee_id
 # EnvironmentSatisfaction: 1. Low, 2. Medium, 3. High, 4. Very High
 # JobSatisfaction:  1. Low, 2. Medium, 3. High, 4. Very High
 # WorkLifeBalance: 1. Bad, 2. Good, 3. Better, 4. Best
