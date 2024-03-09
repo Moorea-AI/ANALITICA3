@@ -15,7 +15,15 @@ import pandas as pd # para manejo de datos
 import sqlite3 as sql ### para bases de datos sql
 import a_funciones as a_funciones ## funciones creadas en el archivo de funciones
 
-#Hacemos llamado a las bases de datos desde GitHub
+
+
+######################################################################
+#                                                                    #
+#   CARGA DE LAS BASES DE DATOS                                      #
+#                                                                    #
+#   Hacemos llamado a las bases de datos desde GitHub                #
+#                                                                    #
+######################################################################
 
 # employee_survey_data: Encuesta realizada a los empleados sobre satisfacción laboral a final de cada año, se tienen el histórico 
 # de dos encuestas, la realizada el 31-12-2015 y la que se realizó el 31-12-2016.
@@ -34,7 +42,15 @@ df_manager = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3
 # empleados que se retiraron ese año.
 df_retirement = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/retirement_info.csv')
 
-# Verificamos la correcta visualización:
+
+
+######################################################################
+#                                                                    #
+#   VISUALIZACIÓN DE LAS BASES DE DATOS                              #
+#                                                                    #
+#   Verificamos la correcta visualización:                           #
+#                                                                    #
+######################################################################
 
 # Podemos observar que df_employee tiene información de 2015 y 2016, por ende hay duplicado el employeeID por cada encuesta realizada. 
 # También tiene una columna Unnamed susceptible de borrar además de un index sin rotulación
@@ -51,32 +67,90 @@ df_manager.sort_values(by=['EmployeeID']).head(10)
 #df_retirement tiene tres columnas susceptibles de retirar: Unnamed 0, 1 y otro index sin nombrar
 df_retirement.sort_values(by=['EmployeeID']).head(10)
 
-# Verificamos el tipo de información que tiene cada una:
+
+
+######################################################################
+#                                                                    #
+#   INFORMACIÓN DE LAS BASES DE DATOS                                #
+#                                                                    #
+#   Verificamos el tipo de información que tiene cada una:           #
+#                                                                    #
+######################################################################
+
 # df_employee tiene 6 columnas: Unnamed (candidata para eliminar), EmployeeID, EnvironmentSatisfaction, JobSatisfaction, WorkLifeBalance 
 # y DateSurvey (susceptible para cambio a datetime). 
-# Esta también tiene variables categóricas con la escala de lickert en las encuesta
+# Esta también tiene variables categóricas con la escala de likert en las encuesta
 df_employee.info(verbose=True)
 
 
+# df_general tiene mucha información del empleado. Algunas de las columnas pueden ser irrelevantes para nuestro problema. Unnamed no aporta info, Over18 tampoco,
+# ya que ningún empleado debería ser menor de edad y todos sus valores son iguales (Y: Yes), 
 df_general.info()
+
+# df_manager tiene 5 columnas: Unnamed (candidata para eliminar), EmployeeID, JobInvolvement, PerformanceRating, SurveyDate  (susceptible para cambio a datetime). 
+# Esta también tiene variables categóricas con la escala de likert en las encuesta
 df_manager.info()
+
+# df_retirement tiene 7 columnas: 2 columnas Unnamed (candidata para eliminar), EmployeeID, Attrition (Variable Objetivo), RetirementDate, RetirementType, ResignationReason
 df_retirement.info()
 
-#Existen datos faltantes? Revisamos los outliers:
+
+######################################################################
+#                                                                    #
+#   DATOS FALTANTES DE LAS BASES DE DATOS                            #
+#                                                                    #
+#   Verificamos los outliers                                         #
+#                                                                    #
+######################################################################
+
+# df_employee (solo mostramos las columnas con datos faltantes, las demás se omiten) 
+# EnvironmentSatisfaction    50
+# JobSatisfaction            40
+# WorkLifeBalance            76
+# Se deben tratar los datos faltantes en la encuesta de satisfacción. Más adelante lo abordaremos
 print(df_employee.isnull().sum())
+
+# df_employee (solo mostramos las columnas con datos faltantes, las demás se omiten) 
+# NumCompaniesWorked         38
+# TotalWorkingYears          18
+# Se deben tratar los datos faltantes en la base de información. Más adelante lo abordaremos
 print(df_general.isnull().sum())
-print(df_manager.isnull().sum()) #No tiene nulos
+
+# df_manager no tiene nulos
+print(df_manager.isnull().sum()) 
+
+# df_retirement (solo mostramos las columnas con datos faltantes, las demás se omiten) 
+# resignationReason    70
 print(df_retirement.isnull().sum())
 
-## Eliminamos columnas que no se necesitan ya que son índices que no tienen relación entre si
+
+######################################################################
+#                                                                    #
+#   COLUMNAS INUTILES DE LAS BASES DE DATOS                          #
+#                                                                    #
+#   Verificamos los outliers                                         #
+#                                                                    #
+######################################################################
+
+## Eliminamos columnas Unnamed que no se necesitan ya que son índices que no tienen relación entre si
 df_employee =df_employee.drop(["Unnamed: 0"], axis=1)
 df_general =df_general.drop(["Unnamed: 0"], axis=1)
 df_manager =df_manager.drop(["Unnamed: 0"], axis=1)
 df_retirement =df_retirement.drop(["Unnamed: 0","Unnamed: 0.1"], axis=1)
 
 
+######################################################################
+#                                                                    #
+#   CONSTRUCCIÓN DE UNA BASE DE DATOS MAESTRA                        #
+#                                                                    #
+#   Esta BD maestra se filtra por EmployeeID                         #
+#                                                                    #
+######################################################################
+
+
 # Se construye una sola BD la cual pivotamos por el ID del empleado para que queden solo
 # las filas que tienen los datos completos.
+# Esto se hace desde Python y no desde SQL ya que es más sencillo el tratamiento.
 df = df_employee.merge(df_general, on='EmployeeID', how='inner')\
                         .merge(df_manager, on='EmployeeID', how='inner')\
                         .merge(df_retirement, on='EmployeeID', how='left')              
@@ -91,7 +165,7 @@ print(df.columns)
 
 
 #Algunas columnas no aportan mucho al modelo, por ejemplo 
-# EmployeeCount: Employee count managed 
+# EmployeeCount: Employee count managed (todos sus valores son 1)
 # Over18: Whether the employee is above 18 years of age or not ya que tenemos una columna de edad que sirve para lo mismo
 # StandardHours: Standard hours of work for the employee no es relevante yaq ue el numero de horas trabajadas ya se infiere
 
