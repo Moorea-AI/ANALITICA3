@@ -16,24 +16,53 @@ import sqlite3 as sql ### para bases de datos sql
 import a_funciones as a_funciones ## funciones creadas en el archivo de funciones
 
 #Hacemos llamado a las bases de datos desde GitHub
+
+# employee_survey_data: Encuesta realizada a los empleados sobre satisfacción laboral a final de cada año, se tienen el histórico 
+# de dos encuestas, la realizada el 31-12-2015 y la que se realizó el 31-12-2016.
 df_employee = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/employee_survey_data.csv')
+
+# general_data: Información general de los empleados, dado que la información puede cambiar con el tiempo se extrajo la información con el 
+# último corte 31-12-2016 y un histórico con la información con corte 31-12-2015
 df_general = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/general_data.csv')
+
+# Encuesta de desempeño de los empleados realizada por parte de los jefes, se tienen el histórico de dos encuestas, la realizada el 31-12-2015 
+# y la que se realizó el 31-12-2016..
 df_manager = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/manager_survey.csv')
+
+# Información de retiro de los empleados que dejaron la empresa, se tiene la información de retiro de los empleados de 2015 y 2016, sin embargo, 
+# la información de 2015 no se pudo obtener completa por problemas en el almacenamiento de la información, por lo tanto, no están todos los 
+# empleados que se retiraron ese año.
 df_retirement = pd.read_csv('https://raw.githubusercontent.com/Moorea-AI/ANALITICA3/main/databases/retirement_info.csv')
 
-# Verificamos la correcta visualización
+# Verificamos la correcta visualización:
+
+# Podemos observar que df_employee tiene información de 2015 y 2016, por ende hay duplicado el employeeID por cada encuesta realizada. 
+# También tiene una columna Unnamed susceptible de borrar además de un index sin rotulación
 df_employee.sort_values(by=['EmployeeID']).head(10)
-df_general.sort_values(by=['EmployeeID']).head(10)
+
+# Podemos observar que df_general tiene información de 2015 y 2016, por ende hay duplicado el employeeID por cada encuesta realizada. 
+#También tiene una columna Unnamed susceptible de borrar además de un index sin rotulación
+df_general.sort_values(by=['EmployeeID']).head(10) 
+
+# Podemos observar que df_manager tiene información de 2015 y 2016, por ende hay duplicado el employeeID por cada encuesta realizada. 
+#También tiene una columna Unnamed susceptible de borrar además de un index sin rotulación
 df_manager.sort_values(by=['EmployeeID']).head(10)
+
+#df_retirement tiene tres columnas susceptibles de retirar: Unnamed 0, 1 y otro index sin nombrar
 df_retirement.sort_values(by=['EmployeeID']).head(10)
 
-# Verificamos el tipo de información que tiene cada uno
+# Verificamos el tipo de información que tiene cada una:
+# df_employee tiene 6 columnas: Unnamed (candidata para eliminar), EmployeeID, EnvironmentSatisfaction, JobSatisfaction, WorkLifeBalance 
+# y DateSurvey (susceptible para cambio a datetime). 
+# Esta también tiene variables categóricas con la escala de lickert en las encuesta
 df_employee.info(verbose=True)
+
+
 df_general.info()
 df_manager.info()
 df_retirement.info()
 
-#Existen datos faltantes? Revisamos los atípicos:
+#Existen datos faltantes? Revisamos los outliers:
 print(df_employee.isnull().sum())
 print(df_general.isnull().sum())
 print(df_manager.isnull().sum()) #No tiene nulos
