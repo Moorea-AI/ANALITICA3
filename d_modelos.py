@@ -55,6 +55,8 @@ from sklearn import metrics
 from sklearn.metrics import mean_squared_error,  mean_absolute_error, mean_absolute_percentage_error, r2_score, classification_report
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier, export_text
+
 
 # Otras funcionalidades
 import sys
@@ -66,6 +68,69 @@ conn = sql.connect("db_empleados")
 df = pd.read_sql("SELECT * FROM all_employees", conn)
 #Borramos la columna Index ya que no aporta nada relevante
 df.drop('index', axis = 1, inplace = True)  
+
+######################################################################
+#                                                                    #
+#   SELECCIÓN DE VARIABLES                             #
+#                                                                    #
+#   Método Arbol de Desición                          #
+#                                                                    #
+######################################################################
+
+
+
+# REVISAREMOS NUEVAMENTE EL ÁRBOL DE DECISION:
+# Prepararemos el teerreno para un arbol de decisión:
+# Se eliminan variables nulas y se seleccionan las variables numericas
+df_arbol = df.select_dtypes(include=['float64', 'int64']).dropna()
+
+# Separamos las variables predictoras de la variable objetivo
+X = df_arbol.drop("Attrition", axis=1)   # X contendrá todas las variables excepto "Attrition"
+y = df_arbol["Attrition"] # y será la variable que estamos tratando de predecir (Attrition)
+
+
+# Entrenamos un arbol dedecision para hacer predicciones sobre nuevas instancias de datos
+# Creamos un modelo de árbol de decisión con una profundidad máxima de 3.
+model = DecisionTreeClassifier(max_depth=3) #Limitamos el arbol a 3 para evitar el sobreajuste
+model.fit(X, y) # Entrenamos el modelo con las variables predictoras (X) y la variable objetivo (y).
+
+# Obtenemos la importancia de cada variable según el árbol de decisión.
+importances = model.feature_importances_ #importancia de las columnas
+feature_names = X.columns  #nombre de todas las columnas
+
+# Organizamos la importancia de todas las variables en un DataFrame para una mejor visualización.
+feature_importance_df = pd.DataFrame({"Feature": feature_names, "Importance": importances})
+
+#Imprimimos la importancia de las variables según el árbol de decisión, ordenadas de mayor a menor importancia.
+print("Importancia de las variables según el árbol de decisión:\n", feature_importance_df.sort_values(by="Importance", ascending=False))
+
+
+# Importancia de las variables según el árbol de decisión:
+#                      Feature  Importance
+# 12        TotalWorkingYears    0.540448
+# 9        NumCompaniesWorked    0.121857
+# 1   EnvironmentSatisfaction    0.110722
+# 4                       Age    0.097991
+# 8             MonthlyIncome    0.089455
+# 2           JobSatisfaction    0.039527
+# 17           JobInvolvement    0.000000
+# 16     YearsWithCurrManager    0.000000
+# 15  YearsSinceLastPromotion    0.000000
+# 14           YearsAtCompany    0.000000
+# 13    TrainingTimesLastYear    0.000000
+# 0                EmployeeID    0.000000
+# 11         StockOptionLevel    0.000000
+# 10        PercentSalaryHike    0.000000
+# 7                  JobLevel    0.000000
+# 6                 Education    0.000000
+# 5          DistanceFromHome    0.000000
+# 3           WorkLifeBalance    0.000000
+# 18        PerformanceRating    0.000000
+
+
+
+
+
 
 
 # Se convierten los datos a enteros
