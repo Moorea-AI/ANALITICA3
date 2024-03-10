@@ -10,45 +10,68 @@
 #                    UNIVERSIDAD DE ANTIOQUIA                  #
 ################################################################
 
-#### Cargar paquetes siempre al inicio
-import sqlite3 as sql #### para bases de datos sql
-import a_funciones as a_funciones ### archivo de funciones propias
+###importar librerias
+# Manipulación y análisis de datos:
+import pandas as pd
+import numpy as np
+
+# Visualización de datos:
+import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np 
-import graphviz
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.figure_factory as ff
+from plotly.subplots import make_subplots
 
-import pandas as pd ### para manejo de datos
-from pandas.plotting import scatter_matrix  ## para matriz de correlaciones
-
-import matplotlib as mpl ## gráficos
-import matplotlib.pyplot as plt ### gráficos
-
-from sklearn import tree ###para ajustar arboles de decisión
-from sklearn.tree import DecisionTreeClassifier, export_text
-from sklearn.tree import export_text ## para exportar reglas del árbol
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import StandardScaler
-
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import f_classif
-from sklearn.feature_selection import SequentialFeatureSelector
+# Aprendizaje y estadísticas
+from sklearn import linear_model
+from sklearn import tree
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import roc_curve, auc, roc_auc_score
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_val_score
-from sklearn.neighbors import  KNeighborsClassifier
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Lasso
+from sklearn.feature_selection import RFE
+import statsmodels.api as sm
+from imblearn.combine import SMOTETomek
+from itertools import product
+import math
+
+# Preprocesamiento de datos y escalado:
+from sklearn.preprocessing import StandardScaler
+from collections import Counter
+
+#Modelado y slección de características
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.compose import ColumnTransformer
+from sklearn.feature_selection import SelectFromModel
+
+# Evaluación de modelos y clasificación
+from sklearn import metrics
+from sklearn.metrics import mean_squared_error,  mean_absolute_error, mean_absolute_percentage_error, r2_score, classification_report
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.svm import SVC
+
+# Otras funcionalidades
+import sys
+import sqlite3 as sql #### para bases de datos sql
+import a_funciones as funciones
 
 
 conn = sql.connect("db_empleados") 
 df = pd.read_sql("SELECT * FROM all_employees", conn)
-df.drop('index', axis = 1, inplace = True)  
 #Borramos la columna Index ya que no aporta nada relevante
+df.drop('index', axis = 1, inplace = True)  
 
+
+# Se convierten los datos a enteros
 df['NumCompaniesWorked'] = df['NumCompaniesWorked'].astype(float).astype(int) 
 df['TotalWorkingYears'] = df['TotalWorkingYears'].astype(float).astype(int)
+# Se eliminan columnas no relevantes.
 del df['resignationReason']
 del df['retirementDate']
 del df['retirementType']
