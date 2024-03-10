@@ -22,6 +22,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from plotly.subplots import make_subplots
+from sklearn.metrics import roc_curve, auc
+
 
 # Aprendizaje y estadísticas
 from sklearn import linear_model
@@ -34,7 +36,6 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Lasso
 from sklearn.feature_selection import RFE
-import statsmodels.api as sm
 from imblearn.combine import SMOTETomek
 from itertools import product
 import math
@@ -59,6 +60,13 @@ from sklearn.metrics import mean_squared_error,  mean_absolute_error, mean_absol
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+
 
 
 # Otras funcionalidades
@@ -297,6 +305,15 @@ print(selected_features_lasso)
 #   Método Wrapper                                                   #
 #                                                                    #
 ######################################################################
+# Función recursiva de selección de características
+def recursive_feature_selection(X,y,model,k):
+  rfe = RFE(model, n_features_to_select=k, step=1)
+  fit = rfe.fit(X, y)
+  X_new = fit.support_
+  print("Num Features: %s" % (fit.n_features_))
+  print("Selected Features: %s" % (fit.support_))
+  print("Feature Ranking: %s" % (fit.ranking_))
+  return X_new
 
 X_wrapper = df.drop("Attrition", axis=1)  # Características
 y_wrapper = df["Attrition"]  # Variable objetivo 
@@ -365,8 +382,155 @@ conf_matrix = confusion_matrix(y_test, y_pred)
 classification_rep = classification_report(y_test, y_pred)
 
 # Imprimir resultados
+# El 85.2% de las predicciones del modelo fueron correctas en el conjunto de prueba. Esta métrica se calcula como (verdaderos positivos + verdaderos negativos) / total.
 print(f'Exactitud en el conjunto de prueba: {accuracy:.3f}\n')
+
 print('Matriz de Confusión:')
 print(conf_matrix)
 print('\nReporte de Clasificación:')
 print(classification_rep)
+
+
+# Reporte de Clasificación:
+#               precision    recall  f1-score   support
+
+#            0       0.86      0.98      0.92      5919
+#            1       0.66      0.16      0.26      1137
+
+#     accuracy                           0.85      7056
+#    macro avg       0.76      0.57      0.59      7056
+# weighted avg       0.83      0.85      0.81      7056
+
+
+
+###Matriz de confusión
+matriz= confusion_matrix(y_test, y_pred)
+matriz_display = ConfusionMatrixDisplay(confusion_matrix=matriz, display_labels=['No renuncia', 'renuncia'])
+matriz_display.plot()
+plt.show()
+
+
+### metricas del modelo
+tn, fp, fn, tp = matriz.ravel()
+
+precision = tp / (tp + fp)
+recall = tp / (tp + fn)
+especificidad = tn / (fp + tn)
+f1_score = 2*(precision*recall)/(precision+recall)
+
+print(f'Precision: {precision}')
+print(f'Recall: {recall}')
+print(f'Especificidad: {especificidad}')
+print(f'F1 score: {f1_score}')
+
+
+
+######################################################################
+#                                                                    #
+#           RANDOM FOREST CLASSIFIER                                 #
+#                                                                    #
+#   Con matriz de confusion                                          #
+#                                                                    #
+######################################################################
+## se crea el modelo
+X_train_modelo3=X_train
+X_test_modelo3=X_test
+
+ranfor = RandomForestClassifier(class_weight="balanced",n_estimators = 150,criterion= 'gini', max_depth= 5,max_leaf_nodes = 10,n_jobs= -1,random_state = 123)
+ranfor.fit(X_train_modelo3, y_train)
+
+###metricas
+print ("Train - Accuracy :", metrics.accuracy_score(y_train, ranfor.predict(X_train_modelo3)))
+print ("Train - classification report:\n", metrics.classification_report(y_train, ranfor.predict(X_train_modelo3)))
+print ("Test - Accuracy :", metrics.accuracy_score(y_test, ranfor.predict(X_test_modelo3)))
+print ("Test - classification report :", metrics.classification_report(y_test, ranfor.predict(X_test_modelo3)))
+
+# Matriz de confusion
+cm= confusion_matrix(y_test, ranfor.predict(X_test_modelo3))
+# Visualización de la matriz de confusion
+cm_display = ConfusionMatrixDisplay(confusion_matrix = cm, display_labels=['No renuncia', 'renuncia'])
+cm_display.plot()
+plt.show()
+
+
+######################################################################
+#                                                                    #
+#           GRADIENT BOOSTING CLASSIFIER                             #
+#                                                                    #
+#   Con matriz de confusion                                          #
+#                                                                    #
+######################################################################
+X_train_modelo4, X_test_modelo4, y_train_res, y_test = train_test_split(X_wrapper_std[:, X_new_selected], y_wrapper, test_size=0.2, random_state=42)
+
+gboos = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_features=4, random_state=123)
+gboos.fit(X_train_modelo4, y_train_res)
+y_pred = gboos.predict(X_test_modelo4)
+
+print("Test - Accuracy :", accuracy_score(y_test, y_pred))
+print("Test - Classification report :\n", classification_report(y_test, y_pred))
+
+
+cm = confusion_matrix(y_test, y_pred)
+cm_display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['No renuncia', 'Renuncia'])
+cm_display.plot()
+plt.show()
+
+y_prob = gboos.predict_proba(X_test_modelo4)[:, 1]
+fpr, tpr, thresholds = roc_curve(y_test, y_prob)
+roc_auc = auc(fpr, tpr)
+
+plt.figure(figsize=(8, 6))
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'Curva ROC (AUC = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--', label='Aleatorio')
+plt.xlabel('Tasa de Falsos Positivos')
+plt.ylabel('Tasa de Verdaderos Positivos')
+plt.title('Curva ROC')
+plt.legend(loc='lower right')
+plt.show()
+
+
+
+######################################################################
+#                                                                    #
+#           SUPPORT VECTOR MACHINE                                   #
+#                                                                    #
+#   Con matriz de confusion                                          #
+#                                                                    #
+######################################################################
+
+##se crea el modelo
+X_train_modelo5 = X_train_modelo4  # Utilizando el conjunto de entrenamiento previamente definido
+X_test_modelo5 = X_test_modelo4    # Utilizando el conjunto de prueba previamente definido
+
+
+svm_model = SVC(C=1.5, kernel='linear', class_weight='balanced', max_iter=-1, random_state=123)
+svm_model.fit(X_train_modelo5, y_train_res)  # Ajustar al conjunto de entrenamiento
+
+
+print("Train - Accuracy:", accuracy_score(y_train_res, svm_model.predict(X_train_modelo5)))
+print("Train - Classification Report:\n", classification_report(y_train_res, svm_model.predict(X_train_modelo5)))
+print("Test - Accuracy:", accuracy_score(y_test, svm_model.predict(X_test_modelo5)))
+print("Test - Classification Report:", classification_report(y_test, svm_model.predict(X_test_modelo5)))
+
+# Matriz de Confusión
+cm_svm = confusion_matrix(y_test, svm_model.predict(X_test_modelo5))
+# Visualización de la Matriz de Confusión
+cm_svm_display = ConfusionMatrixDisplay(confusion_matrix=cm_svm, display_labels=['No renuncia', 'renuncia'])
+cm_svm_display.plot()
+plt.show()
+
+
+y_probs_svm = svm_model.decision_function(X_test_modelo5)
+roc_auc_svm = roc_auc_score(y_test, y_probs_svm)
+fpr_svm, tpr_svm, _ = roc_curve(y_test, y_probs_svm)
+
+plt.figure(figsize=(8, 6))
+plt.plot(fpr_svm, tpr_svm, color='blue', lw=2, label='SVM (AUC = {:.2f})'.format(roc_auc_svm))
+plt.plot([0, 1], [0, 1], color='gray', lw=1, linestyle='--', label='Random')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Curva ROC - SVM')
+plt.legend(loc='lower right')
+plt.show()
+
+
