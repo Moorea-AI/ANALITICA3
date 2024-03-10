@@ -42,11 +42,10 @@ df = pd.read_sql("select * from all_employees", conn)
 
 df.columns
 
-df['resignationReason'].unique()
 
 ################################################################
 #                                                              #
-#          ANALISIS DE LAS VARIABLES DE LA BD EN FIRME         #              #
+#   ANÁLISIS DE LAS VARIABLES DE LA BD_EMPLEADOS EN FIRME      #              #
 #                                                              #    
 ################################################################
 
@@ -81,6 +80,28 @@ df['resignationReason'].unique()
 # retirementType:  None, 'Resignation', 'Fired'. Fired when decision was made for the company and resignation when it was made for the employee
 # resignationReason: None, 'Others', 'Stress', 'Salary'
 
+
+################################################################
+#                                                              #
+#        DISTRIBUCIÓN DE GÉNERO                                #
+#       Es una empresa mayoritariamente masculina?             # 
+#                                                              #
+#       Si, la empresa tiene un 60% hombres y un 40% mujeres   #
+#                                                              #
+################################################################
+
+
+
+#Esto se nos ocurrió el 09/03/2024 y decidimos agregarlo
+# Gráfico de torta para la distribución del género
+gender_counts = df['Gender'].value_counts()
+labels = gender_counts.index
+sizes = gender_counts.values
+
+plt.figure(figsize=(8, 8))
+plt.pie(sizes, labels=labels, autopct='%1.1f%%', colors=['lightblue', 'lightcoral'])
+plt.title('Distribución de Género')
+plt.show()
       
 ################################################################
 #                                                              #
@@ -92,6 +113,8 @@ df['resignationReason'].unique()
 #       la razón fundamental                                   #                   
 #                                                              #
 ################################################################
+
+df['resignationReason'].unique()
       
 #Asignamos la columna a una variable
 df['resignationReason'].replace('nan', np.nan, inplace=True)
@@ -349,7 +372,10 @@ plt.show()
 
 
 #### Exploración de todas las variables numéricas con histograma.
-fig=df.hist(bins=50, figsize=(40,30),grid=False,ec='black')
+df.columns
+df_numeric = df.select_dtypes(include=['float64', 'int64']).drop(['index', 'EmployeeID'], axis=1)
+
+fig = df_numeric.hist(bins=50, figsize=(40, 30), grid=False, ec='black')
 plt.show()
 
 
@@ -357,13 +383,10 @@ plt.show()
 
 ######################################################################
 #                                                                    #
-#   ANALISIS DE CORRELACION DE LAS VARIABLES NUMÉRICAS             #                                                                    #  
+#   ANALISIS DE CORRELACION DE LAS VARIABLES NUMÉRICAS               #                                                                    #  
 #                                                                    #
-#   ANÁLISIS DE DistanceFromHome VS ATTRITION                        # 
-#   Tiene relación con Attrition? Veamos como está distribuida.      #
-#                                                                    #
-#   Podemos observar que están muy balanceadas por lo que la         #
-#   distancia no es un factor que defina la variable                 #
+#   Observaremos como estan correlacionadas positiva o negativamente #
+#   todas las variables del dataframe                                #
 #                                                                    #
 ######################################################################
 
@@ -414,28 +437,72 @@ attrition_correlation
 # a quedarse en la empresa a medida que pasan los años y se incrementa su edad
 
 
-
+# Prepararemos el teerreno para un arbol de decisión:
 # Se eliminan variables nulas y se seleccionan las variables numericas
 df_arbol = df.select_dtypes(include=['float64', 'int64']).dropna()
 
 # Separamos las variables predictoras de la variable objetivo
-X = df_arbol.drop("Attrition", axis=1)  
-y = df_arbol["Attrition"]
+X = df_arbol.drop("Attrition", axis=1)   # X contendrá todas las variables excepto "Attrition"
+y = df_arbol["Attrition"] # y será la variable que estamos tratando de predecir (Attrition)
 
 
 # Entrenamos un arbol dedecision para hacer predicciones sobre nuevas instancias de datos
+# Creamos un modelo de árbol de decisión con una profundidad máxima de 3.
 model = DecisionTreeClassifier(max_depth=3) #Limitamos el arbol a 3 para evitar el sobreajuste
-model.fit(X, y)
+model.fit(X, y) # Entrenamos el modelo con las variables predictoras (X) y la variable objetivo (y).
 
-
+# Obtenemos la importancia de cada variable según el árbol de decisión.
 importances = model.feature_importances_ #importancia de las columnas
 feature_names = X.columns  #nombre de todas las columnas
 
-#Organizamos la importancia de todas las variables
+# Organizamos la importancia de todas las variables en un DataFrame para una mejor visualización.
 feature_importance_df = pd.DataFrame({"Feature": feature_names, "Importance": importances})
 
-
+#Imprimimos la importancia de las variables según el árbol de decisión, ordenadas de mayor a menor importancia.
 print("Importancia de las variables según el árbol de decisión:\n", feature_importance_df.sort_values(by="Importance", ascending=False))
+
+
+# Importancia de las variables según el árbol de decisión:
+#                      Feature  Importance
+# 13        TotalWorkingYears    0.540448
+# 10       NumCompaniesWorked    0.121857
+# 2   EnvironmentSatisfaction    0.110722
+# 5                       Age    0.097991
+# 9             MonthlyIncome    0.089455
+# 18           JobInvolvement    0.039527
+# 12         StockOptionLevel    0.000000
+# 17     YearsWithCurrManager    0.000000
+# 16  YearsSinceLastPromotion    0.000000
+# 15           YearsAtCompany    0.000000
+# 14    TrainingTimesLastYear    0.000000
+# 0                     index    0.000000
+# 11        PercentSalaryHike    0.000000
+# 1                EmployeeID    0.000000
+# 8                  JobLevel    0.000000
+# 7                 Education    0.000000
+# 6          DistanceFromHome    0.000000
+# 4           WorkLifeBalance    0.000000
+# 3           JobSatisfaction    0.000000
+# 19        PerformanceRating    0.000000
+
+
+# TotalWorkinYears Total de años trabajados
+# Es la variable más importante según el árbol de decisión. Indica que el número total de años trabajados por un 
+# empleado tiene un impacto significativo en la predicción de si abandonará la empresa o no.
+
+
+# NumCompaniesWorked o Numero de compañias donde ha trabajado antes: La segunda variable más importante. Sugiere que 
+# la cantidad de empresas para las que ha trabajado un empleado también es un factor clave para prever si abandonará 
+# la empresa.
+
+
+# EnvironmentSatisfaction o Satisfacción con el entorno de trabajo: Esta variable también tiene un impacto considerable. 
+# Indica que la satisfacción del empleado con el entorno de trabajo es un factor importante
+
+ 
+# Age o Edad: La edad del empleado también es un predictor relevante para determinar la probabilidad de abandono.
+
+# MonthlyIncome o Ingreso mensual: El ingreso mensual del empleado también se considera en la predicción.
 
 
 
