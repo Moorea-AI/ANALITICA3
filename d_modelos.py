@@ -49,6 +49,9 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.compose import ColumnTransformer
 from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_classif
+from sklearn.feature_selection import SequentialFeatureSelector
 
 # Evaluación de modelos y clasificación
 from sklearn import metrics
@@ -71,9 +74,9 @@ df.drop('index', axis = 1, inplace = True)
 
 ######################################################################
 #                                                                    #
-#   SELECCIÓN DE VARIABLES                             #
+#   SELECCIÓN DE VARIABLES                                           #
 #                                                                    #
-#   Método Arbol de Desición                          #
+#   Método Arbol de Desición                                         #
 #                                                                    #
 ######################################################################
 
@@ -130,12 +133,10 @@ print("Importancia de las variables según el árbol de decisión:\n", feature_i
 
 
 
-
-
-
 # Se convierten los datos a enteros
 df['NumCompaniesWorked'] = df['NumCompaniesWorked'].astype(float).astype(int) 
 df['TotalWorkingYears'] = df['TotalWorkingYears'].astype(float).astype(int)
+
 # Se eliminan columnas no relevantes.
 del df['resignationReason']
 del df['retirementDate']
@@ -145,25 +146,30 @@ del df['DateSurvey']
 del df['SurveyDate']
 df.dtypes
 
-
 for column in df.columns:
     unique_values = df[column].unique()
     print(f"Columna: {column}, Tipo: {df[column].dtypes}, Valores Únicos: {unique_values}")
 
 
-
+#En este paso, se realiza la codificación one-hot de las columnas categóricas especificadas en columns_to_encode. 
 columns_to_encode = ['Education', 'EnvironmentSatisfaction', 'JobInvolvement', 'JobLevel', 'EducationField',
                      'BusinessTravel', 'Department', 'Gender', 'JobRole', 'JobSatisfaction', 'MaritalStatus',
                      'PerformanceRating','StockOptionLevel', 'WorkLifeBalance']
 
-
+# La función pd.get_dummies crea columnas binarias para cada categoría en estas columnas. 
 df_encoded = pd.get_dummies(df, columns=columns_to_encode)
+
+# Después, el DataFrame se actualiza para contener estas nuevas columnas codificadas como enteros.
 df = df_encoded.astype(int)
+
+
 
 for column in df.columns:
     unique_values = df[column].unique()
     print(f"Columna: {column}, Tipo: {df[column].dtypes}, Valores Únicos: {unique_values}")
 
+# Aquí, se normalizan (escalan) las columnas numéricas especificadas en ScalerList utilizando StandardScaler de 
+# scikit-learn. Esto asegura que estas columnas tengan una media de cero y una desviación estándar de uno.
 scaler = StandardScaler()
 
 ScalerList = ['Age','DistanceFromHome', 'MonthlyIncome',
@@ -177,85 +183,190 @@ for i in ScalerList:
     
 print(df[ScalerList].describe())
 
+######################################################################
+#                                                                    #
+#   SELECCIÓN DE VARIABLES                                           #
+#                                                                    #
+#   Método KBEST                                                     #
+#                                                                    #
+######################################################################
+
+# Conectamos nuevamente a la base de datos y guardamos los resultados
 conn = sql.connect("db_empleados")
 df.to_sql("df", conn, if_exists="replace", index=False)
 
-
+# Se dividen los datos en características (XKbest) y la variable objetivo (yKbest). Para nuestra 
+# variable objetivo ATTRITION
 XKbest = df.drop("Attrition", axis=1)  # Características
 yKbest = df["Attrition"]  # Variable objetivo    
 
+# Se utiliza la clase SelectKBest del módulo sklearn.feature_selection para seleccionar las mejores k características. 
+# En este caso, se están seleccionando 16 características utilizando la puntuación de análisis de varianza (f_classif). 
+# Las características seleccionadas se almacenan en X_best.
 k_best = SelectKBest(score_func=f_classif, k=16)  # con k= 16, las 16 mejores características
 X_best = k_best.fit_transform(XKbest, yKbest)
 
+# Se crea un DataFrame llamado feature_scores que contiene dos columnas: "Feature" (característica) y "Score" (puntuación). 
+# Las puntuaciones se obtienen del atributo k_best.scores_. Luego, el DataFrame se ordena en función de las puntuaciones de mayor a menor.
 feature_scores = pd.DataFrame({'Feature': XKbest.columns, 'Score': k_best.scores_})
 feature_scores.sort_values(by='Score', ascending=False, inplace=True)
 
+# Se obtienen las características seleccionadas utilizando el método get_support() de k_best.
+# Estas características se almacenan en selected_featuresKbest.
 selected_featuresKbest = XKbest.columns[k_best.get_support()]
 
-
+# Puntuaciones de características:
+#                           Feature        Score
+# 58           MaritalStatus_Single  1120.028070
+# 6               TotalWorkingYears  1063.280870
+# 1                             Age   917.417530
+# 10           YearsWithCurrManager   882.245861
+# 8                  YearsAtCompany   648.885070
 print("Puntuaciones de características:")
 print(feature_scores)
-print("\nCaracterísticas seleccionadas:")
+
+
+# Características seleccionadas:
+# Index(['Age', 'TotalWorkingYears', 'YearsAtCompany', 'YearsWithCurrManager',
+#        'EnvironmentSatisfaction_1.0', 'EducationField_Human Resources',
+#        'BusinessTravel_Non-Travel', 'BusinessTravel_Travel_Frequently',
+#        'Department_Human Resources', 'JobSatisfaction_1', 'JobSatisfaction_4',
+#        'MaritalStatus_Divorced', 'MaritalStatus_Married',
+#        'MaritalStatus_Single', 'WorkLifeBalance_1.0', 'WorkLifeBalance_3.0'],
+#       dtype='object')
+print("\nCaracterísticas seleccionadas por KBest:")
 print(selected_featuresKbest)
 
 
+# Se crea un nuevo DataFrame llamado df_variables_kbest que contiene solo las características 
+# seleccionadas por la técnica KBest. Estas características son aquellas que tienen las puntuaciones 
+# más altas según el análisis de varianza.
 df_variables_kbest = XKbest[selected_featuresKbest].copy()
 
-
+# Se agrega la variable objetivo ("Attrition") al nuevo DataFrame df_variables_kbest. 
+# Esto crea un DataFrame que contiene únicamente las características seleccionadas y la variable objetivo.
 df_variables_kbest['Attrition'] = df['Attrition']
 
+######################################################################
+#                                                                    #
+#   SELECCIÓN DE VARIABLES                                           #
+#                                                                    #
+#   Método LASSO                                                     #
+#                                                                    #
+######################################################################
 
-Xsfs = df.drop("Attrition", axis=1)  # Características
-ysfs = df["Attrition"]  # Variable objetivo
-
-sfs = SequentialFeatureSelector(LogisticRegression(class_weight="balanced", max_iter=500), 
-                                n_features_to_select=16, 
-                                direction= "forward",  
-                                scoring='f1')
-
-sfs.fit(Xsfs, ysfs)
-
-
-selected_featuresSFS = Xsfs.columns[sfs.get_support()]
-print("Características seleccionadas:", selected_featuresSFS)
-
-df_variables_sfs = Xsfs[selected_featuresSFS].copy()
+X_lasso = df.drop("Attrition", axis=1)  # Características
+y_lasso = df["Attrition"]  # Variable objetivo 
 
 
-df_variables_sfs['Attrition'] = df['Attrition']
+lasso_model = Lasso(alpha=0.01)  # El parámetro alpha controla la fuerza de la regularización
 
 
-print("Variables con KBest:",sorted(selected_featuresKbest))
-print("Variables con SFS:",sorted(selected_featuresSFS))
+lasso_model.fit(X_lasso, y_lasso)
+
+lasso_coefficients = pd.DataFrame({'Feature': X_lasso.columns, 'Coefficient': lasso_model.coef_})
 
 
-conn = sql.connect("db_empleados")
-df_variables_kbest.to_sql("df_variables_kbest", conn, if_exists = "replace", index=False)### Llevar tablas a base de datos
-df_variables_sfs.to_sql("df_variables_sfs", conn, if_exists = "replace", index=False) ### Llevar tablas a base de datos
+selected_features_lasso = lasso_coefficients[lasso_coefficients['Coefficient'] != 0]['Feature']
 
 
-knn_scores = []
-tree_scores = []
-num_features_list = range(1, len(XKbest.columns) + 1)  # Prueba desde 1 hasta el número máximo de características
+print("Características seleccionadas por Lasso:")
+print(selected_features_lasso)
+
+# Características seleccionadas por Lasso:
+# 0                           EmployeeID
+# 1                                  Age
+# 3                        MonthlyIncome
+# 4                   NumCompaniesWorked
+# 6                    TotalWorkingYears
+# 7                TrainingTimesLastYear
+# 9              YearsSinceLastPromotion
+# 10                YearsWithCurrManager
+# 16         EnvironmentSatisfaction_1.0
+# 36    BusinessTravel_Travel_Frequently
+# 52                   JobSatisfaction_1
+# 55                   JobSatisfaction_4
+# 58                MaritalStatus_Single
+# 67                 WorkLifeBalance_3.0
 
 
-for num_features in num_features_list:
-    X_knn = XKbest.iloc[:, :num_features]
-    knn = KNeighborsClassifier(n_neighbors=3)
-    knn_scores.append(np.mean(cross_val_score(knn, X_knn, yKbest, cv=5)))  # Validación cruzada de 5-fold
+######################################################################
+#                                                                    #
+#   SELECCIÓN DE VARIABLES                                           #
+#                                                                    #
+#   Método Wrapper                                                   #
+#                                                                    #
+######################################################################
+
+X_wrapper = df.drop("Attrition", axis=1)  # Características
+y_wrapper = df["Attrition"]  # Variable objetivo 
+
+# Se crea un modelo de rregresión logística con un maximo de 10000 iteraciones
+model = LogisticRegression(max_iter=10000)
+
+# Esto asegura que todas las características tengan una media de cero y una desviación estándar de uno
+scaler = StandardScaler()
+
+X_wrapper_std = scaler.fit_transform(X_wrapper)
+
+# Contiene las características seleccionadas después de aplicar el método RFE.
+X_new_selected = recursive_feature_selection(X_wrapper_std, y_wrapper, model, 16)
+
+# Es un DataFrame que contiene las características seleccionadas escaladas, con los nombres de las columnas provenientes del DataFrame original.
+selected_features_df = pd.DataFrame(X_wrapper_std[:, X_new_selected], columns=X_wrapper.columns[X_new_selected])
+
+# Se imprime el DataFrame selected_features_df que muestra las características seleccionadas después de aplicar el método RFE y escalarlas.
+print(selected_features_df)
+
+# Las 16 características seleccionadas por el método Recursive Feature Elimination (RFE) con un modelo de regresión logística son las siguientes:
+
+# NumCompaniesWorked
+# YearsAtCompany
+# EnvironmentSatisfaction_1.0
+# BusinessTravel_Non-Travel
+# BusinessTravel_Travel_Frequently
+# Department_Human Resources
+# JobRole_Manufacturing Director
+# JobSatisfaction_1
+# JobSatisfaction_4
+# MaritalStatus_Single
+# WorkLifeBalance_1.0
+# Age
+# TotalWorkingYears
+# TrainingTimesLastYear
+# YearsWithCurrManager
+# MaritalStatus_Single
 
 
-
-for num_features in num_features_list:
-    X_tree = XKbest.iloc[:, :num_features]
-    tree = DecisionTreeClassifier(random_state=42)
-    tree_scores.append(np.mean(cross_val_score(tree, X_tree, yKbest, cv=5)))  # Validación cruzada de 5-fold
-
-
-best_num_features_knn = num_features_list[np.argmax(knn_scores)]
-best_num_features_tree = num_features_list[np.argmax(tree_scores)]
+######################################################################
+#                                                                    #
+#  MODELO DE REGRESIÓN LOGÍSTICA                                     #
+#                                                                    #
+#   Con matriz de confusion                                          #
+#                                                                    #
+######################################################################
 
 
-print("Número óptimo de características para K Nearest Neighbors:", best_num_features_knn)
-print("Número óptimo de características para Árbol de Decisión:", best_num_features_tree)
+# Dividir el conjunto de datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X_wrapper_std[:, X_new_selected], y_wrapper, test_size=0.2, random_state=42)
 
+# Inicializar el modelo de regresión logística
+model = LogisticRegression(max_iter=10000)
+
+# Ajustar el modelo a los datos de entrenamiento
+model.fit(X_train, y_train)
+
+# Realizar predicciones en los datos de prueba
+y_pred = model.predict(X_test)
+
+# Evaluar el rendimiento del modelo
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred)
+
+# Imprimir resultados
+print(f'Exactitud en el conjunto de prueba: {accuracy:.3f}\n')
+print('Matriz de Confusión:')
+print(conf_matrix)
+print('\nReporte de Clasificación:')
+print(classification_rep)

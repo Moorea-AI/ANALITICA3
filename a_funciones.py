@@ -33,6 +33,7 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import cross_val_predict, cross_val_score, cross_validate
 import joblib
 from sklearn.preprocessing import StandardScaler ## escalar variables 
+from sklearn.feature_selection import RFE
 
 
 #Esta función permite ejecutar un archivo  con extensión .sql que contenga varias consultas
@@ -173,3 +174,14 @@ def ct(columns):
   ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [columns])], remainder='passthrough')
   X = np.array(ct.fit_transform(X))
   return ct
+
+
+# Función recursiva de selección de características
+def recursive_feature_selection(X,y,model,k):
+  rfe = RFE(model, n_features_to_select=k, step=1)
+  fit = rfe.fit(X, y)
+  X_new = fit.support_
+  print("Num Features: %s" % (fit.n_features_))
+  print("Selected Features: %s" % (fit.support_))
+  print("Feature Ranking: %s" % (fit.ranking_))
+  return X_new
