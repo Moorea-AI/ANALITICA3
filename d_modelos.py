@@ -191,6 +191,36 @@ for i in ScalerList:
     
 print(df[ScalerList].describe())
 
+#            Age  DistanceFromHome  MonthlyIncome  NumCompaniesWorked  \
+# count  3.528000e+04      3.528000e+04   3.528000e+04        3.528000e+04   
+# mean  -2.718914e-17      4.531523e-17   4.914184e-17       -9.455777e-17   
+# std    1.000014e+00      1.000014e+00   1.000014e+00        1.000014e+00   
+# min   -2.072192e+00     -1.010909e+00  -1.167343e+00       -1.073523e+00   
+# 25%   -7.581700e-01     -8.875151e-01  -7.632087e-01       -6.734351e-01   
+# 50%   -1.011589e-01     -2.705440e-01  -3.365516e-01       -2.733477e-01   
+# 75%    6.653541e-01      5.932157e-01   3.988370e-01        5.268271e-01   
+# max    2.526886e+00      2.444129e+00   2.867626e+00        2.527264e+00   
+
+#        PercentSalaryHike  TotalWorkingYears  TrainingTimesLastYear  \
+# count       3.528000e+04       3.528000e+04           3.528000e+04   
+# mean        2.332224e-16      -6.303851e-17           8.881784e-17   
+# std         1.000014e+00       1.000014e+00           1.000014e+00   
+# min        -1.150554e+00      -1.449387e+00          -2.171982e+00   
+# 25%        -8.772324e-01      -6.781452e-01          -6.201892e-01   
+# 50%        -3.305891e-01      -1.639837e-01           1.557071e-01   
+# 75%         7.626976e-01       4.787182e-01           1.557071e-01   
+# max         2.675949e+00       3.692227e+00           2.483396e+00   
+
+#        YearsAtCompany  YearsSinceLastPromotion  YearsWithCurrManager  
+# count    3.528000e+04             3.528000e+04          3.528000e+04  
+# mean    -3.625218e-17             1.369527e-17         -2.134851e-17  
+# std      1.000014e+00             1.000014e+00          1.000014e+00  
+# min     -1.144294e+00            -6.791457e-01         -1.155935e+00  
+# 25%     -6.544537e-01            -6.791457e-01         -5.952272e-01  
+# 50%     -3.278933e-01            -3.687153e-01         -3.148735e-01  
+# 75%      3.252275e-01             2.521455e-01          8.065415e-01  
+# max      5.386914e+00             3.977310e+00          3.610079e+00  
+
 ######################################################################
 #                                                                    #
 #   SELECCIÓN DE VARIABLES                                           #
@@ -355,6 +385,84 @@ print(selected_features_df)
 # MaritalStatus_Single
 
 
+#             Age  NumCompaniesWorked  TotalWorkingYears  TrainingTimesLastYear  \
+# 0      1.541369           -0.673435          -1.320847               2.483396   
+# 1      1.541369           -0.673435          -1.320847               2.483396   
+# 2      1.541369           -0.673435          -1.320847               2.483396   
+# 3      1.541369           -0.673435          -1.320847               2.483396   
+# 4     -0.648668           -1.073523          -0.678145               0.155707   
+# ...         ...                 ...                ...                    ...   
+# 35275  0.555852           -1.073523          -0.163984              -0.620189   
+# 35276  0.336849           -1.073523           1.249960               2.483396   
+# 35277  0.336849           -1.073523           1.249960               2.483396   
+# 35278  0.336849           -1.073523           1.249960               2.483396   
+# 35279  0.336849           -1.073523           1.249960               2.483396   
+
+#        YearsAtCompany  YearsSinceLastPromotion  YearsWithCurrManager  \
+# 0           -0.981014                -0.679146             -1.155935   
+# 1           -0.981014                -0.679146             -1.155935   
+# 2           -0.981014                -0.679146             -1.155935   
+# 3           -0.981014                -0.679146             -1.155935   
+# 4           -0.327893                -0.368715             -0.034520   
+# ...               ...                      ...                   ...   
+# 35275        0.325228                 1.493867              1.086895   
+# 35276        2.284590                 0.252146              1.367249   
+# 35277        2.284590                 0.252146              1.367249   
+# 35278        2.284590                 0.252146              1.367249   
+# 35279        2.284590                 0.252146              1.367249   
+
+#        EnvironmentSatisfaction_1.0  BusinessTravel_Non-Travel  \
+# 0                        -0.486854                    -0.3371   
+# 1                        -0.486854                    -0.3371   
+# 2                        -0.486854                    -0.3371   
+# 3                        -0.486854                    -0.3371   
+# 4                        -0.486854                    -0.3371   
+# ...                            ...                        ...   
+# 35275                    -0.486854                    -0.3371   
+# 35276                     2.054005                    -0.3371   
+# 35277                     2.054005                    -0.3371   
+# 35278                     2.054005                    -0.3371   
+# 35279                     2.054005                    -0.3371   
+
+#        BusinessTravel_Travel_Frequently  Department_Human Resources  \
+# 0                             -0.481859                   -0.211604   
+# 1                             -0.481859                   -0.211604   
+# 2                             -0.481859                   -0.211604   
+# 3                             -0.481859                   -0.211604   
+# 4                              2.075297                   -0.211604   
+# ...                                 ...                         ...   
+# 35275                         -0.481859                   -0.211604   
+# 35276                         -0.481859                   -0.211604   
+# 35277                         -0.481859                   -0.211604   
+# 35278                         -0.481859                   -0.211604   
+# 35279                         -0.481859                   -0.211604   
+
+#        JobRole_Manufacturing Director  JobSatisfaction_1  JobSatisfaction_4  \
+# 0                           -0.330808          -0.492193           1.491993   
+# 1                           -0.330808          -0.492193           1.491993   
+# 2                           -0.330808          -0.492193           1.491993   
+# 3                           -0.330808          -0.492193           1.491993   
+# 4                           -0.330808          -0.492193          -0.670245   
+# ...                               ...                ...                ...   
+# 35275                       -0.330808           2.031725          -0.670245   
+# 35276                       -0.330808          -0.492193          -0.670245   
+# 35277                       -0.330808          -0.492193          -0.670245   
+# 35278                       -0.330808          -0.492193          -0.670245   
+# 35279                       -0.330808          -0.492193          -0.670245   
+
+#        MaritalStatus_Single  WorkLifeBalance_1.0  
+# 0                 -0.685565            -0.239375  
+# 1                 -0.685565            -0.239375  
+# 2                 -0.685565            -0.239375  
+# 3                 -0.685565            -0.239375  
+# 4                  1.458650            -0.239375  
+# ...                     ...                  ...  
+# 35275             -0.685565            -0.239375  
+# 35276             -0.685565            -0.239375  
+# 35277             -0.685565            -0.239375  
+# 35278             -0.685565            -0.239375  
+# 35279             -0.685565            -0.239375  
+
 ######################################################################
 #                                                                    #
 #  MODELO DE REGRESIÓN LOGÍSTICA                                     #
@@ -423,6 +531,10 @@ print(f'Recall: {recall}')
 print(f'Especificidad: {especificidad}')
 print(f'F1 score: {f1_score}')
 
+# Precision: 0.6630434782608695
+# Recall: 0.16094986807387862
+# Especificidad: 0.9842878864673087
+# F1 score: 0.2590233545647558
 
 
 ######################################################################
@@ -444,6 +556,29 @@ print ("Train - Accuracy :", metrics.accuracy_score(y_train, ranfor.predict(X_tr
 print ("Train - classification report:\n", metrics.classification_report(y_train, ranfor.predict(X_train_modelo3)))
 print ("Test - Accuracy :", metrics.accuracy_score(y_test, ranfor.predict(X_test_modelo3)))
 print ("Test - classification report :", metrics.classification_report(y_test, ranfor.predict(X_test_modelo3)))
+
+
+# Train - Accuracy : 0.7740221088435374
+# Train - classification report:
+#                precision    recall  f1-score   support
+
+#            0       0.92      0.80      0.86     23673
+#            1       0.38      0.65      0.48      4551
+
+#     accuracy                           0.77     28224
+#    macro avg       0.65      0.72      0.67     28224
+# weighted avg       0.84      0.77      0.80     28224
+
+# Test - Accuracy : 0.7769274376417233
+# Test - classification report :               precision    recall  f1-score   support
+
+#            0       0.92      0.80      0.86      5919
+#            1       0.38      0.64      0.48      1137
+
+#     accuracy                           0.78      7056
+#    macro avg       0.65      0.72      0.67      7056
+# weighted avg       0.83      0.78      0.80      7056
+
 
 # Matriz de confusion
 cm= confusion_matrix(y_test, ranfor.predict(X_test_modelo3))
@@ -468,6 +603,18 @@ y_pred = gboos.predict(X_test_modelo4)
 
 print("Test - Accuracy :", accuracy_score(y_test, y_pred))
 print("Test - Classification report :\n", classification_report(y_test, y_pred))
+
+# Test - Accuracy : 0.8802437641723356
+# Test - Classification report :
+#                precision    recall  f1-score   support
+
+#            0       0.88      0.99      0.93      5919
+#            1       0.84      0.32      0.46      1137
+
+#     accuracy                           0.88      7056
+#    macro avg       0.86      0.65      0.70      7056
+# weighted avg       0.88      0.88      0.86      7056
+
 
 
 cm = confusion_matrix(y_test, y_pred)
@@ -511,6 +658,29 @@ print("Train - Accuracy:", accuracy_score(y_train_res, svm_model.predict(X_train
 print("Train - Classification Report:\n", classification_report(y_train_res, svm_model.predict(X_train_modelo5)))
 print("Test - Accuracy:", accuracy_score(y_test, svm_model.predict(X_test_modelo5)))
 print("Test - Classification Report:", classification_report(y_test, svm_model.predict(X_test_modelo5)))
+
+
+# Train - Accuracy: 0.7048256802721088
+# Train - Classification Report:
+#                precision    recall  f1-score   support
+
+#            0       0.93      0.70      0.80     23673
+#            1       0.32      0.72      0.44      4551
+
+#     accuracy                           0.70     28224
+#    macro avg       0.62      0.71      0.62     28224
+# weighted avg       0.83      0.70      0.74     28224
+
+# Test - Accuracy: 0.7101757369614512
+# Test - Classification Report:               precision    recall  f1-score   support
+
+#            0       0.93      0.71      0.80      5919
+#            1       0.32      0.73      0.45      1137
+
+#     accuracy                           0.71      7056
+#    macro avg       0.63      0.72      0.63      7056
+# weighted avg       0.83      0.71      0.75      7056
+
 
 # Matriz de Confusión
 cm_svm = confusion_matrix(y_test, svm_model.predict(X_test_modelo5))

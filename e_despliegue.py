@@ -23,7 +23,7 @@ if __name__ == "__main__":
     cur = conn.cursor()
 
     # Ejecutar SQL de preprocesamiento inicial
-    funciones.ejecutar_sql('preprocesamientos2.sql', cur)
+    funciones.ejecutar_sql('preprocesamientos.sql', cur)
     df = pd.read_sql('''select * from all_employees''', conn)
 
     # Otras transformaciones en Python (imputación, dummies y selección de variables)
