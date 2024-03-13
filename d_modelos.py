@@ -73,12 +73,26 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import sys
 import sqlite3 as sql #### para bases de datos sql
 import a_funciones as funciones
-
+import joblib
 
 conn = sql.connect("db_empleados") 
 df = pd.read_sql("SELECT * FROM all_employees", conn)
 #Borramos la columna Index ya que no aporta nada relevante
 df.drop('index', axis = 1, inplace = True)  
+
+################################################################
+#### Pasos para modelo #########################################
+###############################################################
+
+    ### a.crear base final (hecho) ####
+    ### b. verificar null  (hecho) ####
+    ### c. Imputar o eliminar nulos si es necesario
+    ### d. convertir categóricas a dummies 
+    ### e. definir modelos a entrenar candidatos
+    ### f. seleccionar variables
+    ### g. definir modelo ganador
+    ### h  afinar hiperparámetros
+    
 
 ######################################################################
 #                                                                    #
@@ -170,6 +184,7 @@ df_encoded = pd.get_dummies(df, columns=columns_to_encode)
 # Después, el DataFrame se actualiza para contener estas nuevas columnas codificadas como enteros.
 df = df_encoded.astype(int)
 
+list_dummies=df_encoded
 
 
 for column in df.columns:
@@ -179,6 +194,7 @@ for column in df.columns:
 # Aquí, se normalizan (escalan) las columnas numéricas especificadas en ScalerList utilizando StandardScaler de 
 # scikit-learn. Esto asegura que estas columnas tengan una media de cero y una desviación estándar de uno.
 scaler = StandardScaler()
+list_cat = scaler
 
 ScalerList = ['Age','DistanceFromHome', 'MonthlyIncome',
                 'NumCompaniesWorked', 'PercentSalaryHike','TotalWorkingYears',
@@ -702,5 +718,189 @@ plt.ylabel('True Positive Rate')
 plt.title('Curva ROC - SVM')
 plt.legend(loc='lower right')
 plt.show()
+
+
+
+# Seleccion de Variables con KBest
+conn = sql.connect("db_empleados")
+df.to_sql("df", conn, if_exists="replace", index=False)
+
+XKbest = df.drop("Attrition", axis=1)
+yKbest = df["Attrition"]
+
+k_best = SelectKBest(score_func=f_classif, k=16)
+X_best = k_best.fit_transform(XKbest, yKbest)
+
+feature_scores = pd.DataFrame({'Feature': XKbest.columns, 'Score': k_best.scores_})
+feature_scores.sort_values(by='Score', ascending=False, inplace=True)
+
+selected_featuresKbest = XKbest.columns[k_best.get_support()]
+
+df_variables_kbest = XKbest[selected_featuresKbest].copy()
+df_variables_kbest['Attrition'] = df['Attrition']
+
+# Seleccion de Variables con LASSO
+X_lasso = df.drop("Attrition", axis=1)
+y_lasso = df["Attrition"]
+
+lasso_model = Lasso(alpha=0.01)
+lasso_model.fit(X_lasso, y_lasso)
+
+lasso_coefficients = pd.DataFrame({'Feature': X_lasso.columns, 'Coefficient': lasso_model.coef_})
+selected_features_lasso = lasso_coefficients[lasso_coefficients['Coefficient'] != 0]['Feature']
+
+# Seleccion de Variables con Wrapper
+X_wrapper = df.drop("Attrition", axis=1)
+y_wrapper = df["Attrition"]
+
+model = LogisticRegression(max_iter=10000)
+scaler = StandardScaler()
+X_wrapper_std = scaler.fit_transform(X_wrapper)
+
+X_new_selected = recursive_feature_selection(X_wrapper_std, y_wrapper, model, 16)
+selected_features_df = pd.DataFrame(X_wrapper_std[:, X_new_selected], columns=X_wrapper.columns[X_new_selected])
+
+# Modelo de Regresion Logistica
+X_train, X_test, y_train, y_test = train_test_split(X_wrapper_std[:, X_new_selected], y_wrapper, test_size=0.2, random_state=42)
+model = LogisticRegression(max_iter=10000)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred)
+
+# Random Forest Classifier
+X_train_modelo3 = X_train
+X_test_modelo3 = X_test
+ranfor = RandomForestClassifier(class_weight="balanced", n_estimators=150, criterion='gini', max_depth=5,
+                                max_leaf_nodes=10, n_jobs=-1, random_state=123)
+ranfor.fit(X_train_modelo3, y_train)
+
+print("Train - Accuracy :", metrics.accuracy_score(y_train, ranfor.predict(X_train_modelo3)))
+print("Train - classification report:\n", metrics.classification_report(y_train, ranfor.predict(X_train_modelo3)))
+print("Test - Accuracy :", metrics.accuracy_score(y_test, ranfor.predict(X_test_modelo3)))
+print("Test - classification report :", metrics.classification_report(y_test, ranfor.predict(X_test_modelo3)))
+
+# Gradient Boosting Classifier
+X_train_modelo4, X_test_modelo4, y_train_res, y_test = train_test_split(X_wrapper_std[:, X_new_selected], y_wrapper,
+                                                                        test_size=0.2, random_state=42)
+
+gboos = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_features=4, random_state=123)
+gboos.fit(X_train_modelo4, y_train_res)
+y_pred = gboos.predict(X_test_modelo4)
+
+print("Test - Accuracy :", accuracy_score(y_test, y_pred))
+print("Test - Classification report :\n", classification_report(y_test, y_pred))
+
+# Support Vector Machine
+X_train_modelo5 = X_train_modelo4
+X_test_modelo5 = X_test_modelo4
+
+svm_model = SVC(C=1.5, kernel='linear', class_weight='balanced', max_iter=-1, random_state=123)
+svm_model.fit(X_train_modelo5, y_train_res)
+
+print("Train - Accuracy:", accuracy_score(y_train_res, svm_model.predict(X_train_modelo5)))
+print("Train - Classification Report:\n", classification_report(y_train_res, svm_model.predict(X_train_modelo5)))
+print("Test - Accuracy:", accuracy_score(y_test, svm_model.predict(X_test_modelo5)))
+print("Test - Classification Report:", classification_report(y_test, svm_model.predict(X_test_modelo5)))
+
+# ### función para exportar y guardar objetos de python (cualqueira)
+
+# joblib.dump(rf_final, "rf_final.pkl") ## 
+# joblib.dump(m_lreg, "m_lreg.pkl") ## 
+# joblib.dump(list_cat, "list_cat.pkl") ### para realizar imputacion
+# joblib.dump(list_dummies, "list_dummies.pkl")  ### para convertir a dummies
+# joblib.dump(var_names, "var_names.pkl")  ### para variables con que se entrena modelo
+# joblib.dump(scaler, "scaler.pkl") ## 
+
+var_names= feature_importance_df
+
+# Guardar Modelos
+output_folder = "salidas"
+joblib.dump(list_cat, os.path.join(output_folder, "list_cat.pkl"))
+joblib.dump(model, os.path.join(output_folder, "m_lreg.pkl"))
+joblib.dump(var_names, os.path.join(output_folder, "var_names.pkl"))  ### para variables con que se entrena modelo
+joblib.dump(ranfor, os.path.join(output_folder, "rf_final.pkl"))
+joblib.dump(gboos, os.path.join(output_folder, "gboos_final.pkl"))
+joblib.dump(list_dummies, os.path.join(output_folder, "list_dummies.pkl"))  ### para convertir a dummies
+joblib.dump(svm_model, os.path.join(output_folder, "svm_model.pkl"))
+joblib.dump(scaler, os.path.join(output_folder, "scaler.pkl")) ## 
+
+
+
+
+
+
+
+
+
+
+
+
+
+matriz = confusion_matrix(y_test, y_pred)
+
+# Ahora puedes seguir con el cálculo de las métricas
+tn, fp, fn, tp = matriz.ravel()
+precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+
+# Resultados del modelo Logístico
+logistic_results = {
+    'Modelo': ['Logístico'],
+    'Precisión': [precision],
+    'Recall': [recall],
+    'Especificidad': [especificidad],
+    'F1 Score': [f1_score],
+}
+
+# Resultados del modelo Random Forest Classifier
+rf_results = {
+    'Modelo': ['Random Forest'],
+    'Precisión (Train)': [metrics.accuracy_score(y_train, ranfor.predict(X_train_modelo3))],
+    'Precisión (Test)': [metrics.accuracy_score(y_test, ranfor.predict(X_test_modelo3))],
+    'F1 Score (Train)': [classification_report(y_train, ranfor.predict(X_train_modelo3), output_dict=True)['1']['f1-score']],
+    'F1 Score (Test)': [classification_report(y_test, ranfor.predict(X_test_modelo3), output_dict=True)['1']['f1-score']],
+}
+
+# Resultados del modelo Gradient Boosting Classifier
+gboos_results = {
+    'Modelo': ['Gradient Boosting'],
+    'Precisión': [accuracy_score(y_test, y_pred)],
+    'F1 Score': [classification_report(y_test, y_pred, output_dict=True)['1']['f1-score']],
+}
+
+# Resultados del modelo Support Vector Machine
+svm_results = {
+    'Modelo': ['Support Vector Machine'],
+    'Precisión (Train)': [accuracy_score(y_train_res, svm_model.predict(X_train_modelo5))],
+    'Precisión (Test)': [accuracy_score(y_test, svm_model.predict(X_test_modelo5))],
+    'F1 Score (Train)': [classification_report(y_train_res, svm_model.predict(X_train_modelo5), output_dict=True)['1']['f1-score']],
+    'F1 Score (Test)': [classification_report(y_test, svm_model.predict(X_test_modelo5), output_dict=True)['1']['f1-score']],
+}
+
+# Crear DataFrames
+logistic_df = pd.DataFrame(logistic_results)
+rf_df = pd.DataFrame(rf_results)
+gboos_df = pd.DataFrame(gboos_results)
+svm_df = pd.DataFrame(svm_results)
+
+pip install xlsxwriter
+
+# Crear un nuevo archivo Excel y escribir los resultados en hojas separadas
+with pd.ExcelWriter(os.path.join(output_folder, 'resultados_modelos.xlsx'), engine='xlsxwriter') as writer:
+    logistic_df.to_excel(writer, sheet_name='Logístico', index=False)
+    rf_df.to_excel(writer, sheet_name='Random Forest', index=False)
+    gboos_df.to_excel(writer, sheet_name='Gradient Boosting', index=False)
+    svm_df.to_excel(writer, sheet_name='Support Vector Machine', index=False)
+
+
+
+
+
+
+
+
 
 

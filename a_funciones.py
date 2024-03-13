@@ -146,12 +146,27 @@ def medir_modelos(modelos,scoring,X,y,cv):
 def preparar_datos (df):
    #######Cargar y procesar nuevos datos ######
    #### Cargar modelo y listas 
+   # Obtener listas de nombres de columnas
+    list_cat = joblib.load("list_cat.pkl")  # Lista de columnas categóricas
+    list_dummies =joblib.load("list_dummies.pkl") # Lista de columnas para aplicar get_dummies
+    
+    
+   #var_names=joblib.load("var_names.pkl")
+   #scaler = joblib.load("scaler.pkl") 
+   #df = imputar_f(df, list_cat)
+    
+   # Imputar y aplicar dummies
+    df = imputar_f(df, list_cat)
+    df_dummies = pd.get_dummies(df, columns=list_dummies)
    
-    list_cat=joblib.load("list_cat.pkl")
-    list_dummies=joblib.load("list_dummies.pkl")
-    var_names=joblib.load("var_names.pkl")
-    scaler=joblib.load( "scaler.pkl") 
+   # Normalizar utilizando StandardScaler
+    scaler = StandardScaler()
+    df_dummies_std = scaler.fit_transform(df_dummies)
+    
+    return df_dummies_std
 
+
+    
     ####Ejecutar funciones de transformaciones
     
     df=imputar_f(df,list_cat)
