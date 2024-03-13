@@ -23,7 +23,7 @@ import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from plotly.subplots import make_subplots
 from sklearn.metrics import roc_curve, auc
-
+import xlsxwriter
 
 # Aprendizaje y estadísticas
 from sklearn import linear_model
@@ -886,7 +886,7 @@ rf_df = pd.DataFrame(rf_results)
 gboos_df = pd.DataFrame(gboos_results)
 svm_df = pd.DataFrame(svm_results)
 
-pip install xlsxwriter
+
 
 # Crear un nuevo archivo Excel y escribir los resultados en hojas separadas
 with pd.ExcelWriter(os.path.join(output_folder, 'resultados_modelos.xlsx'), engine='xlsxwriter') as writer:
@@ -902,5 +902,28 @@ with pd.ExcelWriter(os.path.join(output_folder, 'resultados_modelos.xlsx'), engi
 
 
 
+random_forest_importance = {'Feature': ['Feature1', 'Feature2', 'Feature3'],
+                            'Importance': [0.2, 0.5, 0.3]}
 
+# Ejemplo de datos de importancia de variables para Gradient Boosting
+gradient_boosting_importance = {'Feature': ['Feature1', 'Feature2', 'Feature3'],
+                                'Importance': [0.3, 0.4, 0.2]}
+
+# Ejemplo de datos de importancia de variables para Support Vector Machine
+svm_importance = {'Feature': ['Feature1', 'Feature2', 'Feature3'],
+                  'Importance': [0.1, 0.4, 0.5]}
+
+# Crear DataFrames con los resultados de importancia de variables para cada modelo
+random_forest_df = pd.DataFrame(random_forest_importance)
+gradient_boosting_df = pd.DataFrame(gradient_boosting_importance)
+svm_df = pd.DataFrame(svm_importance)
+
+# Crear un nuevo archivo Excel y escribir los resultados en hojas separadas
+output_folder = "salidas"
+os.makedirs(output_folder, exist_ok=True)
+
+with pd.ExcelWriter(os.path.join(output_folder, 'importancia_variables.xlsx'), engine='xlsxwriter') as writer:
+    random_forest_df.to_excel(writer, sheet_name='Random Forest', index=False)
+    gradient_boosting_df.to_excel(writer, sheet_name='Gradient Boosting', index=False)
+    svm_df.to_excel(writer, sheet_name='Support Vector Machine', index=False)
 
