@@ -20,12 +20,13 @@ import plotly.express as px
 import a_funciones as fn
 
 
+from mlxtend.preprocessing import TransactionEncoder
+
+
 
 
 # Conectarse a la base de datos
-conn = sql.connect('db_movies')
-
-# Crear el cursor
+conn = sql.connect('data\db_movies')
 cur = conn.cursor()
 
 # Para ver las tablas
@@ -49,7 +50,7 @@ movie_ratings.head()
 movie_ratings.duplicated().sum()
 
 # calcular la distribución de calificaciones
-cr = pd.read_sql(""" 
+Calificaciones = pd.read_sql(""" 
     SELECT 
         "Rating" AS rating, 
         COUNT(*) AS conteo 
@@ -58,10 +59,10 @@ cr = pd.read_sql("""
     ORDER BY conteo DESC
 """, conn)
 
-print(cr)
+print(Calificaciones)
 
 
-fig = go.Figure(data=[go.Bar(x=cr['rating'], y=cr['conteo'], text=cr['conteo'], textposition="outside")])
+fig = go.Figure(data=[go.Bar(x=Calificaciones['rating'], y=Calificaciones['conteo'], text=Calificaciones['conteo'], textposition="outside")])
 
 # Actualizar el diseño
 fig.update_layout(title="Conteo de calificaciones", xaxis={'title': 'Calificación'}, yaxis={'title': 'Conteo'})
