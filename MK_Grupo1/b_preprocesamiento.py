@@ -123,7 +123,7 @@ print(rating_movies1.describe())
 fig  = px.histogram(rating_movies1, x= 'cnt_rat', title= 'Hist frecuencia de numero de calificaciones para cada pelicula')
 fig.show()
 #
-fn.ejecutar_sql('preprocesamientos.sql', cur)
+fn.ejecutar_sql('preprocesamientos1.sql', cur)
 
 cur.execute("select name from sqlite_master where type='table' ")
 cur.fetchall()
