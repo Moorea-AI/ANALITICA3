@@ -302,7 +302,9 @@ df_ratings = pd.read_sql_query(query, conn)
 query = f"SELECT * FROM {'movies'}"
 df_movies = pd.read_sql_query(query, conn)
 
-# Ahora bien, crearemos una sola base de datos para poder trabajar con esta. Lo filtrremos por el movieId que es el campo comun en ambos:
+# Ahora bien, crearemos una sola base de datos para poder trabajar con esta. Lo filtrremos por el movieId que es el campo comun en ambos
+# Pero antes, analizaremos detalladamente ambas bases de datos
+
 print("\nCruce de datos:")
 print("Tabla ratings:", df_ratings.columns)
 print("Tabla movies:", df_movies.columns)
@@ -315,3 +317,70 @@ print("Tabla movies:", df_movies['movieId'].dtype)
 # Ahora bien, verifiquemos si son campos unicos o tienen duplicados. Podemos observar que NO existen datos duplicados
 duplicadosratings = df_ratings.duplicated().sum()
 duplicadosmovies = df_movies.duplicated().sum()
+
+
+# Calcular cuántas películas calificó cada usuario
+rating_users = pd.read_sql('''SELECT userId as user_id,
+                                     COUNT(*) as cnt_rat
+                              FROM ratings
+                              GROUP BY userId
+                              ORDER BY cnt_rat DESC''', conn)
+
+# Imprimir el DataFrame
+print(rating_users)
+
+
+rating_users.describe()
+
+# 	user_id	cnt_rat
+# count	610.000000	610.000000
+# mean	305.500000	165.304918
+# std	176.236111	269.480584
+# min	1.000000	20.000000
+# 25%	153.250000	35.000000
+# 50%	305.500000	70.500000
+# 75%	457.750000	168.000000
+# max	610.000000	2698.000000
+
+# Con esto tenemos que los usuarios calificaron un promedio de 165 peliculas
+# Los usuarios que menos han calificado son 20 peliculas y los que más han calificado son 2698 peliculas
+# Existirán usuarios que hayan tenido el tiempo suficiente para calificar 2698 peliculas?
+
+# El 25% de los usuarios han calificado en promedio 35 peliculas
+# el 50% de los usuarios han calificado alrededor 70 peliculas
+
+# Por ende, tomaremos los usuarios que han calificado entre 30 y 1000.
+
+# Consulta SQL para filtrar usuarios con más de 50 calificaciones pero menos de 1000
+query = '''
+    SELECT userId as user_id,
+           COUNT(*) as cnt_rat
+    FROM ratings
+    GROUP BY userId
+    HAVING cnt_rat >= 30 AND cnt_rat <= 1000
+    ORDER BY cnt_rat DESC
+'''
+# Ejecutar la consulta y cargar los resultados en un DataFrame
+rating_users_def = pd.read_sql(query, conn)
+
+# Imprimir el DataFrame
+print(rating_users_def)
+
+# Esto quedaría gráficamente asi:
+
+fig  = px.histogram(rating_users_def, x= 'cnt_rat', title= 'Frecuencia de calificaciones por usuario')
+fig.show()
+     
+     
+rating_users_def.describe()
+
+# Con esto, los datos atipicos quedan más controlados
+# user_id	cnt_rat
+# count	489.000000	489.000000
+# mean	299.171779	163.014315
+# std	176.961279	177.733228
+# min	1.000000	30.000000
+# 25%	142.000000	50.000000
+# 50%	302.000000	94.000000
+# 75%	450.000000	196.000000
+# max	609.000000	977.000000
