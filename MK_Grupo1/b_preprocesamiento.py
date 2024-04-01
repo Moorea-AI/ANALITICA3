@@ -206,6 +206,67 @@ print(rating_movies1.describe())
 fig  = px.histogram(rating_movies1, x= 'cnt_rat', title= 'Hist frecuencia de numero de calificaciones para cada pelicula')
 fig.show()
 
+
+# Cuáles usuarios han calificados más de 100 peliculas?
+consulta_sql = """
+    SELECT userId, COUNT(DISTINCT movieId) AS numero_peliculas
+    FROM ratings
+    GROUP BY userId
+    HAVING numero_peliculas >= 100
+    order by numero_peliculas desc
+"""
+pd.read_sql(consulta_sql, conn)
+
+
+
+# Cuál es la pelicula con la calificación más alta?
+consulta_sql = """
+    SELECT m.title, AVG(r.rating) as calificacion
+    FROM movies m
+    LEFT JOIN ratings r ON m.movieId = r.movieId
+    GROUP BY m.title
+    ORDER BY calificacion DESC 
+    LIMIT 1
+"""
+pd.read_sql(consulta_sql, conn)
+
+#0	Zeitgeist: Moving Forward (2011)	5.0
+
+
+# Cuáles son las 5 peliculas más recomendadas?
+consulta_sql = """
+    SELECT m.title, COUNT(r.rating) as total_calificacion
+    FROM movies m
+    LEFT JOIN ratings r ON m.movieId = r.movieId
+    GROUP BY m.title
+    ORDER BY total_calificacion DESC 
+    LIMIT 5
+"""
+pd.read_sql(consulta_sql, conn)
+
+# title	total_calificacion
+# 0	Forrest Gump (1994)	329
+# 1	Shawshank Redemption, The (1994)	317
+# 2	Pulp Fiction (1994)	307
+# 3	Silence of the Lambs, The (1991)	279
+# 4	Matrix, The (1999)	278
+
+
+# Distribución de las calificaciones
+consulta_sql = """
+    SELECT rating, COUNT(*) AS n_movies
+    FROM ratings
+    GROUP BY rating
+    ORDER BY n_movies DESC
+"""
+
+cr=pd.read_sql(consulta_sql, conn)
+data  = go.Bar( x=cr.rating,y=cr.n_movies, text=cr.n_movies, textposition="outside")
+Layout=go.Layout(title="Count of ratings",xaxis={'title':'Rating'},yaxis={'title':'Count movies'})
+go.Figure(data,Layout)
+
+
+
 # ***************************************************************************
 # ALEJA, POR FFAVOR REVISA ESTO QUE NO CORRE
 # 
