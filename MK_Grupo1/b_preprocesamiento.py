@@ -177,6 +177,8 @@ fig.show()
 
 
 
+# Cuántas veces ha sido calificada una película?
+# Podemos ver que la película 356 ha sido calificada 329 veces
 
 rating_movies =pd.read_sql(''' select movieId ,
                          count(*) as cnt_rat
@@ -186,10 +188,12 @@ rating_movies =pd.read_sql(''' select movieId ,
                          ''',conn )
 print(rating_movies)
 print(rating_movies.describe())
-fig  = px.histogram(rating_movies, x= 'cnt_rat', title= 'Hist frecuencia de numero de calificaciones para cada pelicula')
+fig  = px.histogram(rating_movies, x= 'cnt_rat', title= 'Frecuencia de calificaciones para cada pelicula')
 fig.show()
 
 
+
+# Seleccionamos las que tienen entre 20 y 150 calificaciones
 rating_movies1 =pd.read_sql(''' select movieId ,
                          count(*) as cnt_rat
                          from ratings
@@ -202,28 +206,31 @@ print(rating_movies1.describe())
 fig  = px.histogram(rating_movies1, x= 'cnt_rat', title= 'Hist frecuencia de numero de calificaciones para cada pelicula')
 fig.show()
 
+# ***************************************************************************
+# ALEJA, POR FFAVOR REVISA ESTO QUE NO CORRE
+# 
+# fn.ejecutar_sql('preprocesamiento1.sql', cur)
 
-fn.ejecutar_sql('preprocesamiento1.sql', cur)
-
-cur.execute("select name from sqlite_master where type='table' ")
-cur.fetchall()
+# cur.execute("select name from sqlite_master where type='table' ")
+# cur.fetchall()
 
 
-pd.read_sql('select count(*) from movies', conn)
-pd.read_sql('select count(*) from movies_final', conn)
-pd.read_sql('select count(*) from ratings', conn)
-pd.read_sql('select count(*) from ratings_final', conn)
-pd.read_sql('select count(*) from full_ratings', conn)
+# pd.read_sql('select count(*) from movies', conn)
+# pd.read_sql('select count(*) from movies_final', conn)
+# pd.read_sql('select count(*) from ratings', conn)
+# pd.read_sql('select count(*) from ratings_final', conn)
+# pd.read_sql('select count(*) from full_ratings', conn)
 
-ratings=pd.read_sql('select * from full_ratings',conn)
-print(ratings.duplicated().sum()) # al cruzar tablas a veces se duplican registros
-print(ratings.info())
-print(ratings.head(10))
+# ratings=pd.read_sql('select * from full_ratings',conn)
+# print(ratings.duplicated().sum()) # al cruzar tablas a veces se duplican registros
+# print(ratings.info())
+# print(ratings.head(10))
 
-movies=pd.read_sql("""select * from movies""", conn)
-genres=movies['genres'].str.split('|')
-te = TransactionEncoder()
-genres = te.fit_transform(genres)
-genres = pd.DataFrame(genres, columns = te.columns_)
+# movies=pd.read_sql("""select * from movies""", conn)
+# genres=movies['genres'].str.split('|')
+# te = TransactionEncoder()
+# genres = te.fit_transform(genres)
+# genres = pd.DataFrame(genres, columns = te.columns_)
 
+# ***************************************************************************
 
