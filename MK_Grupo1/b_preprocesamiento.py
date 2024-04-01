@@ -267,6 +267,7 @@ go.Figure(data,Layout)
 
 
 
+
 # ***************************************************************************
 # ALEJA, POR FFAVOR REVISA ESTO QUE NO CORRE
 # 
@@ -295,3 +296,22 @@ go.Figure(data,Layout)
 
 # ***************************************************************************
 
+query = f"SELECT * FROM {'ratings'}"
+df_ratings = pd.read_sql_query(query, conn)
+
+query = f"SELECT * FROM {'movies'}"
+df_movies = pd.read_sql_query(query, conn)
+
+# Ahora bien, crearemos una sola base de datos para poder trabajar con esta. Lo filtrremos por el movieId que es el campo comun en ambos:
+print("\nCruce de datos:")
+print("Tabla ratings:", df_ratings.columns)
+print("Tabla movies:", df_movies.columns)
+
+#Verificamos y podemos ver que ambos son tipo Int
+print("\nFormato de 'movieId':")
+print("Tabla ratings:", df_ratings['movieId'].dtype)
+print("Tabla movies:", df_movies['movieId'].dtype)
+
+# Ahora bien, verifiquemos si son campos unicos o tienen duplicados. Podemos observar que NO existen datos duplicados
+duplicadosratings = df_ratings.duplicated().sum()
+duplicadosmovies = df_movies.duplicated().sum()
