@@ -5,7 +5,6 @@
 #                              POR:                            #
 #                                                              #
 #                    AURA LUZ MORENO - MOOREA                  #
-#                       ALEJANDRA AGUIRRE                      #
 #                                                              #
 #                    UNIVERSIDAD DE ANTIOQUIA                  #
 ################################################################
