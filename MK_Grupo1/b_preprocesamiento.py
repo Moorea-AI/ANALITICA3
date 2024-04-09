@@ -37,11 +37,7 @@ for table in tables:
 # Tablas de la base de datos:
 # ratings
 # movies
-# usuarios_sel
-# movies_sel
-# ratings_final
-# users_final
-# movies_final
+
 
 #### Exploración de cada tabla de la Base de datos:
 
@@ -107,84 +103,6 @@ for column in columns_movies:
 # movieId: INTEGER
 # title: TEXT
 # genres: TEXT
-
-
-# Tabla usuarios_sel
-df_usuarios_sel = pd.read_sql_query("SELECT * FROM usuarios_sel LIMIT 5;", conn)
-print("\nPrimeras filas de la tabla 'usuarios_sel':")
-print(df_usuarios_sel)
-
-# Primeras filas de la tabla 'usuarios_sel':
-#    user_id  cnt_rat
-# 0      182      977
-# 1      307      975
-# 2      603      943
-# 3      298      939
-# 4      177      904
-
-
-# Tabla movies_sel
-df_movies_sel = pd.read_sql_query("SELECT * FROM movies_sel LIMIT 5;", conn)
-print("\nPrimeras filas de la tabla 'movies_sel':")
-print(df_movies_sel)
-
-
-# Primeras filas de la tabla 'movies_sel':
-#    movieId  cnt_rat
-# 0    58559      149
-# 1     6539      149
-# 2     1214      146
-# 3      595      146
-# 4     1036      145
-
-
-
-
-# Tabla ratings_final
-df_ratings_final = pd.read_sql_query("SELECT * FROM ratings_final LIMIT 5;", conn)
-print("\nPrimeras filas de la tabla 'ratings_final':")
-print(df_ratings_final)
-
-
-
-# Primeras filas de la tabla 'ratings_final':
-#    user_id  movie_rating  movieId
-# 0        1           4.0        3
-# 1        1           4.0        6
-# 2        1           3.0       70
-# 3        1           5.0      101
-# 4        1           5.0      151
-
-
-
-# Tabla users_final
-df_users_final = pd.read_sql_query("SELECT * FROM users_final LIMIT 5;", conn)
-print("\nPrimeras filas de la tabla 'users_final':")
-print(df_users_final)
-
-# Primeras filas de la tabla 'users_final':
-#    movieId  userId  rating
-# 0        1       1     4.0
-# 1        3       1     4.0
-# 2        6       1     4.0
-# 3       47       1     5.0
-# 4       50       1     5.0
-
-# Tabla movies_final
-df_movies_final = pd.read_sql_query("SELECT * FROM movies_final LIMIT 5;", conn)
-print("\nPrimeras filas de la tabla 'movies_final':")
-print(df_movies_final)
-
-
-
-# Primeras filas de la tabla 'movies_final':
-#    movieId                               title                      genres
-# 0        2                      Jumanji (1995)  Adventure|Children|Fantasy
-# 1        3             Grumpier Old Men (1995)              Comedy|Romance
-# 2        5  Father of the Bride Part II (1995)                      Comedy
-# 3        6                         Heat (1995)       Action|Crime|Thriller
-# 4        7                      Sabrina (1995)  
-
 
 # Traemos las tablas a Python
 df_movies = pd.read_sql("""SELECT *  FROM movies""", conn)
@@ -394,7 +312,7 @@ print("Tabla movies:", df_movies['movieId'].dtype)
 # Tabla movies: Index(['movieId', 'title', 'genres'], dtype='object')
 
 
-# Ahora bien, verifiquemos si son campos unicos o tienen duplicados. Podemos observar que NO existen datos duplicados (ya lo habiamos mostrado más arriba)
+# Ahora bien, verifiquemos nuevamente si son campos unicos o tienen duplicados. Podemos observar que NO existen datos duplicados (ya lo habiamos mostrado más arriba)
 duplicadosratings = df_ratings.duplicated().sum()
 duplicadosmovies = df_movies.duplicated().sum()
 
@@ -406,9 +324,9 @@ rating_users = pd.read_sql('''SELECT userId as user_id,
                               GROUP BY userId
                               ORDER BY cnt_rat DESC''', conn)
 
-# Imprimir el DataFrame
+# Imprimir el DataFrame - 
 print(rating_users)
-
+#Será logico que una sola persona haya calificado 2698 peliculas?
 
 rating_users.describe()
 
@@ -473,33 +391,34 @@ fn.ejecutar_sql('preprocesamiento.sql', cur)
 cur.execute("select name from sqlite_master where type='table' ")
 cur.fetchall()
 
-final = pd.read_sql("""SELECT *  FROM final""", conn)
-final
+df_final = pd.read_sql("""SELECT *  FROM df_final""", conn)
+df_final
 
-# Ahora bien, debemos organizar los géneros de las peliculas para que sean medibles
-genres=final['genres'].str.split('|') 
+# Ahora bien, debemos organizar los géneros de las peliculas para que sean medibles. O.H.E
+genres=df_final['genres'].str.split('|') 
 te = TransactionEncoder() 
 genres = te.fit_transform(genres) 
 genres = pd.DataFrame(genres, columns = te. columns_) 
 
 
-final = pd.concat([final, genres], axis=1)
-final = final.drop('genres', axis=1)
-final
+df_final = pd.concat([df_final, genres], axis=1)
+df_final = df_final.drop('genres', axis=1) #Quitamos la columna genero pero dejamos las del encode
+df_final
 
-final[final['(no genres listed)']]
+df_final[df_final['(no genres listed)']]
 
 
 # Extraemos el año de la columna title en otra columna 
-final['year'] = final['title'].str.extract('.*\((.*)\).*', expand=True)
-final
-# Borramos el texto de los paréntesis de la columna title
-final['title'] = final['title'].str.replace(r'\s*\([^()]*\)', '', regex=True)
-final
+df_final['year'] = df_final['title'].str.extract('.*\((.*)\).*', expand=True)
+df_final
 
-# Reemplazamos en los géneros el false por 0 y el true por 1
-final[genres.columns] = final[genres.columns].replace({False: 0, True: 1})
-final
+# Borramos el texto de los paréntesis de la columna title
+df_final['title'] = df_final['title'].str.replace(r'\s*\([^()]*\)', '', regex=True)
+df_final
+
+# Reemplazamos en los géneros 0 para false y 1 para True
+df_final[genres.columns] = df_final[genres.columns].replace({False: 0, True: 1})
+df_final
 
 # Guardamos la base final en sql
-final.to_sql('final', conn, if_exists='replace', index=False)
+df_final.to_sql('final', conn, if_exists='replace', index=False)

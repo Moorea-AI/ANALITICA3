@@ -40,6 +40,26 @@ cur=conn.cursor()
 cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
 cur.fetchall()
 
+cur.execute("PRAGMA table_info('df_final')")
+columns = cur.fetchall()
+for column in columns:
+    print(column)
+
+
+# #Exploremos las tablas finales de la BD.
+# [('ratings',),            Original
+#  ('movies',),             Original
+#  ('users_final',),        Nueva
+
+#  ('usuarios_sel',),       Nueva
+#  ('movies_sel',),         Nueva
+
+#  ('movies_final',),       Nueva
+#  ('ratings_final',),      Nueva
+
+#  ('df_final',),           Nueva después del preprocesamiento
+#  ('df_final2',),          Nueva
+#  ('recommendations',),    Nueva con el resultado del ejercicio
 
 # 1. sistemas basados en popularidad 
 ##### recomendaciones basado en popularidad ######
@@ -47,27 +67,25 @@ cur.fetchall()
 #¿Cuáles son las 10 películas con la calificación promedio más alta?
 consulta_sql = """
     SELECT title, AVG(rating) as calificacion
-    FROM final
+    FROM df_final
     GROUP BY title
     ORDER BY calificacion DESC 
     LIMIT 10
 """
 pd.read_sql(consulta_sql, conn)
 
-#### ¿Cuáles son las 10 películas más populares (con más calificaciones) junto con el número total de calificaciones que han recibido?
+#### ¿Cuáles son las 10 películas más populares además del total de calificaciones que han recibido?
 consulta_sql = """
     SELECT title, COUNT(rating) as total_calificacion
-    FROM final
+    FROM df_final
     GROUP BY title
     ORDER BY total_calificacion DESC 
     LIMIT 10
 """
 pd.read_sql(consulta_sql, conn)
 
-consulta_sql = """
-    SELECT * FROM movies_final
-"""
-pd.read_sql(consulta_sql, conn)
+
+
 
 
 # Año de las peliculas más populares
@@ -81,11 +99,19 @@ fig = px.bar(sql1, x='year', y='numberOfMovies', title='Cantidad de peliculas po
 fig.show()
 
 
+
+cursor.execute('SELECT * FROM df_final')
+columns = cursor.fetchall()
+for column in columns:
+    print(column)
+    
+
+
 # Consulta para obtener películas con 6 o 7 géneros
 sql2 = pd.read_sql('''  SELECT title, (Action + Adventure + Animation + Children + Comedy + Crime + Documentary + 
                             Drama + Fantasy + 'Film-Noir' + Horror + IMAX + Musical + Mystery + 
                             Romance + 'Sci-Fi' + Thriller + War + Western) AS total_genres 
-                        FROM final
+                        FROM df_final
                         GROUP BY title
                         HAVING total_genres IN (6, 7)
                         ORDER BY total_genres desc''',conn )
@@ -117,7 +143,7 @@ sql3 = pd.read_sql('''   SELECT
     SUM(Thriller) AS Thriller,
     SUM(War) AS War,
     SUM(Western) AS Western 
-    FROM final; ''',conn )
+    FROM df_final; ''',conn )
 
 
 # Gráfico de barras con los géneros más populares
@@ -130,7 +156,7 @@ fig.show()
 
 # Consulta para obtener películas con una calificación promedio mayor o igual a 4.5
 sql4 = pd.read_sql(''' SELECT movieId, title, AVG(rating) AS average_rating
-FROM final
+FROM df_final
 GROUP BY movieId, title
 HAVING AVG(rating) >= 4.5
 ORDER BY average_rating DESC;
@@ -145,7 +171,7 @@ fig.show()
 sql5 = pd.read_sql("""SELECT title,
             AVG(rating) AS avg_rat,
             COUNT(*) AS view_num
-            FROM final
+            FROM df_final
             GROUP BY title
             HAVING view_num >= 5
             ORDER BY avg_rat DESC
@@ -185,7 +211,7 @@ FROM (
                 WHEN "Film-Noir" = 1 THEN 'Cine negro'
             END as genero,
             rating
-    FROM final
+    FROM df_final
 ) AS generos
 GROUP BY genero;
 """, conn)
@@ -197,7 +223,7 @@ fig.show()
 
 # Consulta para obtener las películas mejor calificadas por año de lanzamiento
 sql7 = pd.read_sql('''SELECT title, year, AVG(rating) AS average_rating
-                    FROM final
+                    FROM df_final
                     GROUP BY year, title
                     ORDER BY year, average_rating DESC''', conn)
 

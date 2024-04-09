@@ -34,10 +34,10 @@ CREATE TABLE ratings_final as
                   from ratings inner join usuarios_sel
                   on ratings.userID = usuarios_sel.userID;
 
--- Base de datos final
+-- Base de datos df_final
 
-DROP TABLE IF EXISTS final;
-CREATE TABLE final as
+DROP TABLE IF EXISTS df_final;
+CREATE TABLE df_final as
                   select userID, movies_final.movieID, title, genres, rating
                   from movies_final inner join ratings_final
                   on movies_final.movieID = ratings_final.movieID;
