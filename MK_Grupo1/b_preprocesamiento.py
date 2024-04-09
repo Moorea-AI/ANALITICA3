@@ -407,18 +407,14 @@ df_final
 
 df_final[df_final['(no genres listed)']]
 
-
 # Extraemos el año de la columna title en otra columna 
 df_final['year'] = df_final['title'].str.extract('.*\((.*)\).*', expand=True)
 df_final
 
-# Borramos el texto de los paréntesis de la columna title
-df_final['title'] = df_final['title'].str.replace(r'\s*\([^()]*\)', '', regex=True)
-df_final
 
 # Reemplazamos en los géneros 0 para false y 1 para True
 df_final[genres.columns] = df_final[genres.columns].replace({False: 0, True: 1})
 df_final
 
 # Guardamos la base final en sql
-df_final.to_sql('final', conn, if_exists='replace', index=False)
+df_final.to_sql('df_final', conn, if_exists='replace', index=False)
