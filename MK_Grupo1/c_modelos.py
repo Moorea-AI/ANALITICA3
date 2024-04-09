@@ -17,10 +17,18 @@ from ipywidgets import interact ## para análisis interactivo
 from sklearn import neighbors ### basado en contenido un solo producto consumido
 import joblib
 from mlxtend.preprocessing import TransactionEncoder
+import a_funciones as fn
+import plotly.graph_objs as go 
+import plotly.express as px
 
+
+
+#Para activar el paquete de Surprise se debe cambiar el kernel por el de conda
+# Una vez se abre el powershell, conda install -c conda-forge scikit-surprise
 from surprise import Reader, Dataset
 from surprise import KNNBasic, KNNWithMeans, KNNWithZScore, KNNBaseline
 from surprise.model_selection import cross_validate, GridSearchCV
+
 
 #### conectar_base_de_Datos
 
@@ -39,7 +47,7 @@ cur.fetchall()
 #¿Cuáles son las 10 películas con la calificación promedio más alta?
 consulta_sql = """
     SELECT title, AVG(rating) as calificacion
-    FROM full_ratings
+    FROM final
     GROUP BY title
     ORDER BY calificacion DESC 
     LIMIT 10
@@ -49,20 +57,10 @@ pd.read_sql(consulta_sql, conn)
 #### ¿Cuáles son las 10 películas más populares (con más calificaciones) junto con el número total de calificaciones que han recibido?
 consulta_sql = """
     SELECT title, COUNT(rating) as total_calificacion
-    FROM full_ratings
+    FROM final
     GROUP BY title
     ORDER BY total_calificacion DESC 
     LIMIT 10
-"""
-pd.read_sql(consulta_sql, conn)
-
-####¿Cuáles son los 5 géneros más vistos basado en la cantidad total de películas en ese género?
-consulta_sql = """
-    SELECT SUBSTR(genres, 1, INSTR(genres, '|') - 1) AS genero, COUNT(genres) AS total_peliculas, AVG(rating) as calificacion
-    FROM full_ratings
-    GROUP BY genero
-    ORDER BY calificacion DESC
-    LIMIT 5
 """
 pd.read_sql(consulta_sql, conn)
 
@@ -72,233 +70,393 @@ consulta_sql = """
 pd.read_sql(consulta_sql, conn)
 
 
+# Año de las peliculas más populares
+sql1 = pd.read_sql('''  SELECT year, count(title) AS numberOfMovies 
+                    FROM final 
+                    GROUP BY year 
+                    ORDER BY numberOfMovies DESC
+                            ''',conn )
+# Graficamos el año de las peliculas más populares
+fig = px.bar(sql1, x='year', y='numberOfMovies', title='Cantidad de peliculas por año')
+fig.show()
+
+
+# Consulta para obtener películas con 6 o 7 géneros
+sql2 = pd.read_sql('''  SELECT title, (Action + Adventure + Animation + Children + Comedy + Crime + Documentary + 
+                            Drama + Fantasy + 'Film-Noir' + Horror + IMAX + Musical + Mystery + 
+                            Romance + 'Sci-Fi' + Thriller + War + Western) AS total_genres 
+                        FROM final
+                        GROUP BY title
+                        HAVING total_genres IN (6, 7)
+                        ORDER BY total_genres desc''',conn )
+
+
+# Visualización de películas por cantidad de géneros
+fig = px.bar(sql2, x='title', y='total_genres', title='Cantidad de géneros por pelicula')
+fig.show()
+
+
+# Consulta para obtener la cantidad de películas por género
+sql3 = pd.read_sql('''   SELECT 
+    SUM(Action) AS Action, 
+    SUM(Adventure) AS Adventure, 
+    SUM(Animation) AS Animation,
+    SUM(Children) AS Children,
+    SUM(Comedy) AS Comedy,
+    SUM(Crime) AS Crime,
+    SUM(Documentary) AS Documentary,
+    SUM(Drama) AS Drama,
+    SUM(Fantasy) AS Fantasy,
+    SUM("Film-Noir") AS "Film-Noir",
+    SUM(Horror) AS Horror,
+    SUM(IMAX) AS IMAX,
+    SUM(Musical) AS Musical,
+    SUM(Mystery) AS Mystery,
+    SUM(Romance) AS Romance,
+    SUM("Sci-Fi") AS "Sci-Fi",
+    SUM(Thriller) AS Thriller,
+    SUM(War) AS War,
+    SUM(Western) AS Western 
+    FROM final; ''',conn )
+
+
+# Gráfico de barras con los géneros más populares
+genres = ['Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'IMAX', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
+counts = [sql3[genre][0] for genre in genres]
+
+fig = go.Figure(data=[go.Bar(x=genres, y=counts)])
+fig.update_layout(title='Géneros más populares')
+fig.show()
+
+# Consulta para obtener películas con una calificación promedio mayor o igual a 4.5
+sql4 = pd.read_sql(''' SELECT movieId, title, AVG(rating) AS average_rating
+FROM final
+GROUP BY movieId, title
+HAVING AVG(rating) >= 4.5
+ORDER BY average_rating DESC;
+''',conn )
+
+# Visualización de estas películas con un gráfico de barras
+fig = go.Figure(data=[go.Bar(x=sql4['title'], y=sql4['average_rating'])])
+fig.update_layout(title='Calificación promedio por peli >= 4.5')
+fig.show()
+
+# Consulta para obtener las 10 películas mejor calificadas con al menos 5 vistas
+sql5 = pd.read_sql("""SELECT title,
+            AVG(rating) AS avg_rat,
+            COUNT(*) AS view_num
+            FROM final
+            GROUP BY title
+            HAVING view_num >= 5
+            ORDER BY avg_rat DESC
+            LIMIT 10
+            """, conn)
+
+# Gráfico referente a la consulta anterior
+fig = go.Figure(data=[go.Bar(x=sql5['title'], y=sql5['avg_rat'])])
+fig.update_layout(title='Top 10 Películas con Mejor Calificación Promedio (con al menos 5 vistas)',
+                    xaxis_title='Película',
+                    yaxis_title='Calificación Promedio')
+fig.show()
+
+# Consulta para obtener la mejor película calificada por género
+sql6 = pd.read_sql(""" SELECT genero, title, MAX(rating) AS mejor_calificacion
+FROM (
+    SELECT title,
+            CASE
+                WHEN Action = 1 THEN 'Accion'
+                WHEN Adventure = 1 THEN 'Aventura'
+                WHEN Animation = 1 THEN 'Animacion'
+                WHEN Children = 1 THEN 'Infantil'
+                WHEN Comedy = 1 THEN 'Comedia'
+                WHEN Crime = 1 THEN 'Crimen'
+                WHEN Documentary = 1 THEN 'Documental'
+                WHEN Drama = 1 THEN 'Drama'
+                WHEN Fantasy = 1 THEN 'Fantasia'
+                WHEN Horror = 1 THEN 'Horror'
+                WHEN IMAX = 1 THEN 'Imax'
+                WHEN Musical = 1 THEN 'Musical'
+                WHEN Mystery = 1 THEN 'Misterio'
+                WHEN Romance = 1 THEN 'Romance'
+                WHEN Thriller = 1 THEN 'Thrill'
+                WHEN War = 1 THEN 'Guerra'
+                WHEN Western = 1 THEN 'Occidental'
+                WHEN "Sci-Fi" = 1 THEN 'Ciencia ficcion'
+                WHEN "Film-Noir" = 1 THEN 'Cine negro'
+            END as genero,
+            rating
+    FROM final
+) AS generos
+GROUP BY genero;
+""", conn)
+
+# Visualización de estas películas por género
+fig = px.bar(sql6, x='genero', y='mejor_calificacion', color='genero', title='Mejor calificación por género', text='title')
+fig.update_layout(showlegend=False)
+fig.show()
+
+# Consulta para obtener las películas mejor calificadas por año de lanzamiento
+sql7 = pd.read_sql('''SELECT title, year, AVG(rating) AS average_rating
+                    FROM final
+                    GROUP BY year, title
+                    ORDER BY year, average_rating DESC''', conn)
+
+fig = px.bar(sql7, x='year', y='average_rating', color='title', title='Peliculas mejor calificas por año de lanzamiento')
+fig.update_layout(
+    autosize=False,
+    width=1000,
+    height=600,
+    margin=dict(l=50, r=50, b=100, t=100, pad=4)
+)
+fig.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 2.1 Sistema de recomendación basado en contenido un solo producto - Manual 
 
-movies=pd.read_sql('select * from movies_final', conn )
 
-movies.info()
+# Cargar todos los registros de la tabla 'final' en un DataFrame
+final = pd.read_sql_query('SELECT * FROM final', conn) # Carga la tabla 'final' en el DataFrame 'final'
 
 
-# escalar para que año esté en el mismo rango
+# Selecciona solo las columnas relevantes (elimina las columnas 'userId' y 'movieId')
+general = final.loc[:,~final.columns.isin(['userId','movieId'])]
+general
 
-genres=movies['genres'].str.split('|')
-te = TransactionEncoder()
-genres = te.fit_transform(genres)
-genres = pd.DataFrame(genres, columns = te.columns_)
-movies.genres.unique()
-movies_dum1 = pd.concat([movies, genres], axis=1)
-# movies_dum1.info()
+# Guarda el DataFrame 'general' en la base de datos con el nombre 'final2'
+general.to_sql('final2', conn, if_exists='replace', index=False)
 
-# eliminar filas que no se van a utilizar
+# Consulta SQL para agrupar por título y año y calcular la calificación promedio
+final1 = pd.read_sql("""select *, avg(rating) as avg_rat
+                    from final2
+                    group by year, title
+                    order by year desc, avg_rat desc""", conn) # Agrupa y ordena por año y calificación promedio
+final1
 
-movies_dum1['year'] = movies_dum1['title'].str.extract(r'\((\d{4})\)')
-movies_dum1.info()
-movies_dum1['year']=movies_dum1.year.astype('int')
+# Convierte la columna 'year' a tipo entero y escala sus valores entre 0 y 1
+final1['year']=final1.year.astype('int')              # Convierte a entero
+sc=MinMaxScaler()                                     # Inicializa el escalador MinMax
+final1[["year1"]]=sc.fit_transform(final1[['year']])  # Escala la columna 'year' y la guarda como 'year1'
+
+# Elimina las columnas innecesarias: el año original, rating y avg_rat
+final2=final1.drop(columns=['year','rating','avg_rat'])
+final2
+
+# Convierte el título de las películas en columnas dummy (one-hot encoding)
+final3=pd.get_dummies(final2,columns=['title'])
+final3
+
+# Función para obtener películas recomendadas basadas en una película dada 
+# Mediante la técnica de correlación la cual se basa en las características (o "contenido") de las películas, como género, año y título, para encontrar películas similares a una película dada.
+def recomendacion(movie=list(final1['title'])[0]):
+    ind_movie = final1[final1['title'] == movie].index.values.astype(int)[0]      # Encuentra el índice de la película dada
+    similar_movie = final3.corrwith(final3.iloc[ind_movie, :], axis=1)            # Calcula la correlación con otras películas
+    similar_movie = similar_movie.sort_values(ascending=False)                    # Ordena por correlación descendente
+    top_similar_movie = similar_movie.to_frame(name="correlación").iloc[0:11, ]   # Selecciona las 10 películas más similares
+    top_similar_movie['title'] = final1["title"]                                  # Añade títulos a las recomendaciones
+
+    return top_similar_movie # Devuelve las películas recomendadas
+
+# Interfaz de usuario para elegir una película y obtener recomendaciones
+interact(recomendacion)
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######################################################################
+# 3. Sistema de recomendacion basado en el contenido de cada usuario
+
+
+# Reutilizar el DataFrame 'final' previamente cargado
+final
+
+# Eliminar la columna 'userId' para quedarse solo con los datos de las películas
+df_usuario = final.loc[:,~final.columns.isin(['userId'])]
+
+# Guardar el DataFrame resultante en la base de datos como 'df_final'
+df_usuario.to_sql('df_final', conn, if_exists='replace')
+
+# Consulta SQL para agrupar por título y año y calcular la calificación promedio
+movies = pd.read_sql("""select *, avg(rating) as avg_rat
+                    from df_final
+                    group by year, title
+                    order by year desc, avg_rat desc""", conn)
+
+# Eliminar columnas innecesarias
+movies = movies.drop(columns=['index','rating','avg_rat'])
+
+# Convertir la columna 'year' a tipo entero
+movies['year'] = movies['year'].astype('int')
+
+# Escalar el año para que tenga valores entre 0 y 1, lo que facilita la comparación y mejora el rendimiento del algoritmo
+sc=MinMaxScaler() 
 sc=MinMaxScaler()
-movies_dum1[["year"]]=sc.fit_transform(movies_dum1[['year']])
-movies_dum1.info()
-movies_dum1=movies_dum1.drop(columns=['genres','title', 'movieId'])
-# movies_dum1.info()
+movies[["year_sc"]]=sc.fit_transform(movies[['year']])
 
+# Eliminar columnas que no se utilizarán en el proceso de recomendación
+movies1 = movies.drop(columns=['movieId', 'title', 'year'])
+movies1
 
-col_dum=genres.columns
-movies_dum2=pd.get_dummies(movies_dum1,columns=col_dum)
-movies_dum2.shape
-
-joblib.dump(movies_dum2,"data\\moviess_dum2.joblib") ### para utilizar en segundos modelos
-
-# movies_dum2.info()
-
-# movies recomendadas ejemplo para un pelicula
-
-pelicula='Toy Story (1995)'
-ind_pelicula=movies[movies['title']==pelicula].index.values.astype(int)[0]
-similar_movies=movies_dum2.corrwith(movies_dum2.iloc[ind_pelicula,:],axis=1)
-similar_movies=similar_movies.sort_values(ascending=False)
-top_similar_movies=similar_movies.to_frame(name="correlación").iloc[0:11,]### el 11 es número de movies recomendados
-top_similar_movies['title']=movies["title"] ### agregaro los nombres (como tiene mismo indice no se debe cruzar)
-    
-
-
-# peliculas recomendados ejemplo para visualización todos las peliculas
-
-def recomendacion(pelicula = list(movies['title'])):
-     
-    ind_pelicula=movies[movies['title']==pelicula].index.values.astype(int)[0]
-    similar_movies=movies_dum2.corrwith(movies_dum2.iloc[ind_pelicula,:],axis=1)
-    similar_movies=similar_movies.sort_values(ascending=False)
-    top_similar_movies=similar_movies.to_frame(name="correlación").iloc[0:11,]### el 11 es número de movies recomendados
-    top_similar_movies['title']=movies["title"] ### agregaro los nombres (como tiene mismo indice no se debe cruzar)
-      
-    return top_similar_movies
-
-
-print(interact(recomendacion))
-
-
-
-# 2.1 Sistema de recomendación basado en contenido KNN un solo producto visto 
-
-# entrenar modelo 
-
-# el coseno de un angulo entre dos vectores es 1 cuando son perpendiculares y 0 cuando son paralelos(indicando que son muy similar324e-06	3.336112e-01	3.336665e-01	3.336665e-es)
-model = neighbors.NearestNeighbors(n_neighbors=11, metric='cosine')
-model.fit(movies_dum2)
-dist, idlist = model.kneighbors(movies_dum2)
-
-distancias=pd.DataFrame(dist) ## devuelve un ranking de la distancias más cercanas para cada fila(movie)
-id_list=pd.DataFrame(idlist) ## para saber esas distancias a que item corresponde
-
-
-def MovieRecommender(movie_name = list(movies['title'].value_counts().index)):
-    movie_list_name = []
-    movie_id = movies[movies['title'] == movie_name].index
-    movie_id = movie_id[0]
-    for newid in idlist[movie_id]:
-        movie_list_name.append(movies.loc[newid].title)
-    return movie_list_name
-
-
-print(interact(MovieRecommender))
-
-
-# 3 Sistema de recomendación basado en contenido KNN 
-# Con base en todo lo visto por el usuario 
-
-
+# Extraer los usuarios únicos de la tabla 'ratings_final'
 usuarios=pd.read_sql('select distinct (userId) as user_id from ratings_final',conn)
 
 
-def recomendar(user_id=list(usuarios['user_id'].value_counts().index)):
-    
-    ###seleccionar solo los ratings del usuario seleccionado
-    ratings=pd.read_sql('select * from ratings_final where userId=:user',conn, params={'user':user_id})
-    
-    ###convertir ratings del usuario a array
-    l_movie_r=ratings['movieId'].to_numpy()
-    
-    ###agregar la columna de isbn y titulo del libro a dummie para filtrar y mostrar nombre
-    movies_dum2[['movieId','title']]=movies[['movieId','title']]
-    
-    ### filtrar libros calificados por el usuario
-    movies_r=movies_dum2[movies_dum2['movieId'].isin(l_movie_r)]
-    
-    ## eliminar columna nombre e ID
+# Función para recomendar películas basadas en el perfil de un usuario específico
+def usuario(user_id=list(usuarios['user_id'].value_counts().index)):
+
+    ## Seleccionar solo las calificaciones del usuario seleccionado
+    ratings=pd.read_sql('select *from ratings_final where userId=:user',conn, params={'user':user_id})
+    ## Convertir los ID de las películas calificadas por el usuario a un array
+    l_movies_r=ratings['movieId'].to_numpy()
+
+    ## Agregar columnas 'movieId' y 'title' para poder filtrar y mostrar el nombre de las películas
+    movies1[['movieId','title']]=movies[['movieId','title']]
+    # Filtrar solo las películas que el usuario ya ha calificado
+    movies_r=movies1[movies1['movieId'].isin(l_movies_r)]
     movies_r=movies_r.drop(columns=['movieId','title'])
-    movies_r["indice"]=1 ### para usar group by y que quede en formato pandas tabla de centroide
-    ##centroide o perfil del usuario
+    movies_r["indice"]=1
+    # Calcular el "centroide" del usuario, que es el perfil promedio del usuario basado en sus calificaciones
     centroide=movies_r.groupby("indice").mean()
-    
-    
-    ### filtrar libros no leídos
-    movie_nr=movies_dum2[~movies_dum2['movieId'].isin(l_movie_r)]
-    ## eliminbar nombre e isbn
-    movie_nr=movie_nr.drop(columns=['movieId','title'])
-    
-    ### entrenar modelo 
+
+    # Filtrar las películas que el usuario no ha calificado aún
+    movies_nr=movies1[~movies1['movieId'].isin(l_movies_r)]
+    movies_nr=movies_nr.drop(columns=['movieId','title'])
+    # Usar el modelo NearestNeighbors para encontrar las películas más cercanas al centroide del usuario
     model=neighbors.NearestNeighbors(n_neighbors=11, metric='cosine')
-    model.fit(movie_nr)
+    model.fit(movies_nr)
     dist, idlist = model.kneighbors(centroide)
-    
-    ids=idlist[0] ### queda en un array anidado, para sacarlo
-    recomend_b=movies.loc[ids][['title','movieId']]
-#    vistos=movies[movies['movieId'].isin(l_movie_r)][['title','movieId']]
-    
-    return recomend_b
+    # Seleccionar las películas recomendadas basadas en sus índices
+    ids=idlist[0]
+    recomend_m=movies.loc[ids][['title','movieId']]
+    vistos=movies[movies['movieId'].isin(l_movies_r)][['title','movieId']]
 
-print(interact(recomendar))
+    return recomend_m
 
-
-# 4 Sistema de recomendación filtro colaborativo 
+# Interfaz de usuario para elegir un usuario y obtener recomendaciones de películas basadas en su perfil
+interact(usuario)
 
 
-pd.read_sql('select * from ratings_final where rating>0', conn)
 
-### datos originales en pandas
-## knn solo sirve para calificaciones explicitas
-ratings=pd.read_sql('select * from ratings_final where rating>0', conn)
 
-####los datos deben ser leidos en un formato espacial para surprise
-reader = Reader(rating_scale=(0, 5)) ### la escala de la calificación
-###las columnas deben estar en orden estándar: user item rating
-data   = Dataset.load_from_df(ratings[['userId','movieId','rating']], reader)
 
-#Existen varios modelos
-models=[KNNBasic(),KNNWithMeans(),KNNWithZScore(),KNNBaseline()]
+
+
+
+#######################################################################
+# 4. Sistemas de recomendación de filtros colaborativos
+
+# Cargar los ratings de la base de datos
+movie_ratings = pd.read_sql('select * from ratings_final', conn)
+movie_ratings
+
+# Configurar un objeto 'Reader' para indicar la escala de las calificaciones (de 0 a 5)
+reader = Reader(rating_scale=(0, 5))
+
+# Crear un conjunto de datos de Surprise usando las columnas de usuario, ítem y calificación
+data = Dataset.load_from_df(movie_ratings[['userId','movieId','rating']], reader)
+
+# Calcular y mostrar el rating promedio de todos los ratings
+avg_rating = pd.read_sql('select avg(rating) from ratings_final', conn)
+
+# Definir modelos de vecinos más cercanos a evaluar
+models = [KNNBasic(), KNNWithMeans(), KNNWithZScore(), KNNBaseline()]
 results = {}
 
-# función para probar varios modelos 
-model=models[1]
+
+# Bucle para entrenar y evaluar cada modelo usando validación cruzada y almacenar los resultados en un diccionario
 for model in models:
+    # Validación cruzada de 5 pliegues, evaluando MAE y RMSE en cada pliegue
+    CV_scores = cross_validate(model, data, measures=["MAE", "RMSE"], cv=5)
+    
+    # Calcular la media de los resultados y renombrar las columnas para mejor claridad
+    result = pd.DataFrame.from_dict(CV_scores).mean(axis=0).rename({'test_mae':'MAE', 'test_rmse': 'RMSE'})
+    
+    # Extraer el nombre del modelo para usar como clave en el diccionario de resultados
+    model_name = str(model).split("algorithms.")[1].split("object ")[0]
+    results[model_name] = result
 
-    CV_scores = cross_validate(model, data, measures=["MAE","RMSE"], cv=5, n_jobs=-1)
 
-    result = pd.DataFrame.from_dict(CV_scores).mean(axis=0).\
-             rename({'test_mae':'MAE', 'test_rmse': 'RMSE'})
-    results[str(model).split("algorithms.")[1].split("object ")[0]] = result
-
+# Convertir los resultados en un DataFrame y ordenar por RMSE
 performance_df = pd.DataFrame.from_dict(results).T
-performance_df.sort_values(by='RMSE')
+sorted_performance = performance_df.sort_values(by='RMSE')
 
+# Definir la grilla de parámetros para la búsqueda de hiperparámetros
 param_grid = {
     'sim_options': {
         'name': ['msd', 'cosine'],
         'min_support': [5],
         'user_based': [False, True]
-    },
-    'bsl_options': {
-        'method': ['als', 'sgd'],  # Opciones para KNNBaseline
     }
 }
 
-### se afina si es basado en usuario o basado en ítem
+# Inicializar y ejecutar la búsqueda de hiperparámetros con validación cruzada de 2 pliegues
+grid_search = GridSearchCV(KNNBaseline, param_grid, measures=['rmse'], cv=2)
+grid_search.fit(data)
 
-gridsearchKNNBaseline = GridSearchCV(KNNBaseline, param_grid, measures=['rmse'], \
-                                      cv=2, n_jobs=2)
+### Mostrar los mejores parámetros y su respectivo RMSE
 
-gridsearchKNNBaseline.fit(data)
+# Indica los mejores hiperparámetros encontrados por GridSearchCV para el modelo KNNBaseline
+print(grid_search.best_params["rmse"]) # = {'sim_options': {'name': 'msd', 'min_support': 5, 'user_based': False}}
+# Este resultado indidica que la mejor métrica de similitud para este modelo y conjunto de datos es la "Mean Squared Difference" (Diferencia Cuadrática Media)
+# Ademas en 'min_support': 5: Este es el número mínimo de items comunes necesarios entre usuarios para considerarlos "similares"
+# Finalmente 'user_based': False: Indica que el modelo basado en vecinos más cercanos (k-NN) que se está utilizando es basado en items y no en usuarios. 
 
-gridsearchKNNBaseline.best_params["rmse"]
+# Este el error promedio del modelo en predicciones de calificaciones, bajo la configuración de hiperparámetros óptima identificada por la búsqueda de cuadrícula
+print(grid_search.best_score["rmse"]) # = 0.924400921350208
+# Y indica que, en promedio, las predicciones del modelo se desvían aproximadamente 0.92 unidades de las calificaciones reales, en la escala de calificación utilizada
 
-gridsearchKNNBaseline.best_score["rmse"]
+best_model = grid_search.best_estimator['rmse']
 
-gs_model=gridsearchKNNBaseline.best_estimator['rmse'] ### mejor estimador de gridsearch
-gs_model
 
-# Entrenar con todos los datos y Realizar predicciones con el modelo afinado
+# Entrenar el mejor modelo con todos los datos
+full_trainset = data.build_full_trainset()
+trained_model = best_model.fit(full_trainset)
 
-trainset = data.build_full_trainset() ### esta función convierte todos los datos en entrnamiento, las funciones anteriores dividen  en entrenamiento y evaluación
-model=gs_model.fit(trainset) ## se reentrena sobre todos los datos posibles (sin dividir)
+# Crear un conjunto de prueba con todas las combinaciones usuario-ítem que no están en el conjunto de entrenamiento
+testset = full_trainset.build_anti_testset()
+predicted_values = trained_model.test(testset)
 
-predset = trainset.build_anti_testset() ### crea una tabla con todos los usuarios y los libros que no han leido
-# en la columna de rating pone el promedio de todos los rating, en caso de que no pueda calcularlo para un item-usuario
-len(predset)
+# Convertir las predicciones en un DataFrame para facilitar el manejo
+predicted_df = pd.DataFrame(predicted_values)
 
-predictions = gs_model.test(predset) ### función muy pesada, hace las predicciones de rating para todos las peliculas que no hay leido un usuario
-### la funcion test recibe un test set constriuido con build_test method, o el que genera crosvalidate
+# Mostrar algunas estadísticas y predicciones
+print(predicted_df.sort_values(by='est', ascending=False))
 
-predictions_df = pd.DataFrame(predictions) ### esta tabla se puede llevar a una base donde estarán todas las predicciones
-predictions_df.shape
+# Función para recomendar las top N películas a un usuario específico
+def get_recommendations(user_id, n_recommendations=10):
+    # Filtrar las predicciones para el usuario deseado y obtener las top N
+    user_predictions = predicted_df[predicted_df['uid'] == user_id].sort_values(by="est", ascending=False).head(n_recommendations)
+    
+    # Convertir las recomendaciones en un DataFrame y guardarlo como una tabla en SQL
+    top_movies = user_predictions[['iid', 'est']]
+    top_movies.to_sql('recommendations', conn, if_exists="replace")
+    
+    # Unir las recomendaciones con los nombres de las películas y devolver el resultado
+    movie_details = pd.read_sql('''select a.*, b.title from recommendations a left join movies b on a.iid=b.movieId''', conn)
+    return movie_details
 
-predictions_df.head()
-
-predictions_df['r_ui'].unique() ### promedio de ratings
-predictions_df.sort_values(by='est',ascending=False)
-
-##### funcion para recomendar los 10 peliculas con mejores predicciones y llevar base de datos para consultar resto de información
-def recomendaciones(user_id,n_recomend=10):
-
-    predictions_userID = predictions_df[predictions_df['uid'] == user_id].\
-                    sort_values(by="est", ascending = False).head(n_recomend)
-
-    recomendados = predictions_userID[['iid','est']]
-    recomendados.to_sql('reco',conn,if_exists="replace")
-
-    recomendados=pd.read_sql('''select a.*, b.title
-                             from reco a left join movies_final b
-                             on a.iid=b.movieId ''', conn)
-
-    return(recomendados)
-
-recomendaciones(user_id=429,n_recomend=10)
+# Obtener y mostrar 15 recomendaciones para el usuario 100
+user_recommendations = get_recommendations(user_id=100, n_recommendations=15)
+user_recommendations

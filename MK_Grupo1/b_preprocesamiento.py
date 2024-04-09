@@ -9,23 +9,24 @@
 #                    UNIVERSIDAD DE ANTIOQUIA                  #
 ################################################################
 
+#Se hace llamado  a las librerias que necesitamos:
+
 import numpy as np
 import pandas as pd
 import sqlite3 as sql
 import plotly.graph_objs as go
 import plotly.express as px
+from mlxtend.preprocessing import TransactionEncoder
 
+# Se hace llamado al archivo de funciones
 import a_funciones as fn
-
-
-#from mlxtend.preprocessing import TransactionEncoder
 
 
 # Hacemos la conexión a la base de datos db_movies
 conn = sql.connect('data/db_movies')
 cur = conn.cursor()
 
-#Revisamos las tablas que contiene la BD
+# Revisamos las tablas que contiene la BD
 cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
 tables = cur.fetchall()
 
@@ -33,7 +34,7 @@ tables = cur.fetchall()
 for table in tables:
     print(table[0])
 
-# Tablas de la base de datos 
+# Tablas de la base de datos:
 # ratings
 # movies
 # usuarios_sel
@@ -42,12 +43,22 @@ for table in tables:
 # users_final
 # movies_final
 
-# Exploración de cada tabla de la Base de datos:
+#### Exploración de cada tabla de la Base de datos:
 
 # Tabla ratings
 df_ratings = pd.read_sql_query("SELECT * FROM ratings LIMIT 5;", conn)
 print("\nPrimeras filas de la tabla 'ratings':")
 print(df_ratings)
+
+
+# Primeras filas de la tabla 'ratings':
+#    userId  movieId  rating  timestamp
+# 0       1        1     4.0  964982703
+# 1       1        3     4.0  964981247
+# 2       1        6     4.0  964982224
+# 3       1       47     5.0  964983815
+# 4       1       50     5.0  964982931
+
 
 #Tipos de datos de la tabla ratings
 cur.execute("PRAGMA table_info(ratings)")
@@ -56,12 +67,33 @@ print("Tipos de datos de las columnas en la tabla 'ratings':")
 for column in columns_ratings:
     print(column[1] + ": " + column[2])
     
-    
+# Tipos de datos de las columnas en la tabla 'ratings':
+# userId: INTEGER
+# movieId: INTEGER
+# rating: REAL
+# timestamp: INTEGER    
 
 # Tabla movies
 df_movies = pd.read_sql_query("SELECT * FROM movies LIMIT 5;", conn)
 print("\nPrimeras filas de la tabla 'movies':")
 print(df_movies)
+
+
+# Primeras filas de la tabla 'movies':
+#    movieId                               title  \
+# 0        1                    Toy Story (1995)   
+# 1        2                      Jumanji (1995)   
+# 2        3             Grumpier Old Men (1995)   
+# 3        4            Waiting to Exhale (1995)   
+# 4        5  Father of the Bride Part II (1995)   
+
+#                                         genres  
+# 0  Adventure|Animation|Children|Comedy|Fantasy  
+# 1                   Adventure|Children|Fantasy  
+# 2                               Comedy|Romance  
+# 3                         Comedy|Drama|Romance  
+# 4                                       Comedy 
+
 
 #Tipos de datos de la tabla movies
 cur.execute("PRAGMA table_info(movies)")
@@ -71,6 +103,10 @@ for column in columns_movies:
     print(column[1] + ": " + column[2])
 
 
+# Tipos de datos de las columnas en la tabla 'movies':
+# movieId: INTEGER
+# title: TEXT
+# genres: TEXT
 
 
 # Tabla usuarios_sel
@@ -78,26 +114,76 @@ df_usuarios_sel = pd.read_sql_query("SELECT * FROM usuarios_sel LIMIT 5;", conn)
 print("\nPrimeras filas de la tabla 'usuarios_sel':")
 print(df_usuarios_sel)
 
+# Primeras filas de la tabla 'usuarios_sel':
+#    user_id  cnt_rat
+# 0      182      977
+# 1      307      975
+# 2      603      943
+# 3      298      939
+# 4      177      904
+
+
 # Tabla movies_sel
 df_movies_sel = pd.read_sql_query("SELECT * FROM movies_sel LIMIT 5;", conn)
 print("\nPrimeras filas de la tabla 'movies_sel':")
 print(df_movies_sel)
+
+
+# Primeras filas de la tabla 'movies_sel':
+#    movieId  cnt_rat
+# 0    58559      149
+# 1     6539      149
+# 2     1214      146
+# 3      595      146
+# 4     1036      145
+
+
+
 
 # Tabla ratings_final
 df_ratings_final = pd.read_sql_query("SELECT * FROM ratings_final LIMIT 5;", conn)
 print("\nPrimeras filas de la tabla 'ratings_final':")
 print(df_ratings_final)
 
+
+
+# Primeras filas de la tabla 'ratings_final':
+#    user_id  movie_rating  movieId
+# 0        1           4.0        3
+# 1        1           4.0        6
+# 2        1           3.0       70
+# 3        1           5.0      101
+# 4        1           5.0      151
+
+
+
 # Tabla users_final
 df_users_final = pd.read_sql_query("SELECT * FROM users_final LIMIT 5;", conn)
 print("\nPrimeras filas de la tabla 'users_final':")
 print(df_users_final)
+
+# Primeras filas de la tabla 'users_final':
+#    movieId  userId  rating
+# 0        1       1     4.0
+# 1        3       1     4.0
+# 2        6       1     4.0
+# 3       47       1     5.0
+# 4       50       1     5.0
 
 # Tabla movies_final
 df_movies_final = pd.read_sql_query("SELECT * FROM movies_final LIMIT 5;", conn)
 print("\nPrimeras filas de la tabla 'movies_final':")
 print(df_movies_final)
 
+
+
+# Primeras filas de la tabla 'movies_final':
+#    movieId                               title                      genres
+# 0        2                      Jumanji (1995)  Adventure|Children|Fantasy
+# 1        3             Grumpier Old Men (1995)              Comedy|Romance
+# 2        5  Father of the Bride Part II (1995)                      Comedy
+# 3        6                         Heat (1995)       Action|Crime|Thriller
+# 4        7                      Sabrina (1995)  
 
 
 # Traemos las tablas a Python
@@ -108,15 +194,28 @@ df_ratings = pd.read_sql('SELECT * FROM ratings', conn)
 # La tabla df_ratings tiene 100836 filas y 4 columnas: " ", userId, movieId, rating, timestamp
 
 # Verificamos la información de la tabla y sus datos duplicados: NO TIENE y sus datos nulos: NO TIENE
-df_movies.info()
+nulosmovies = df_movies.info()   # NO TIENE NULOS
 df_movies.head()
-df_movies.duplicated().sum()
+df_movies.duplicated().sum()  #NO TIENE DUPLICADOS
+duplicadosmovies = df_movies.duplicated().sum()
+
+print("\nnulos de 'movies':")
+print(nulosmovies)
+
+print("\nduplicados de 'movies':")
+print(duplicadosmovies)
+
 
 # Verificamos la información de la tabla y sus datos duplicados: NO TIENE y sus datos nulos: NO TIENE
-df_ratings.info()
-df_ratings.head()
-df_ratings.duplicated().sum()
+nulosratings = df_ratings.info()   #NO TIENE NULOS
+df_ratings.head()   #Observamos que el timestamp esta raro, tendremos que ver más adelante si se necesita o no, y que significa ese dato numérico
+duplicadosratings =  df_ratings.duplicated().sum()  #NO TIENE DUPLICADOS
 
+print("\nnulos de 'ratings':")
+print(nulosratings)
+
+print("\nduplicados de 'ratings':")
+print(duplicadosratings)
 
 # Ahora empezaremos a hacernos preguntas. Cuál es la calificación más frecuente? 
 # calcular la distribución de calificaciones
@@ -129,7 +228,7 @@ Calificaciones = pd.read_sql("""
     ORDER BY conteo DESC
 """, conn)
 
-print(Calificaciones)
+print(Calificaciones)  #Podemos observar que 3,4,5 son las calificaciones más frecuentes
 
 #    rating  conteo
 # 0     4.0   26818
@@ -207,6 +306,8 @@ fig.show()
 
 
 # Cuáles usuarios han calificados más de 100 peliculas?
+# Esto nos lleva a la pregunta: Es lógico que un usuario haya calificado 2.698 peliculas
+# Tenemos datos atipicos? errores en la base de datos?
 consulta_sql = """
     SELECT userId, COUNT(DISTINCT movieId) AS numero_peliculas
     FROM ratings
@@ -265,36 +366,6 @@ Layout=go.Layout(title="Count of ratings",xaxis={'title':'Rating'},yaxis={'title
 go.Figure(data,Layout)
 
 
-
-
-# ***************************************************************************
-# ALEJA, POR FFAVOR REVISA ESTO QUE NO CORRE
-# 
-# fn.ejecutar_sql('preprocesamiento1.sql', cur)
-
-# cur.execute("select name from sqlite_master where type='table' ")
-# cur.fetchall()
-
-
-# pd.read_sql('select count(*) from movies', conn)
-# pd.read_sql('select count(*) from movies_final', conn)
-# pd.read_sql('select count(*) from ratings', conn)
-# pd.read_sql('select count(*) from ratings_final', conn)
-# pd.read_sql('select count(*) from full_ratings', conn)
-
-# ratings=pd.read_sql('select * from full_ratings',conn)
-# print(ratings.duplicated().sum()) # al cruzar tablas a veces se duplican registros
-# print(ratings.info())
-# print(ratings.head(10))
-
-# movies=pd.read_sql("""select * from movies""", conn)
-# genres=movies['genres'].str.split('|')
-# te = TransactionEncoder()
-# genres = te.fit_transform(genres)
-# genres = pd.DataFrame(genres, columns = te.columns_)
-
-# ***************************************************************************
-
 query = f"SELECT * FROM {'ratings'}"
 df_ratings = pd.read_sql_query(query, conn)
 
@@ -308,12 +379,22 @@ print("\nCruce de datos:")
 print("Tabla ratings:", df_ratings.columns)
 print("Tabla movies:", df_movies.columns)
 
+# Cruce de datos:
+# Tabla ratings: Index(['userId', 'movieId', 'rating', 'timestamp'], dtype='object')
+# Tabla movies: Index(['movieId', 'title', 'genres'], dtype='object')
+
+
 #Verificamos y podemos ver que ambos son tipo Int
 print("\nFormato de 'movieId':")
 print("Tabla ratings:", df_ratings['movieId'].dtype)
 print("Tabla movies:", df_movies['movieId'].dtype)
 
-# Ahora bien, verifiquemos si son campos unicos o tienen duplicados. Podemos observar que NO existen datos duplicados
+# Cruce de datos:
+# Tabla ratings: Index(['userId', 'movieId', 'rating', 'timestamp'], dtype='object')
+# Tabla movies: Index(['movieId', 'title', 'genres'], dtype='object')
+
+
+# Ahora bien, verifiquemos si son campos unicos o tienen duplicados. Podemos observar que NO existen datos duplicados (ya lo habiamos mostrado más arriba)
 duplicadosratings = df_ratings.duplicated().sum()
 duplicadosmovies = df_movies.duplicated().sum()
 
@@ -359,6 +440,8 @@ query = '''
     HAVING cnt_rat >= 30 AND cnt_rat <= 1000
     ORDER BY cnt_rat DESC
 '''
+
+
 # Ejecutar la consulta y cargar los resultados en un DataFrame
 rating_users_def = pd.read_sql(query, conn)
 
@@ -383,3 +466,40 @@ rating_users_def.describe()
 # 50%	302.000000	94.000000
 # 75%	450.000000	196.000000
 # max	609.000000	977.000000
+
+# Ejecutamos el archivo preprocesamiento.sql para limpiar la base de datos
+fn.ejecutar_sql('preprocesamiento.sql', cur)
+
+cur.execute("select name from sqlite_master where type='table' ")
+cur.fetchall()
+
+final = pd.read_sql("""SELECT *  FROM final""", conn)
+final
+
+# Ahora bien, debemos organizar los géneros de las peliculas para que sean medibles
+genres=final['genres'].str.split('|') 
+te = TransactionEncoder() 
+genres = te.fit_transform(genres) 
+genres = pd.DataFrame(genres, columns = te. columns_) 
+
+
+final = pd.concat([final, genres], axis=1)
+final = final.drop('genres', axis=1)
+final
+
+final[final['(no genres listed)']]
+
+
+# Extraemos el año de la columna title en otra columna 
+final['year'] = final['title'].str.extract('.*\((.*)\).*', expand=True)
+final
+# Borramos el texto de los paréntesis de la columna title
+final['title'] = final['title'].str.replace(r'\s*\([^()]*\)', '', regex=True)
+final
+
+# Reemplazamos en los géneros el false por 0 y el true por 1
+final[genres.columns] = final[genres.columns].replace({False: 0, True: 1})
+final
+
+# Guardamos la base final en sql
+final.to_sql('final', conn, if_exists='replace', index=False)
