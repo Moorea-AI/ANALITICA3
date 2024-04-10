@@ -1,43 +1,68 @@
--- Tabla de usuarios con menos de 750 ratings
-DROP TABLE IF EXISTS usuarios_sel;
-CREATE TABLE usuarios_sel as
-                  SELECT UserId, count(*) as cnt_rat_user
-                  FROM ratings
-                  GROUP BY userId
-                  HAVING cnt_rat_user <=750
-                  ORDER BY cnt_rat_user ASC;
+-- Tabla de películas con el año
+DROP TABLE IF EXISTS movies_with_year;
+CREATE TABLE movies_with_year AS
+    SELECT 
+        movieId,
+        title,
+        genres,
+        CAST(SUBSTR(title, -5, 4) AS INTEGER) AS year  -- Extraemos el año del título y lo convertimos a un entero
+    FROM movies;
 
--- Tabla de peliculas con 5 o más ratings
-
+-- Tabla de películas seleccionadas con 5 o más calificaciones
 DROP TABLE IF EXISTS movies_sel;
-CREATE TABLE movies_sel as
-                  select title , count(*) as rating_count
-                         from movies inner join ratings
-                         on movies.movieID = ratings.movieID
-                         group by title
-                         having rating_count >=5
-                         order by rating_count desc;
+CREATE TABLE movies_sel AS
+    SELECT 
+        title,
+        COUNT(*) AS rating_count
+    FROM movies_with_year
+    INNER JOIN ratings ON movies_with_year.movieId = ratings.movieId
+    GROUP BY title
+    HAVING rating_count >= 5
+    ORDER BY rating_count DESC;
 
--- Base de datos movies final
+drop table if exists usuarios_sel;
 
+create table usuarios_sel as 
+
+        SELECT userId, COUNT(*) AS n_id
+        FROM ratings
+        GROUP BY userId
+        HAVING n_id >=10 and n_id <=600
+        ORDER BY n_id asc ;
+
+
+
+-- Base de datos final de películas
 DROP TABLE IF EXISTS movies_final;
-CREATE TABLE movies_final as
-                  select movieID, movies.title, genres, rating_count
-                  from movies inner join movies_sel
-                  on movies.title = movies_sel.title;
+CREATE TABLE movies_final AS
+    SELECT 
+        movies_with_year.movieId,
+        movies_with_year.title,
+        movies_with_year.genres,
+        movies_sel.rating_count,
+        movies_with_year.year  -- Incluimos la columna de año en la tabla final de películas
+    FROM movies_with_year
+    INNER JOIN movies_sel ON movies_with_year.title = movies_sel.title;
 
--- Base de datos ratings final
-
+-- Base de datos final de calificaciones
 DROP TABLE IF EXISTS ratings_final;
-CREATE TABLE ratings_final as
-                  select ratings.userID, movieID, rating
-                  from ratings inner join usuarios_sel
-                  on ratings.userID = usuarios_sel.userID;
+CREATE TABLE ratings_final AS
+    SELECT 
+        ratings.userId,
+        ratings.movieId,
+        ratings.rating
+    FROM ratings
+    INNER JOIN usuarios_sel ON ratings.userId = usuarios_sel.userId;
 
 -- Base de datos final
-
 DROP TABLE IF EXISTS df_final;
-CREATE TABLE df_final as
-                  select userID, movies_final.movieID, title, genres, rating, year
-                  from movies_final inner join ratings_final
-                  on movies_final.movieID = ratings_final.movieID;
+CREATE TABLE df_final AS
+    SELECT 
+        ratings_final.userId,
+        movies_final.movieId,
+        movies_final.title,
+        movies_final.genres,
+        ratings_final.rating,
+        movies_final.year  -- Incluimos la columna de año en la tabla final
+    FROM movies_final
+    INNER JOIN ratings_final ON movies_final.movieId = ratings_final.movieId;

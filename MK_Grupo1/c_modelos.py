@@ -66,240 +66,86 @@ for column in columns:
 #  ('df_final2',),          Nueva
 #  ('recommendations',),    Nueva con el resultado del ejercicio
 
-# 1. sistemas basados en popularidad 
+
+
+
+# 1. Sistemas basado en popularidad 
 ##### recomendaciones basado en popularidad ######
 
+# Consulta para obtener la cantidad de películas por año
+popular_movies_by_year = pd.read_sql('''
+    SELECT year, COUNT(*) AS number_of_movies 
+    FROM df_final 
+    GROUP BY year 
+    ORDER BY number_of_movies DESC
+''', conn)
 
-
-
-# Año de las peliculas más populares
-sql1 = pd.read_sql('''  SELECT year, count(title) AS numberOfMovies 
-                    FROM df_final 
-                    GROUP BY year 
-                    ORDER BY numberOfMovies DESC
-                            ''',conn )
-# Graficamos el año de las peliculas más populares
-fig = px.bar(sql1, x='year', y='numberOfMovies', title='Cantidad de peliculas por año')
+# Gráfico de barras con la cantidad de películas por año
+fig = px.bar(popular_movies_by_year, x='year', y='number_of_movies', title='Cantidad de películas por año')
 fig.show()
-
 
 # Consulta para obtener películas con 6 o 7 géneros
-sql2 = pd.read_sql('''  SELECT title, (Action + Adventure + Animation + Children + Comedy + Crime + Documentary + 
-                            Drama + Fantasy + 'Film-Noir' + Horror + IMAX + Musical + Mystery + 
-                            Romance + 'Sci-Fi' + Thriller + War + Western) AS total_genres 
-                        FROM df_final
-                        GROUP BY title
-                        HAVING total_genres IN (6, 7)
-                        ORDER BY total_genres desc''',conn )
-
-# Visualización de películas por cantidad de géneros
-fig = px.bar(sql2, x='title', y='total_genres', title='Cantidad de géneros por pelicula')
-fig.show()
-
-
-
-# Consulta para obtener la cantidad de películas por género
-sql3 = pd.read_sql('''   SELECT 
-    SUM(Action) AS Action, 
-    SUM(Adventure) AS Adventure, 
-    SUM(Animation) AS Animation,
-    SUM(Children) AS Children,
-    SUM(Comedy) AS Comedy,
-    SUM(Crime) AS Crime,
-    SUM(Documentary) AS Documentary,
-    SUM(Drama) AS Drama,
-    SUM(Fantasy) AS Fantasy,
-    SUM("Film-Noir") AS "Film-Noir",
-    SUM(Horror) AS Horror,
-    SUM(IMAX) AS IMAX,
-    SUM(Musical) AS Musical,
-    SUM(Mystery) AS Mystery,
-    SUM(Romance) AS Romance,
-    SUM("Sci-Fi") AS "Sci-Fi",
-    SUM(Thriller) AS Thriller,
-    SUM(War) AS War,
-    SUM(Western) AS Western 
-    FROM df_final; ''',conn )
-
-
-# Gráfico de barras con los géneros más populares
-genres = ['Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'IMAX', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
-counts = [sql3[genre][0] for genre in genres]
-
-fig = go.Figure(data=[go.Bar(x=genres, y=counts)])
-fig.update_layout(title='Géneros más populares')
-fig.show()
-
-
-# Consulta para obtener películas con una calificación promedio mayor o igual a 4.5
-sql4 = pd.read_sql(''' SELECT movieId, title, AVG(rating) AS average_rating
-FROM df_final
-GROUP BY movieId, title
-HAVING AVG(rating) >= 4.5
-ORDER BY average_rating DESC;
-''',conn )
-
-# Visualización de estas películas con un gráfico de barras
-fig = go.Figure(data=[go.Bar(x=sql4['title'], y=sql4['average_rating'])])
-fig.update_layout(title='Calificación promedio por peli >= 4.5')
-fig.show()
-
-
-#¿Cuáles son las 10 películas con la calificación promedio más alta?
-consulta_sql = """
-    SELECT title, AVG(rating) as calificacion
+movies_with_six_or_seven_genres = pd.read_sql('''
+    SELECT title, 
+           (Action + Adventure + Animation + Children + Comedy + Crime + Documentary + 
+            Drama + Fantasy + "Film-Noir" + Horror + IMAX + Musical + Mystery + 
+            Romance + "Sci-Fi" + Thriller + War + Western) AS total_genres 
     FROM df_final
     GROUP BY title
-    ORDER BY calificacion DESC 
-    LIMIT 10
-"""
-pd.read_sql(consulta_sql, conn)
-
-
-#### ¿Cuáles son las 10 películas más populares además del total de calificaciones que han recibido?
-consulta_sql = """
-    SELECT title, COUNT(rating) as total_calificacion
-    FROM df_final
-    GROUP BY title
-    ORDER BY total_calificacion DESC 
-    LIMIT 10
-"""
-pd.read_sql(consulta_sql, conn)
-
-
-
-# Año de las peliculas más populares
-sql1 = pd.read_sql('''  SELECT year, count(title) AS numberOfMovies 
-                    FROM df_final 
-                    GROUP BY year 
-                    ORDER BY numberOfMovies DESC
-                            ''',conn )
-# Graficamos el año de las peliculas más populares
-fig = px.bar(sql1, x='year', y='numberOfMovies', title='Cantidad de peliculas por año')
-fig.show()
-
-
-
-# Consulta para obtener películas con 6 o 7 géneros
-sql2 = pd.read_sql('''  SELECT title, (Action + Adventure + Animation + Children + Comedy + Crime + Documentary + 
-                            Drama + Fantasy + 'Film-Noir' + Horror + IMAX + Musical + Mystery + 
-                            Romance + 'Sci-Fi' + Thriller + War + Western) AS total_genres 
-                        FROM df_final
-                        GROUP BY title
-                        HAVING total_genres IN (6, 7)
-                        ORDER BY total_genres desc''',conn )
-
+    HAVING total_genres IN (6, 7)
+    ORDER BY total_genres DESC
+''', conn)
 
 # Visualización de películas por cantidad de géneros
-fig = px.bar(sql2, x='title', y='total_genres', title='Cantidad de géneros por pelicula')
+fig = px.bar(movies_with_six_or_seven_genres, x='title', y='total_genres', title='Cantidad de géneros por película')
 fig.show()
-
 
 # Consulta para obtener la cantidad de películas por género
-sql3 = pd.read_sql('''   SELECT 
-    SUM(Action) AS Action, 
-    SUM(Adventure) AS Adventure, 
-    SUM(Animation) AS Animation,
-    SUM(Children) AS Children,
-    SUM(Comedy) AS Comedy,
-    SUM(Crime) AS Crime,
-    SUM(Documentary) AS Documentary,
-    SUM(Drama) AS Drama,
-    SUM(Fantasy) AS Fantasy,
-    SUM("Film-Noir") AS "Film-Noir",
-    SUM(Horror) AS Horror,
-    SUM(IMAX) AS IMAX,
-    SUM(Musical) AS Musical,
-    SUM(Mystery) AS Mystery,
-    SUM(Romance) AS Romance,
-    SUM("Sci-Fi") AS "Sci-Fi",
-    SUM(Thriller) AS Thriller,
-    SUM(War) AS War,
-    SUM(Western) AS Western 
-    FROM df_final; ''',conn )
-
+movies_by_genre = pd.read_sql('''
+    SELECT 
+        SUM(Action) AS Action, 
+        SUM(Adventure) AS Adventure, 
+        SUM(Animation) AS Animation,
+        SUM(Children) AS Children,
+        SUM(Comedy) AS Comedy,
+        SUM(Crime) AS Crime,
+        SUM(Documentary) AS Documentary,
+        SUM(Drama) AS Drama,
+        SUM(Fantasy) AS Fantasy,
+        SUM("Film-Noir") AS "Film-Noir",
+        SUM(Horror) AS Horror,
+        SUM(IMAX) AS IMAX,
+        SUM(Musical) AS Musical,
+        SUM(Mystery) AS Mystery,
+        SUM(Romance) AS Romance,
+        SUM("Sci-Fi") AS "Sci-Fi",
+        SUM(Thriller) AS Thriller,
+        SUM(War) AS War,
+        SUM(Western) AS Western 
+    FROM df_final
+''', conn)
 
 # Gráfico de barras con los géneros más populares
-genres = ['Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'IMAX', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
-counts = [sql3[genre][0] for genre in genres]
+genres = ['Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 
+          'Fantasy', 'Film-Noir', 'Horror', 'IMAX', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 
+          'Thriller', 'War', 'Western']
+counts = [movies_by_genre[genre][0] for genre in genres]
 
 fig = go.Figure(data=[go.Bar(x=genres, y=counts)])
-fig.update_layout(title='Géneros más populares')
-fig.show()
-
-# Consulta para obtener películas con una calificación promedio mayor o igual a 4.5
-sql4 = pd.read_sql(''' SELECT movieId, title, AVG(rating) AS average_rating
-FROM df_final
-GROUP BY movieId, title
-HAVING AVG(rating) >= 4.5
-ORDER BY average_rating DESC;
-''',conn )
-
-# Visualización de estas películas con un gráfico de barras
-fig = go.Figure(data=[go.Bar(x=sql4['title'], y=sql4['average_rating'])])
-fig.update_layout(title='Calificación promedio por peli >= 4.5')
-fig.show()
-
-# Consulta para obtener las 10 películas mejor calificadas con al menos 5 vistas
-sql5 = pd.read_sql("""SELECT title,
-            AVG(rating) AS avg_rat,
-            COUNT(*) AS view_num
-            FROM df_final
-            GROUP BY title
-            HAVING view_num >= 5
-            ORDER BY avg_rat DESC
-            LIMIT 10
-            """, conn)
-
-fig = go.Figure(data=[go.Bar(x=sql5['title'], y=sql5['avg_rat'])])
-fig.update_layout(title='Top 10 Películas con Mejor Calificación Promedio (con al menos 5 vistas)',
-                    xaxis_title='Película',
-                    yaxis_title='Calificación Promedio')
-fig.show()
-
-# Consulta para obtener la mejor película calificada por género
-sql6 = pd.read_sql(""" SELECT genero, title, MAX(rating) AS mejor_calificacion
-FROM (
-    SELECT title,
-            CASE
-                WHEN Action = 1 THEN 'Accion'
-                WHEN Adventure = 1 THEN 'Aventura'
-                WHEN Animation = 1 THEN 'Animacion'
-                WHEN Children = 1 THEN 'Infantil'
-                WHEN Comedy = 1 THEN 'Comedia'
-                WHEN Crime = 1 THEN 'Crimen'
-                WHEN Documentary = 1 THEN 'Documental'
-                WHEN Drama = 1 THEN 'Drama'
-                WHEN Fantasy = 1 THEN 'Fantasia'
-                WHEN Horror = 1 THEN 'Horror'
-                WHEN IMAX = 1 THEN 'Imax'
-                WHEN Musical = 1 THEN 'Musical'
-                WHEN Mystery = 1 THEN 'Misterio'
-                WHEN Romance = 1 THEN 'Romance'
-                WHEN Thriller = 1 THEN 'Thrill'
-                WHEN War = 1 THEN 'Guerra'
-                WHEN Western = 1 THEN 'Occidental'
-                WHEN "Sci-Fi" = 1 THEN 'Ciencia ficcion'
-                WHEN "Film-Noir" = 1 THEN 'Cine negro'
-            END as genero,
-            rating
-    FROM df_final
-) AS generos
-GROUP BY genero;
-""", conn)
-
-# Visualización de estas películas por género
-fig = px.bar(sql6, x='genero', y='mejor_calificacion', color='genero', title='Mejor calificación por género', text='title')
-fig.update_layout(showlegend=False)
+fig.update_layout(title='Cantidad de películas por género')
 fig.show()
 
 # Consulta para obtener las películas mejor calificadas por año de lanzamiento
-sql7 = pd.read_sql('''SELECT title, year, AVG(rating) AS average_rating
-                    FROM df_final
-                    GROUP BY year, title
-                    ORDER BY year, average_rating DESC''', conn)
+top_movies_by_year = pd.read_sql('''
+    SELECT title, year, AVG(rating) AS average_rating
+    FROM df_final
+    GROUP BY year, title
+    ORDER BY year, average_rating DESC
+''', conn)
 
-fig = px.bar(sql7, x='year', y='average_rating', color='title', title='Peliculas mejor calificas por año de lanzamiento')
+# Gráfico de barras con las películas mejor calificadas por año de lanzamiento
+fig = px.bar(top_movies_by_year, x='year', y='average_rating', color='title', 
+             title='Películas mejor calificadas por año de lanzamiento')
 fig.update_layout(
     autosize=False,
     width=1000,
@@ -313,19 +159,10 @@ fig.show()
 
 
 
-
-
-
-
-
-
-
-
-
-
 # 2.1 Sistema de recomendación basado en contenido un solo producto - Manual 
 
 
+# INTENTO 1
 # Cargar todos los registros de la tabla 'final' en un DataFrame
 df_final = pd.read_sql_query('SELECT * FROM df_final', conn) # Carga la tabla 'final' en el DataFrame 'final'
 
@@ -334,7 +171,7 @@ df_final = pd.read_sql_query('SELECT * FROM df_final', conn) # Carga la tabla 'f
 general = df_final.loc[:,~df_final.columns.isin(['userId','movieId'])]
 general
 
-# Guarda el DataFrame 'general' en la base de datos con el nombre 'final2'
+# Guarda el df general en la base de datos con el nombre final2
 general.to_sql('final2', conn, if_exists='replace', index=False)
 
 # Consulta SQL para agrupar por título y año y calcular la calificación promedio
@@ -344,10 +181,10 @@ final1 = pd.read_sql("""select *, avg(rating) as avg_rat
                     order by year desc, avg_rat desc""", conn) # Agrupa y ordena por año y calificación promedio
 final1
 
-# Convierte la columna 'year' a tipo entero y escala sus valores entre 0 y 1
+# Convierte la columna year a tipo entero y escala sus valores entre 0 y 1
 final1['year']=final1.year.astype('int')              # Convierte a entero
 sc=MinMaxScaler()                                     # Inicializa el escalador MinMax
-final1[["year1"]]=sc.fit_transform(final1[['year']])  # Escala la columna 'year' y la guarda como 'year1'
+final1[["year1"]]=sc.fit_transform(final1[['year']])  # Escala la columna year y la guarda como year1
 
 # Elimina las columnas innecesarias: el año original, rating y avg_rat
 final2=final1.drop(columns=['year','rating','avg_rat'])
@@ -379,6 +216,55 @@ interact(recomendacion)
 
 
 
+# INTENTO 2
+
+# Seleccionar solo las columnas relevantes (elimina las columnas 'userId' y 'movieId')
+general = df_final.drop(columns=['userId', 'movieId'])
+
+# Guardar el DataFrame 'general' en la base de datos con el nombre 'final2'
+general.to_sql('final2', conn, if_exists='replace', index=False)
+
+# Consulta SQL para agrupar por título y año y calcular la calificación promedio
+final1 = pd.read_sql("""
+    SELECT *, AVG(rating) AS avg_rat
+    FROM final2
+    GROUP BY year, title
+    ORDER BY year DESC, avg_rat DESC
+""", conn)
+
+# Convertir la columna 'year' a tipo entero y escalar sus valores entre 0 y 1
+final1['year'] = final1['year'].astype('int')
+scaler = MinMaxScaler()
+final1[['year']] = scaler.fit_transform(final1[['year']])
+
+# Eliminar las columnas innecesarias: 'year', 'rating' y 'avg_rat'
+final2 = final1.drop(columns=['year', 'rating', 'avg_rat'])
+
+# Convertir el título de las películas en columnas dummy (one-hot encoding)
+final3 = pd.get_dummies(final2, columns=['title'])
+
+# Función para obtener películas recomendadas basadas en una película dada
+def recomendacion(movie=list(final1['title'])[0]):
+    ind_movie = final1[final1['title'] == movie].index[0]  # Índice de la película dada
+    similar_movie = final3.corrwith(final3.iloc[ind_movie], axis=1)  # Correlación con otras películas
+    similar_movie = similar_movie.sort_values(ascending=False)  # Ordenar por correlación descendente
+    top_similar_movie = similar_movie.head(11)  # Top 10 películas más similares
+    top_similar_movie = top_similar_movie.reset_index()  # Reiniciar índices
+    top_similar_movie.columns = ['title_index', 'correlation']  # Renombrar columnas
+    top_similar_movie['title'] = final1['title']  # Añadir títulos a las recomendaciones
+
+    return top_similar_movie
+
+# Interfaz de usuario para elegir una película y obtener recomendaciones
+interact(recomendacion, movie=list(final1['title']))
+
+
+
+
+
+
+
+
 
 
 
@@ -387,65 +273,69 @@ interact(recomendacion)
 # 3. Sistema de recomendacion basado en el contenido de cada usuario
 
 
-# Reutilizar el DataFrame 'final' previamente cargado
+# Reutilizaremos el DataFrame final previamente cargado
 df_final
 
-# Eliminar la columna 'userId' para quedarse solo con los datos de las películas
+# Eliminamos la columna userId para quedarnos solo con los datos de las películas
 df_usuario = df_final.loc[:,~df_final.columns.isin(['userId'])]
 
-# Guardar el DataFrame resultante en la base de datos como 'df_final'
+# Guardamos el df resultante en la base de datos como df_final
 df_usuario.to_sql('df_final', conn, if_exists='replace')
 
-# Consulta SQL para agrupar por título y año y calcular la calificación promedio
+# Consulta en SQL para agrupar por título y año y calcular la calificación promedio
 movies = pd.read_sql("""select *, avg(rating) as avg_rat
                     from df_final
                     group by year, title
                     order by year desc, avg_rat desc""", conn)
 
-# Eliminar columnas innecesarias
+# Eliminamos columnas innecesarias
 movies = movies.drop(columns=['index','rating','avg_rat'])
 
 # Convertir la columna 'year' a tipo entero
 movies['year'] = movies['year'].astype('int')
 
-# Escalar el año para que tenga valores entre 0 y 1, lo que facilita la comparación y mejora el rendimiento del algoritmo
-sc=MinMaxScaler() 
+# Escalamos el año para que tenga valores entre 0 y 1, lo que facilita la comparación y mejora el rendimiento del algoritmo
 sc=MinMaxScaler()
 movies[["year_sc"]]=sc.fit_transform(movies[['year']])
 
-# Eliminar columnas que no se utilizarán en el proceso de recomendación
+# Eliminamos columnas que no se utilizarán en el proceso de recomendación
 movies1 = movies.drop(columns=['movieId', 'title', 'year'])
 movies1
 
-# Extraer los usuarios únicos de la tabla 'ratings_final'
+# Extraemos los usuarios únicos de la tabla 'ratings_final'
 usuarios=pd.read_sql('select distinct (userId) as user_id from ratings_final',conn)
 
 
 # Función para recomendar películas basadas en el perfil de un usuario específico
 def usuario(user_id=list(usuarios['user_id'].value_counts().index)):
 
-    ## Seleccionar solo las calificaciones del usuario seleccionado
+    # Seleccionamos solo las calificaciones del usuario seleccionado
     ratings=pd.read_sql('select *from ratings_final where userId=:user',conn, params={'user':user_id})
-    ## Convertir los ID de las películas calificadas por el usuario a un array
+    
+    # Convertimos los ID de las películas calificadas por el usuario a un array
     l_movies_r=ratings['movieId'].to_numpy()
 
-    ## Agregar columnas 'movieId' y 'title' para poder filtrar y mostrar el nombre de las películas
+    # Agregamos las columnas 'movieId' y 'title' para poder filtrar y mostrar el nombre de las películas
     movies1[['movieId','title']]=movies[['movieId','title']]
-    # Filtrar solo las películas que el usuario ya ha calificado
+    
+    # Filtramos solo las películas que el usuario ya ha calificado
     movies_r=movies1[movies1['movieId'].isin(l_movies_r)]
     movies_r=movies_r.drop(columns=['movieId','title'])
     movies_r["indice"]=1
-    # Calcular el "centroide" del usuario, que es el perfil promedio del usuario basado en sus calificaciones
+    
+    # Calculamos el centroide del usuario, que es el perfil promedio del usuario basado en sus calificaciones
     centroide=movies_r.groupby("indice").mean()
 
-    # Filtrar las películas que el usuario no ha calificado aún
+    # Filtramos las películas que el usuario no ha calificado aún
     movies_nr=movies1[~movies1['movieId'].isin(l_movies_r)]
     movies_nr=movies_nr.drop(columns=['movieId','title'])
-    # Usar el modelo NearestNeighbors para encontrar las películas más cercanas al centroide del usuario
+    
+    # Usamos el modelo Nearest Neighbors para encontrar las películas más cercanas al centroide del usuario
     model=neighbors.NearestNeighbors(n_neighbors=11, metric='cosine')
     model.fit(movies_nr)
     dist, idlist = model.kneighbors(centroide)
-    # Seleccionar las películas recomendadas basadas en sus índices
+    
+    # Seleccionamos las películas recomendadas basadas en sus índices
     ids=idlist[0]
     recomend_m=movies.loc[ids][['title','movieId']]
     vistos=movies[movies['movieId'].isin(l_movies_r)][['title','movieId']]
@@ -516,14 +406,18 @@ grid_search.fit(data)
 ### Mostrar los mejores parámetros y su respectivo RMSE
 
 # Indica los mejores hiperparámetros encontrados por GridSearchCV para el modelo KNNBaseline
-print(grid_search.best_params["rmse"]) # = {'sim_options': {'name': 'msd', 'min_support': 5, 'user_based': False}}
-# Este resultado indidica que la mejor métrica de similitud para este modelo y conjunto de datos es la "Mean Squared Difference" (Diferencia Cuadrática Media)
-# Ademas en 'min_support': 5: Este es el número mínimo de items comunes necesarios entre usuarios para considerarlos "similares"
-# Finalmente 'user_based': False: Indica que el modelo basado en vecinos más cercanos (k-NN) que se está utilizando es basado en items y no en usuarios. 
+print(grid_search.best_params["rmse"]) 
 
-# Este el error promedio del modelo en predicciones de calificaciones, bajo la configuración de hiperparámetros óptima identificada por la búsqueda de cuadrícula
-print(grid_search.best_score["rmse"]) # = 0.924400921350208
-# Y indica que, en promedio, las predicciones del modelo se desvían aproximadamente 0.92 unidades de las calificaciones reales, en la escala de calificación utilizada
+# = {'sim_options': {'name': 'msd', 'min_support': 5, 'user_based': False}}
+
+# Este resultado indidica que la mejor métrica de similitud para este modelo y conjunto de datos es la "Mean Squared Difference" (Diferencia Cuadrática Media) y tiene un RMSE de 0.924400921350208
+
+# 'min_support': 5 es el número mínimo de items comunes necesarios entre usuarios para considerarlos "similares"
+
+# 'user_based': False: el modelo basado en KNN es basado en items y no en usuarios. 
+
+print(grid_search.best_score["rmse"]) #  El error promedio de predicciones de calificaciones,bajo gridesearch es 0.924400921350208
+# Las predicciones del modelo se desvían 0.92 unidades de las calificaciones reales.
 
 best_model = grid_search.best_estimator['rmse']
 
@@ -558,3 +452,10 @@ def get_recommendations(user_id, n_recommendations=10):
 # Obtener y mostrar 15 recomendaciones para el usuario 100
 user_recommendations = get_recommendations(user_id=100, n_recommendations=15)
 user_recommendations
+
+
+# El modelo colaborativo ha sido entrenado utilizando el mejor conjunto de 
+# parámetros identificados por la búsqueda de cuadrícula, y han realizado 
+# predicciones precisas sobre las calificaciones de las películas para los 
+# usuarios. El RMSE promedio de 0.922 indica un buen rendimiento del modelo 
+# en la tarea de recomendación de películas.
