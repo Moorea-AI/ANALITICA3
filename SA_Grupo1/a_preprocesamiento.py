@@ -15,6 +15,7 @@ import os
 #img1=cv2.imread('data\\test\\NORMAL\\IM-0005-0001.jpeg')
 #img2 = cv2.imread('data/train/PNEUMONIA/person7_bacteria_29.jpeg')
 
+Sas
 img1 = "/kaggle/input/alzheimers-dataset-4-class-of-images/Alzheimer_s Dataset/train/"
 img2 = "/kaggle/input/alzheimers-dataset-4-class-of-images/Alzheimer_s Dataset/test/"
 
