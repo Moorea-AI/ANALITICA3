@@ -9,7 +9,7 @@ import os
 def load_and_display(image_path):
     img = cv2.imread(image_path)
     class_name = image_path.split("/")[2]  # Extract class name from path
-    resized_img = cv2.resize(img, (100, 100))  # Resize to 100x100
+    resized_img = cv2.resize(img, (120, 120))  # Resize to 100x100
     num_pixels = np.prod(resized_img.shape)  # Calculate number of pixels
     plt.imshow(resized_img)
     plt.title(f"{class_name} - Shape: {resized_img.shape}, Max: {resized_img.max()}, Min: {resized_img.min()}, Pixels: {num_pixels}")
@@ -37,7 +37,7 @@ load_and_display('data/train/ModerateDemented/moderateDem10.jpg')
 ################################################################
 
 
-width = 100 #tamaño para reescalar imágen
+width = 120 #tamaño para reescalar imágen
 num_classes = 2 #clases variable respuesta
 trainpath = 'data/train/'
 testpath = 'data/test/'
@@ -74,5 +74,8 @@ joblib.dump(x_train, "salidas/x_train.pkl")
 joblib.dump(y_train, "salidas/y_train.pkl")
 joblib.dump(x_test, "salidas/x_test.pkl")
 joblib.dump(y_test, "salidas/y_test.pkl")
+
+
+
 
 
