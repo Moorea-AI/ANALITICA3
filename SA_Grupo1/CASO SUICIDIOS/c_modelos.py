@@ -38,6 +38,7 @@ acc_test = []
 rmse_train = []
 rmse_test = []
 
+###############    tengo que pasar esta funcion para las funciones!!!!
 def storeResults(model, a,b,c,d):
   ML_Model.append(model)
   acc_train.append(round(a, 3))
