@@ -1,19 +1,18 @@
 import numpy as np
 import joblib ### para cargar array
-
 ########Paquetes para NN #########
 import tensorflow as tf
 from sklearn import metrics ### para analizar modelo
 from sklearn.ensemble import RandomForestClassifier  ### para analizar modelo
 import pandas as pd
-
 from sklearn import tree
-
-
 import cv2 ### para leer imagenes jpeg
 ### pip install opencv-python
-
 from matplotlib import pyplot as plt #
+
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import roc_auc_score
+
 
 ### cargar bases_procesadas ####
 
@@ -46,10 +45,8 @@ np.unique(y_test, return_counts=True)
 
 ##### convertir a 1 d array ############
 
- #El 30.000 sale de multiplicar 100x100x3 cuando se hace el shape
-
-x_train2=x_train.reshape(5216,30000)
-x_test2=x_test.reshape(624, 30000)
+x_train2 = x_train.reshape(5121, 100*100*3)  # 5121 images in x_train
+x_test2 = x_test.reshape(1279, 100*100*3)  # 1279 images in x_test
 x_train2.shape
 x_test2.shape
 
@@ -85,13 +82,14 @@ x_test2.shape
 rf=RandomForestClassifier()
 rf.fit(x_train2, y_train)
 
+
 pred_train=rf.predict(x_train2)
 print(metrics.classification_report(y_train, pred_train))
-metrics.roc_auc_score(y_train, pred_train)
+metrics.roc_auc_score(y_train, pred_train, multi_class='ovo')  # Or 'ovr'
 
 pred_test=rf.predict(x_test2)
 print(metrics.classification_report(y_test, pred_test))
-metrics.roc_auc_score(y_test, pred_test)
+metrics.roc_auc_score(y_test, pred_test, multi_class='ovo')  # Or 'ovr'
 
 # Desempeño de 69% se debe acercar a 1
 
@@ -137,11 +135,23 @@ test_loss, test_acc, test_auc, test_recall, test_precision = fc_model.evaluate(x
 print("Test auc:", test_auc)
 
 x_test.shape
-###### matriz de confusión test
-pred_test=(fc_model.predict(x_test) > 0.50).astype('int')
-cm=metrics.confusion_matrix(y_test,pred_test, labels=[1,0])
-disp=metrics.ConfusionMatrixDisplay(cm,display_labels=['Pneu', 'Normal'])
+
+
+le = LabelEncoder()
+y_test_encoded = le.fit_transform(y_test)  # Encode string labels to numerical labels
+class_names = le.classes_  # Get the ordered list of class names
+
+cm = metrics.confusion_matrix(y_test_encoded, pred_test)  # Create confusion matrix
+disp = metrics.ConfusionMatrixDisplay(cm, display_labels=class_names)
 disp.plot()
+plt.show()
+
+
+###### matriz de confusión test
+# pred_test=(fc_model.predict(x_test) > 0.50).astype('int')
+# cm=metrics.confusion_matrix(y_test,pred_test, labels=[1,0])
+# disp=metrics.ConfusionMatrixDisplay(cm,display_labels=['Pneu', 'Normal'])
+# disp.plot()
 
 print(metrics.classification_report(y_test, pred_test))
 

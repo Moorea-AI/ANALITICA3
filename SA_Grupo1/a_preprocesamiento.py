@@ -1,60 +1,35 @@
 import numpy as np
-
-import cv2 ### para leer imagenes jpeg
-### pip install opencv-python
-
+import cv2 ### para leer imagenes jpeg  ### pip install opencv-python
 from matplotlib import pyplot as plt ## para gráfciar imágnes
-import SA_Grupo1.funciones as fn#### funciones personalizadas, carga de imágenes
+import funciones as fn#### funciones personalizadas, carga de imágenes
 import joblib ### para descargar array
 import os
 
+# Ahora bien, definimos una función para desplegar las imágenes para saber si están cargando bien
+def load_and_display(image_path):
+    img = cv2.imread(image_path)
+    class_name = image_path.split("/")[2]  # Extract class name from path
+    resized_img = cv2.resize(img, (100, 100))  # Resize to 100x100
+    num_pixels = np.prod(resized_img.shape)  # Calculate number of pixels
+    plt.imshow(resized_img)
+    plt.title(f"{class_name} - Shape: {resized_img.shape}, Max: {resized_img.max()}, Min: {resized_img.min()}, Pixels: {num_pixels}")
+    plt.show()
+
 ############################################
 ##### ver ejemplo de imágenes cargadas ######
 #############################################
 
-img1=cv2.imread('data\\test\\MildDemented\\26 (19).jpg')
-img2 = cv2.imread('data/train/VeryMildDemented/verymildDem0.jpg')
+# Veamos como seria cada una: 
+load_and_display('data/train/NonDemented/nonDem15.jpg')
+load_and_display('data/train/VeryMildDemented/verymildDem0.jpg')
+load_and_display('data/test/MildDemented/26 (19).jpg')
+load_and_display('data/train/ModerateDemented/moderateDem10.jpg')  
 
+#Podemos observar que el shape es igual para todas: 208,176,3
+#La intnsidad de pixeles en su máximo esta en 243 y 254
+# Y los pixeles estan en 109.824
+# 208 en el eje Y y 176 en el eje x
 
-
-############################################
-##### ver ejemplo de imágenes cargadas ######
-#############################################
-
-plt.imshow(img1)
-plt.title('normal')
-plt.show()
-
-plt.imshow(img2)
-plt.title('pneumonia')
-plt.show()
-
-###### representación numérica de imágenes ####
-
-img2.shape ### tamaño de imágenes
-# 824 pixeles en eje y
-# 1200 en eje x
-img1.shape
-img1.max() ### máximo valor de intensidad en un pixel
-img1.min() ### mínimo valor de intensidad en un pixel
-
-
-np.prod(img1.shape) ### 5 millones de observaciones cada imágen
-
-#### dado que se necesitarían muchas observaciones (imágenes para entrenar)
-#### un modelo con tantas observaciones y no tenemos, vamos a reescalar las imágenes
-
-img1_r = cv2.resize(img1 ,(100,100))
-plt.imshow(img1_r)
-plt.title('Normal')
-plt.show()
-np.prod(img1_r.shape)
-
-img2_r = cv2.resize(img2 ,(100,100))
-plt.imshow(img2_r)
-plt.title('Normal')
-plt.show()
-np.prod(img2_r.shape)
 
 ################################################################
 ######## Código para cargar todas las imágenes #############
