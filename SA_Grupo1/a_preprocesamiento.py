@@ -12,8 +12,8 @@ import os
 ##### ver ejemplo de imágenes cargadas ######
 #############################################
 
-img1=cv2.imread('data\\test\\NORMAL\\IM-0005-0001.jpeg')
-img2 = cv2.imread('data/train/PNEUMONIA/person7_bacteria_29.jpeg')
+img1=cv2.imread('data\\test\\MildDemented\\26 (19).jpg')
+img2 = cv2.imread('data/train/VeryMildDemented/verymildDem0.jpg')
 
 
 
@@ -21,7 +21,7 @@ img2 = cv2.imread('data/train/PNEUMONIA/person7_bacteria_29.jpeg')
 ##### ver ejemplo de imágenes cargadas ######
 #############################################
 
-plt.imshow(image1)
+plt.imshow(img1)
 plt.title('normal')
 plt.show()
 
