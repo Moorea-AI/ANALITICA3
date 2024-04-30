@@ -12,15 +12,9 @@ import os
 ##### ver ejemplo de imágenes cargadas ######
 #############################################
 
-#img1=cv2.imread('data\\test\\NORMAL\\IM-0005-0001.jpeg')
-#img2 = cv2.imread('data/train/PNEUMONIA/person7_bacteria_29.jpeg')
+img1=cv2.imread('data\\test\\NORMAL\\IM-0005-0001.jpeg')
+img2 = cv2.imread('data/train/PNEUMONIA/person7_bacteria_29.jpeg')
 
-Sas
-img1 = "/kaggle/input/alzheimers-dataset-4-class-of-images/Alzheimer_s Dataset/train/"
-img2 = "/kaggle/input/alzheimers-dataset-4-class-of-images/Alzheimer_s Dataset/test/"
-
-image1 = cv2.imread(img1)
-image1_rgb = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
 
 
 ############################################
