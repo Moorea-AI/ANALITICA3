@@ -8,6 +8,7 @@ import pandas as pd
 
 ####instalar paquete !pip install keras-tuner
 import keras_tuner as kt
+from keras.utils import to_categorical
 
 
 ### cargar bases_procesadas ####
@@ -49,6 +50,9 @@ np.unique(y_test, return_counts=True)
 ################ Redes convolucionales ###################
 ##########################################################
 
+
+
+
 cnn_model = tf.keras.Sequential([
     tf.keras.layers.Conv2D(16, kernel_size=(3, 3), activation='relu', input_shape=x_train.shape[1:]),
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
@@ -56,14 +60,18 @@ cnn_model = tf.keras.Sequential([
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(1, activation='sigmoid')
+    tf.keras.layers.Dense(4, activation='softmax')
 ])
 
 # Compile the model with binary cross-entropy loss and Adam optimizer
-cnn_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['AUC'])
+cnn_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['AUC'])
+
+
+y_train_encoded = to_categorical(y_train)
+y_test_encoded = to_categorical(y_test)
 
 # Train the model for 10 epochs
-cnn_model.fit(x_train, y_train, batch_size=100, epochs=10, validation_data=(x_test, y_test))
+cnn_model.fit(x_train, y_train_encoded, batch_size=100, epochs=10, validation_data=(x_test, y_test_encoded))
 
 
 cnn_model.summary()
@@ -85,16 +93,21 @@ cnn_model2 = tf.keras.Sequential([
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(reg_strength)),
     tf.keras.layers.Dropout(dropout_rate),
-    tf.keras.layers.Dense(1, activation='sigmoid')
+    tf.keras.layers.Dense(4, activation='softmax')  # 4 output neurons for 4 classes
 ])
 
 # Compile the model with binary cross-entropy loss and Adam optimizer
-cnn_model2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['AUC'])
+cnn_model2.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['AUC'])
+
+y_train_encoded = to_categorical(y_train)
+y_test_encoded = to_categorical(y_test)
+
 
 # Train the model for 10 epochs
-cnn_model2.fit(x_train, y_train, batch_size=100, epochs=3, validation_data=(x_test, y_test))
+cnn_model2.fit(x_train, y_train_encoded, batch_size=100, epochs=3, validation_data=(x_test, y_test_encoded))
 
 
+cnn_model2.summary()
 
 
 
@@ -108,16 +121,13 @@ cnn_model2.fit(x_train, y_train, batch_size=100, epochs=3, validation_data=(x_te
 hp = kt.HyperParameters()
 
 def build_model(hp):
-    
-    dropout_rate=hp.Float('DO', min_value=0.1, max_value= 0.4, step=0.05)
-    reg_strength = hp.Float("rs", min_value=0.0001, max_value=0.0005, step=0.0001)
-    optimizer = hp.Choice('optimizer', ['adam', 'sgd', 'rmsprop']) ### en el contexto no se debería afinar
-   
-    ####hp.Int
-    ####hp.Choice
+    dropout_rate = hp.Float('dropout_rate', min_value=0.1, max_value=0.4, step=0.05)
+    reg_strength = hp.Float("reg_strength", min_value=0.0001, max_value=0.0005, step=0.0001)
+    # No need to tune optimizer in this context
+    # optimizer = hp.Choice('optimizer', ['adam', 'sgd', 'rmsprop']) 
     
 
-    model= tf.keras.Sequential([
+    model = tf.keras.Sequential([
         tf.keras.layers.Conv2D(16, kernel_size=(3, 3), activation='relu', input_shape=x_train.shape[1:], kernel_regularizer=tf.keras.regularizers.l2(reg_strength)),
         tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
         tf.keras.layers.Dropout(dropout_rate),
@@ -127,53 +137,49 @@ def build_model(hp):
         tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(reg_strength)),
         tf.keras.layers.Dropout(dropout_rate),
-        tf.keras.layers.Dense(1, activation='sigmoid')
+        tf.keras.layers.Dense(4, activation='softmax')  # 4 output neurons for 4 classes
     ])
     
   
-    
-    if optimizer == 'adam':
-        opt = tf.keras.optimizers.Adam(learning_rate=0.001)
-    elif optimizer == 'sgd':
-        opt = tf.keras.optimizers.SGD(learning_rate=0.001)
-    else:
-        opt = tf.keras.optimizers.RMSprop(learning_rate=0.001)
-   
     model.compile(
-        optimizer=opt, loss="binary_crossentropy", metrics=["AUC"],
+        optimizer='adam',  # You can fix the optimizer for now
+        loss='categorical_crossentropy', 
+        metrics=['AUC']
+    
     )
-    
-    
     return model
 
 
 
 ###########
 
+# tuner = kt.RandomSearch(
+#     hypermodel=build_model,
+#     hyperparameters=hp,
+#     tune_new_entries=False, ## solo evalúe los hiperparámetros configurados
+#     objective=kt.Objective("val_auc", direction="max"),
+#     max_trials=10,
+#     overwrite=True,
+#     directory="my_dir",
+#     project_name="helloworld", 
+# )
+
 tuner = kt.RandomSearch(
     hypermodel=build_model,
-    hyperparameters=hp,
-    tune_new_entries=False, ## solo evalúe los hiperparámetros configurados
-    objective=kt.Objective("val_auc", direction="max"),
+    objective='val_auc',  # Maximize validation AUC
     max_trials=10,
-    overwrite=True,
-    directory="my_dir",
-    project_name="helloworld", 
+    directory='my_dir',
+    project_name='alzheimers_classification'
 )
 
+tuner.search(x_train, y_train_encoded, epochs=3, validation_data=(x_test, y_test_encoded))
 
-
-tuner.search(x_train, y_train, epochs=3, validation_data=(x_test, y_test), batch_size=100)
-
-fc_best_model = tuner.get_best_models(num_models=1)[0]
+best_model = tuner.get_best_models(num_models=1)[0]
 tuner.results_summary()
-fc_best_model.summary()
+best_model.summary()
 
 
 #################### Mejor redes ##############
-fc_best_model.save('salidas\\fc_model.h5')
-cnn_model.save('salidas\\cnn_model.h5')
-
-
-cargar_modelo=tf.keras.models.load_model('salidas\\cnn_model.h5')
-cargar_modelo.summary()
+best_model.save('salidas/best_alzheimers_model.h5')
+loaded_model = tf.keras.models.load_model('salidas/best_alzheimers_model.h5')
+loaded_model.summary()
