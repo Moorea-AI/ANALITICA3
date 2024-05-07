@@ -27,23 +27,45 @@ x_test /=255
 
 ##### cargar modelo  ######
 
-modelo=tf.keras.models.load_model('salidas\\fc_model.h5')
+modelo=tf.keras.models.load_model('path_to_my_model.h5')
 
 
 
-####desempeño en evaluación para grupo 1 (tienen neumonía) #######
 prob=modelo.predict(x_test)
 sns.histplot(prob, legend=False)
 plt.title("probabilidades imágenes en entrenamiento")### conocer el comportamiento de las probabilidades para revisar threshold
 
+# threshold_no_alz=0.508
 
-threshold_neu=0.508
+# pred_test=(modelo.predict(x_test)>=0.508).astype('int')
+# print(metrics.classification_report(y_test, pred_test))
+# cm=metrics.confusion_matrix(y_test,pred_test, labels=[1,0])
+# disp=metrics.ConfusionMatrixDisplay(cm,display_labels=['Pneu', 'Normal'])
+# disp.plot()
 
-pred_test=(modelo.predict(x_test)>=0.5080).astype('int')
-print(metrics.classification_report(y_test, pred_test))
-cm=metrics.confusion_matrix(y_test,pred_test, labels=[1,0])
-disp=metrics.ConfusionMatrixDisplay(cm,display_labels=['Pneu', 'Normal'])
-disp.plot()
+
+
+# Obtener las probabilidades de cada clase para cada muestra
+y_pred_prob = modelo.predict(x_test)
+
+# Obtener las clases predichas
+y_pred_classes = np.argmax(y_pred_prob, axis=1)
+
+# Crear la matriz de confusión
+conf_matrix = metrics.confusion_matrix(y_test, y_pred_classes)
+
+# Mostrar la matriz de confusión en forma de heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['Clase 0', 'Clase 1', 'Clase 2', 'Clase 3'], yticklabels=['Clase 0', 'Clase 1', 'Clase 2', 'Clase 3'])
+plt.xlabel('Clase Predicha')
+plt.ylabel('Clase Real')
+plt.title('Matriz de Confusión')
+plt.show()
+
+
+
+
+
 
 
 
@@ -52,7 +74,7 @@ prob=modelo.predict(x_train)
 sns.histplot(prob, legend=False)
 plt.title("probabilidades imágenes en entrenamiento")### conocer el comportamiento de las probabilidades para revisar threshold
 
-pred_train=(prob>=threshold_neu).astype('int')
+pred_train=(prob>=threshold_alz).astype('int')
 print(metrics.classification_report(y_train, pred_train))
 cm=metrics.confusion_matrix(y_train,pred_train, labels=[1,0])
 disp=metrics.ConfusionMatrixDisplay(cm,display_labels=['Pneu', 'Normal'])
@@ -60,7 +82,7 @@ disp.plot()
 
 
 ########### ##############################################################
-####desempeño en evaluación para grupo 1 (No tienen neumonía) #######
+####desempeño en evaluación para grupo 1 (No tienen Alzheimer) #######
 ########### ##############################################################
 
 prob=modelo.predict(x_test)
@@ -73,7 +95,7 @@ threshold_no_neu=0.5015
 pred_test=(modelo.predict(x_test)>=threshold_no_neu).astype('int')
 print(metrics.classification_report(y_test, pred_test))
 cm=metrics.confusion_matrix(y_test,pred_test, labels=[1,0])
-disp=metrics.ConfusionMatrixDisplay(cm,display_labels=['Pneu', 'Normal'])
+disp=metrics.ConfusionMatrixDisplay(cm,display_labels=['Alz', 'Normal'])
 disp.plot()
 
 
