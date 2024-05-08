@@ -168,6 +168,6 @@ best_model.summary()
 
 
 #################### Mejor redes ##############
-best_model.save('salidas/best_alzheimers_model.h5')
-loaded_model = tf.keras.models.load_model('salidas/best_alzheimers_model.h5')
+best_model.save('/salidas/best_alzheimers_model.h5')
+loaded_model = tf.keras.models.load_model('/salidas/best_alzheimers_model.h5')
 loaded_model.summary()

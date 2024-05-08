@@ -105,11 +105,11 @@ prob = model.predict(x_test)
 clas = []
 for p in prob:
     if p[0] > 0.52:  # Comparación de la probabilidad de la clase "alz"
-        clas.append('alz')
+        clas.append('Alz')
     elif p[0] < 0.50:  # Comparación de la probabilidad de la clase "No alz"
-        clas.append('No alz')
+        clas.append('No Alz')
     else:
-        clas.append('No ident')
+        clas.append('No Ident')
 
 clases, count = np.unique(clas, return_counts=True)
 
