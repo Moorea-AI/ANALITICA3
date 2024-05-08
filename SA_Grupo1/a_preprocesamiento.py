@@ -42,8 +42,8 @@ num_classes = 2 #clases variable respuesta
 trainpath = 'data/train/'
 testpath = 'data/test/'
 
-x_train, y_train= fn.img2data(trainpath) #Run in train
-x_test, y_test = fn.img2data(testpath) #Run in test
+x_train, y_train = fn.img2data(trainpath, width)
+x_test, y_test = fn.img2data(testpath, width)
 
 
 
@@ -74,3 +74,4 @@ joblib.dump(x_train, "salidas/x_train.pkl")
 joblib.dump(y_train, "salidas/y_train.pkl")
 joblib.dump(x_test, "salidas/x_test.pkl")
 joblib.dump(y_test, "salidas/y_test.pkl")
+

@@ -151,22 +151,9 @@ def build_model(hp):
 
 
 
-###########
-
-# tuner = kt.RandomSearch(
-#     hypermodel=build_model,
-#     hyperparameters=hp,
-#     tune_new_entries=False, ## solo evalúe los hiperparámetros configurados
-#     objective=kt.Objective("val_auc", direction="max"),
-#     max_trials=10,
-#     overwrite=True,
-#     directory="my_dir",
-#     project_name="helloworld", 
-# )
-
 tuner = kt.RandomSearch(
     hypermodel=build_model,
-    objective='val_auc',  
+    objective='val_auc',
     max_trials=10,
     directory='my_dir',
     project_name='alzheimers_classification'
@@ -175,6 +162,7 @@ tuner = kt.RandomSearch(
 tuner.search(x_train, y_train_encoded, epochs=3, validation_data=(x_test, y_test_encoded)) 
 
 best_model = tuner.get_best_models(num_models=1)[0]
+
 tuner.results_summary()
 best_model.summary()
 

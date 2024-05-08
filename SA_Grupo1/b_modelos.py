@@ -46,10 +46,10 @@ np.unique(y_train, return_counts=True)
 np.unique(y_test, return_counts=True)
 
 ##### convertir a 1 d array ############
-x_train2 = x_train.reshape(5121, 100*100*3)  # 5121 images in x_train
-x_test2 = x_test.reshape(1279, 100*100*3)  # 1279 images in x_test
-x_train2.shape
-x_test2.shape
+num_images_train = len(x_train)
+x_train2 = x_train.reshape(len(x_train), -1)
+x_test2 = x_test.reshape(len(x_test), -1) 
+
 
 rl = LogisticRegression()
 rlmodel = rl.fit(x_train2, y_train)
