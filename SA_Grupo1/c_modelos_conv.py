@@ -32,8 +32,8 @@ x_train.max()
 x_train.min()
 
 
-x_train /=255 ### escalarlo para que quede entre 0 y 1, con base en el valor máximo
-x_test /=255
+x_train /=254 ### escalarlo para que quede entre 0 y 1, con base en el valor máximo
+x_test /=254
 
 ###### verificar tamaños
 
@@ -61,11 +61,11 @@ cnn_model = tf.keras.Sequential([
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(4, activation='softmax')
+    tf.keras.layers.Dense(4, activation='sigmoid')
 ])
 
 # Compile the model with binary cross-entropy loss and Adam optimizer
-cnn_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['AUC'])
+cnn_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['AUC'])
 
 
 y_train_encoded = to_categorical(y_train)
@@ -81,7 +81,7 @@ cnn_model.summary()
 reg_strength = 0.001
 
 ###########Estrategias a usar: regilarization usar una a la vez para ver impacto
-dropout_rate = 0.1  
+dropout_rate = 0.3  
 
 
 cnn_model2 = tf.keras.Sequential([
@@ -94,11 +94,11 @@ cnn_model2 = tf.keras.Sequential([
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(reg_strength)),
     tf.keras.layers.Dropout(dropout_rate),
-    tf.keras.layers.Dense(4, activation='softmax')  # 4 outputs para 4 clases
+    tf.keras.layers.Dense(1, activation='sigmoid')  # 2 outputs para 2 clases
 ])
 
 #Complilamos el modelo con categorical_crossentropy y ADAM ya que tenemos 4 clases
-cnn_model2.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['AUC'])
+cnn_model2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['AUC'])
 
 y_train_encoded = to_categorical(y_train)
 y_test_encoded = to_categorical(y_test)

@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
-import cv2 ### para leer imagenes jpeg
-### pip install opencv-python
-import funciones as fn#### funciones personalizadas, carga de imágenes
+import cv2
+import funciones as fn
 import tensorflow as tf
 import openpyxl
 
@@ -12,28 +11,38 @@ sys.path
 
 if __name__=="__main__":
 
-    #### cargar datos ####
+    # Cargar datos
     path = '/data/despliegue/'
-    x, _, files= fn.img2data2(path) #cargar datos de despliegue
+    files, x, _ = fn.img2data2(path)  # Cargar datos de despliegue
 
-    x=np.array(x) ##imagenes a predecir
+    x = np.array(x)  # Imágenes a predecir
+    x = x.astype('float') / 255  # Convertir para escalar
 
-    x=x.astype('float')######convertir para escalar
-    x/=255######escalar datos
+    # Eliminar extensión a nombre de archivo
+    files2 = [name.rsplit('.', 1)[0] for name in files]
 
+    # Cargar modelo
+    model = tf.keras.models.load_model('/salidas/best_alzheimers_model.h5')
 
-    files2= [name.rsplit('.', 1)[0] for name in files] ### eliminar extension a nombre de archivo
+    # Realizar predicciones
+    prob = model.predict(x)
 
-    model=tf.keras.models.load_model('/salidas/best_alzheimers_model.h5') ### cargar modelo
-    prob=model.predict(x)
+    # Clasificar las predicciones
+    clas = []
+    for p in prob:
+        if p > 0.508:
+            clas.append('Alz')
+        elif p < 0.5015:
+            clas.append('No Alz')
+        else:
+            clas.append('No Ident')
 
-
-    clas=['Alz' if prob >0.508 else 'No Alz' if prob <0.5015 else "No Ident" for prob in prob]
-
-    res_dict={
+    # Crear DataFrame con resultados
+    res_dict = {
         "paciente": files2,
-        "clas": clas   
+        "clas": clas
     }
-    resultados=pd.DataFrame(res_dict)
+    resultados = pd.DataFrame(res_dict)
 
+    # Guardar resultados en un archivo Excel
     resultados.to_excel('/salidas/clasificados.xlsx', index=False)

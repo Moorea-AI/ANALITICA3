@@ -1,0 +1,19 @@
+
+Data Description:
+
+- ID: Unique identifier for each record.
+- CreditScore: The credit score of the individual.
+- DebtRatio: The ratio of debt to total assets.
+- Assets: Total assets of the individual.
+- Age: The age of the individual.
+- NumberOfDependents: The number of dependents of the individual.
+- NumberOfOpenCreditLinesAndLoans: The number of open credit lines and loans.
+- MonthlyIncome: The monthly income of the individual.
+- NumberOfTimesPastDue: The number of times the individual has been past due.
+- EmploymentLength: Number of years employed.
+- HomeOwnership: Type of home ownership (Rent, Own, Mortgage).
+- Education: Education level (High School, Bachelor, Masters, PhD).
+- MaritalStatus: Marital status (Single, Married, Divorced, Widowed).
+- YearsAtCurrentAddress: Number of years at current address.
+- NoPaidPerc: Proportion of the payments that consumer has not made in all their credits.
+- NewLoanApplication: Amount of money the costumer has requested to the institution.
