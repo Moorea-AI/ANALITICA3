@@ -157,13 +157,17 @@ print(results_df)
 analysis_text = """
 Análisis de los Resultados:
 
-- R² (R cuadrado): Gradient Boosting tiene el R² más alto (0.7375), lo que significa que explica la mayor varianza en la variable objetivo (NoPaidPerc) en comparación con los otros modelos. Un R² más cercano a 1 indica un mejor ajuste.
-- MSE (Error Cuadrático Medio): Gradient Boosting tiene el MSE más bajo (0.001183), lo que indica que sus predicciones están más cerca de los valores reales.
+- R² (R cuadrado): Gradient Boosting tiene el R² más alto (0.7404), lo que significa que explica la mayor varianza en la variable objetivo (NoPaidPerc) en comparación con los otros modelos. Un R² más cercano a 1 indica un mejor ajuste.
+- MSE (Error Cuadrático Medio): Gradient Boosting tiene el MSE más bajo (0.001170), lo que indica que sus predicciones están más cerca de los valores reales.
 - RMSE (Raíz del Error Cuadrático Medio): Similar al MSE, un RMSE más bajo (0.034395) es mejor, y Gradient Boosting tiene el valor más bajo.
 - MAE (Error Absoluto Medio): Aunque no es tan sensible a valores atípicos como el MSE, un MAE más bajo (0.022818) sigue siendo deseable, y Gradient Boosting lo tiene.
 - MedAE (Mediana del Error Absoluto): Gradient Boosting tiene la MedAE más baja (0.016348), lo que sugiere que la mitad de sus predicciones tienen errores menores o iguales a este valor.
-"""
 
+Los modelos con mejor rendimiento son: Gradient Boosting y Random Forest. Elegiremos Gradient Boosting.
+Los modelos con rendimineto moderado son: KNN, regresión lineal y ridge.
+Los modelos con bajo rendimiento son: SVM
+El modelo con un rendimineto raro es el LASSO ya que tiene un R² negativo
+"""
 print(analysis_text)
 
 # Mostrar los resultados
@@ -175,7 +179,7 @@ print(results_df)
 # best_model = models[best_model_name]
 
 print("El mejor modelo basado en los resultados proporcionados es el Gradient Boosting.")
-print("Tiene el MSE más bajo (0.001183) y el R2 más alto (0.737482) entre todos los modelos evaluados.")
+print("Tiene el MSE más bajo (0.001170) y el R2 más alto (0.7404) entre todos los modelos evaluados.")
 print("Esto indica que tiene la capacidad más sólida para explicar la variabilidad en la variable objetivo y hacer predicciones precisas.")
 
 
@@ -197,3 +201,11 @@ df_resultados = df_nuevos[['ID', 'int_rc']]
 
 # Los exportamos al archivo
 df_resultados.to_csv('grupo_1.csv', index=False)
+
+
+# Esto es solo para comprobar que los resultados estén en el formato correcto
+df_grupo_1 = pd.read_csv("grupo_1.csv")
+print(df_grupo_1.head(10))
+df_grupo_1.shape
+
+
