@@ -45,6 +45,8 @@ from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error, explained_variance_score, median_absolute_error
+from matplotlib.pyplot import figure
+
 
 # Carga de los datos históricos
 url_historico = 'https://raw.githubusercontent.com/juancamiloespana/LEA3_FIN/main/data/datos_historicos.csv'
@@ -101,6 +103,13 @@ for feature in features:
     sns.boxplot(x=df_historico[feature], y=df_historico['NoPaidPerc'])
     plt.title(f'Boxplot of {feature} vs NoPaidPerc')
     plt.show()
+
+sns.histplot(data=df_historico, x="NoPaidPerc")
+
+df_hist_num = df_historico.select_dtypes(include=['number'])
+figure(figsize=(20,6))
+sns.heatmap(df_hist_num.corr(),cmap = sns.cubehelix_palette(as_cmap=True), annot = True, fmt = ".2f")
+
 
 # Evaluar varios modelos
 # 20% para los datos de prueba y 80% para entrenamiento.
