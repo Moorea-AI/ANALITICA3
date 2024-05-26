@@ -3,11 +3,11 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error, explained_variance_score, median_absolute_error
 
 # Cargar los datos históricos
 url_historico = 'https://raw.githubusercontent.com/juancamiloespana/LEA3_FIN/main/data/datos_historicos.csv'
@@ -72,41 +72,37 @@ models = {
     "Linear Regression": LinearRegression(),
     "Random Forest": RandomForestRegressor(n_estimators=100, random_state=42),
     "Decision Tree": DecisionTreeRegressor(random_state=42),
-    "Logistic Regression": LogisticRegression(max_iter=1000)
+    "Gradient Boosting": GradientBoostingRegressor(n_estimators=100, random_state=42)
 }
 
 # Evaluar los modelos
 results = {}
 for model_name, model in models.items():
-    if model_name == "Logistic Regression":
-        # Binarizar la variable objetivo para la regresión logística
-        y_train_bin = (y_train > 0.5).astype(int)
-        y_test_bin = (y_test > 0.5).astype(int)
-        model.fit(X_train, y_train_bin)
-        y_pred_prob = model.predict_proba(X_test)[:, 1]
-        mse = mean_squared_error(y_test, y_pred_prob)
-        rmse = np.sqrt(mse)
-        r2 = r2_score(y_test, y_pred_prob)
-    else:
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-        mse = mean_squared_error(y_test, y_pred)
-        rmse = np.sqrt(mse)
-        r2 = r2_score(y_test, y_pred)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = np.sqrt(mse)
+    r2 = r2_score(y_test, y_pred)
+    mae = mean_absolute_error(y_test, y_pred)
+    explained_variance = explained_variance_score(y_test, y_pred)
+    medae = median_absolute_error(y_test, y_pred)
 
     results[model_name] = {
         "MSE": mse,
         "RMSE": rmse,
-        "R2": r2
+        "R2": r2,
+        "MAE": mae,
+        "Explained Variance": explained_variance,
+        "MedAE": medae
     }
-    print(f"{model_name} - MSE: {mse}, RMSE: {rmse}, R2: {r2}")
+    print(f"{model_name} - MSE: {mse}, RMSE: {rmse}, R2: {r2}, MAE: {mae}, Explained Variance: {explained_variance}, MedAE: {medae}")
 
 # Mostrar los resultados
 results_df = pd.DataFrame(results).T
 print(results_df)
 
-# Seleccionar el mejor modelo (en este ejemplo, supongamos que es Random Forest)
-best_model = RandomForestRegressor(n_estimators=100, random_state=42)
+# Seleccionar el mejor modelo (en este ejemplo, supongamos que es Gradient Boosting)
+best_model = GradientBoostingRegressor(n_estimators=100, random_state=42)
 best_model.fit(X_historico, y_historico)
 
 # Predecir la probabilidad de no pago para los nuevos clientes
