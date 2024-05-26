@@ -9,11 +9,11 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error, explained_variance_score, median_absolute_error
 
-# Cargar los datos históricos
+# Carga de los datos históricos
 url_historico = 'https://raw.githubusercontent.com/juancamiloespana/LEA3_FIN/main/data/datos_historicos.csv'
 df_historico = pd.read_csv(url_historico)
 
-# Cargar los datos de los nuevos clientes
+# Carga de los datos de los nuevos clientes
 url_nuevos = 'https://raw.githubusercontent.com/juancamiloespana/LEA3_FIN/main/data/datos_nuevos_creditos.csv'
 df_nuevos = pd.read_csv(url_nuevos)
 
@@ -21,7 +21,7 @@ df_nuevos = pd.read_csv(url_nuevos)
 print(df_historico.head())
 print(df_nuevos.head())
 
-# Limpieza básica (por ejemplo, eliminar filas con valores nulos)
+# Limpieza básica (eliminar filas con valores nulos)
 df_historico = df_historico.dropna()
 df_nuevos = df_nuevos.dropna()
 
