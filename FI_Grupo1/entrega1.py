@@ -106,6 +106,7 @@ for feature in features:
 
 sns.histplot(data=df_historico, x="NoPaidPerc")
 
+#Mapa de calor para ver las correlaciones entre variables
 df_hist_num = df_historico.select_dtypes(include=['number'])
 figure(figsize=(20,6))
 sns.heatmap(df_hist_num.corr(),cmap = sns.cubehelix_palette(as_cmap=True), annot = True, fmt = ".2f")
@@ -194,7 +195,7 @@ X_nuevos = df_nuevos[features]
 y_pred_nuevos = best_model.predict(X_nuevos)
 
 #Asignamos la tasa de interés
-df_nuevos['int_rc'] = y_pred_nuevos * 100
+df_nuevos['int_rc'] = y_pred_nuevos
 
 #Guardamos los resultados
 df_resultados = df_nuevos[['ID', 'int_rc']]
@@ -207,5 +208,6 @@ df_resultados.to_csv('grupo_1.csv', index=False)
 df_grupo_1 = pd.read_csv("grupo_1.csv")
 print(df_grupo_1.head(10))
 df_grupo_1.shape
+df_grupo_1
 
 
